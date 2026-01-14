@@ -22,8 +22,10 @@ Created cards:
 - `knowledge/cards/kb-0002-system-prompt-exposure.md`
 - `knowledge/cards/kb-0003-rag-context-leakage.md`
 - `knowledge/cards/kb-0004-logging-retention-risk.md`
+- `knowledge/cards/kb-0005-fine-tuning-data-leakage.md`
+- `knowledge/cards/kb-0006-embedding-exposure.md`
 
-Created checklist:
+Created checklists:
 - `knowledge/checklists/rag-logging-review.md`
 
 ## TRANSCRIPT_02
@@ -34,9 +36,15 @@ Key themes:
 - DLL loading, scheduled tasks, and privilege escalation paths.
 - Tooling: process explorer, Frida, static reversing.
 
-Candidate cards:
-- Local update mechanisms as attack surface (general).
-- Safe reverse engineering workflow for client tools (general).
+Created cards:
+- `knowledge/cards/kb-0007-local-service-origin-bypass.md`
+- `knowledge/cards/kb-0008-untrusted-update-fetch.md`
+- `knowledge/cards/kb-0009-dll-search-order-hijack.md`
+- `knowledge/cards/kb-0010-privilege-escalation-path.md`
+- `knowledge/cards/kb-0011-toctou-race.md`
+
+Created checklists:
+- `knowledge/checklists/update-installer-review.md`
 
 ## TRANSCRIPT_03
 Topic: Human cognition, AI, and prompt use (philosophical).
@@ -45,8 +53,11 @@ Key themes:
 - Prompts as tools for interaction and influence.
 - Human-in-the-loop and the limits of linear thinking in AI contexts.
 
-Candidate cards:
-- Human factors in prompt design and social engineering parallels.
+Created cards:
+- `knowledge/cards/kb-0020-prompt-social-engineering.md`
+
+Created checklists:
+- `knowledge/checklists/human-in-loop-review.md`
 
 ## TRANSCRIPT_04
 Topic: Reverse engineering a mobile API (Pokemon Go).
@@ -56,9 +67,13 @@ Key themes:
 - Bypassing client defenses (cert pinning, proxying).
 - Tooling: Fiddler, JADX, Ghidra/IDA, Frida.
 
-Candidate cards:
-- API reverse engineering workflow (general).
-- Auth container tampering risks (general).
+Created cards:
+- `knowledge/cards/kb-0012-auth-container-tampering.md`
+- `knowledge/cards/kb-0013-client-trust-bypass.md`
+- `knowledge/cards/kb-0014-protocol-reverse-engineering.md`
+
+Created checklists:
+- `knowledge/checklists/mobile-api-review.md`
 
 ## TRANSCRIPT_05
 Topic: Mainframe penetration testing and permissions.
@@ -67,8 +82,13 @@ Key themes:
 - Legacy access control systems and file permission pitfalls.
 - Tooling for enumeration and file traversal on mainframes.
 
-Candidate cards:
-- Legacy access controls and least privilege checks (general).
+Created cards:
+- `knowledge/cards/kb-0015-access-control-misconfig.md`
+- `knowledge/cards/kb-0016-credential-exposure-in-files.md`
+- `knowledge/cards/kb-0017-privileged-library-misuse.md`
+
+Created checklists:
+- `knowledge/checklists/legacy-access-control-review.md`
 
 ## TRANSCRIPT_06
 Topic: Apple endpoint security API for defenders.
@@ -77,5 +97,9 @@ Key themes:
 - Endpoint Security event types and authorization flows.
 - Entitlements, caching, and performance pitfalls.
 
-Candidate cards:
-- Endpoint telemetry considerations for defensive tools (general).
+Created cards:
+- `knowledge/cards/kb-0018-authorization-handling-gaps.md`
+- `knowledge/cards/kb-0019-telemetry-gaps.md`
+
+Created checklists:
+- `knowledge/checklists/endpoint-telemetry-review.md`

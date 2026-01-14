@@ -9,3 +9,4 @@ All notable changes to this project will be documented here.
 - Added architecture and component guidance docs.
 - Added transcript source notes and initial knowledge cards and checklist.
 - Added hack type catalog derived from transcripts.
+- Added knowledge cards and checklists for transcript-derived hack types.
