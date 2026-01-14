@@ -14,6 +14,7 @@ advice. Only test systems where you have explicit authorization.
 - `docs/KNOWLEDGE_FORMAT.md`
 - `docs/ARCHITECTURE.md`
 - `docs/COMPONENTS.md`
+- `docs/HACK_TYPES.md`
 
 ## Repository layout
 - `docs/` - architecture, rules, and planning docs

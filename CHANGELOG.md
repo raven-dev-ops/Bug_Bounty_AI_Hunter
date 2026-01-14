@@ -8,3 +8,4 @@ All notable changes to this project will be documented here.
 - Added initial schema stubs for core data types.
 - Added architecture and component guidance docs.
 - Added transcript source notes and initial knowledge cards and checklist.
+- Added hack type catalog derived from transcripts.
