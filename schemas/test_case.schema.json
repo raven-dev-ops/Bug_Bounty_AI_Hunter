@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ravdevops.com/schemas/test_case.schema.json",
+  "title": "TestCase",
+  "type": "object",
+  "description": "A safe test case with steps, stop conditions, and expected results.",
+  "properties": {
+    "schema_version": { "type": "string" },
+    "id": { "type": "string" },
+    "title": { "type": "string" },
+    "objective": { "type": "string" },
+    "steps": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "stop_conditions": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "expected_results": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "safety_notes": { "type": "string" }
+  },
+  "required": ["schema_version", "title"],
+  "additionalProperties": true
+}

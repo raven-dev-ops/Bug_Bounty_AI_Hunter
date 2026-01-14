@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ravdevops.com/schemas/evidence.schema.json",
+  "title": "Evidence",
+  "type": "object",
+  "description": "Evidence artifact metadata supporting a finding.",
+  "properties": {
+    "schema_version": { "type": "string" },
+    "id": { "type": "string" },
+    "type": { "type": "string" },
+    "description": { "type": "string" },
+    "artifacts": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "timestamps": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "source": { "type": "string" }
+  },
+  "required": ["schema_version", "type"],
+  "additionalProperties": true
+}

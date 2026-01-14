@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ravdevops.com/schemas/target_profile.schema.json",
+  "title": "TargetProfile",
+  "type": "object",
+  "description": "High-level description of an authorized target and its AI surfaces.",
+  "properties": {
+    "schema_version": { "type": "string" },
+    "id": { "type": "string" },
+    "name": { "type": "string" },
+    "scope": { "type": "string" },
+    "notes": { "type": "string" }
+  },
+  "required": ["schema_version"],
+  "additionalProperties": true
+}

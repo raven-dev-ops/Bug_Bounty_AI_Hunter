@@ -1,8 +1,7 @@
 # Security Policy
 
 ## Scope
-This repository contains documentation only. It does not ship executable code
-or run services.
+This repository is docs-first and does not ship executable code or run services.
 
 ## Reporting a security issue
 If you believe the repository contains sensitive information or a security
@@ -14,4 +13,4 @@ If you need to report a third-party vulnerability, follow the target program's
 published policy and disclosure channel. Do not report third-party issues here.
 
 ## Supported versions
-Only the latest published report is maintained.
+Only the latest published guidance is maintained.

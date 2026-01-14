@@ -1,21 +1,20 @@
 # Contributing
 
-Thanks for improving the report and supporting docs.
+Thanks for improving the project and its documentation.
 
 ## What to contribute
-- Typos, clarity fixes, and structure improvements
-- Link updates and corrections
-- New references with authoritative sources
+- Documentation and roadmap improvements
+- Schemas and examples for data exchange
+- Scripts and tooling for project setup
+- Safe, non-weaponized checklists and guidance
 
 ## How to propose changes
-1. Open an issue describing the change and the page or section.
-2. Include the exact replacement text and the source link.
-3. If you can, attach a marked-up PDF or a list of edits.
-
-If you cannot edit the PDF source directly, use issues to suggest edits and
-maintainers will publish an updated PDF.
+1. Open an issue describing the change and scope.
+2. For larger changes, discuss approach and acceptance criteria first.
+3. Submit a pull request once the approach is agreed.
 
 ## Style
 - Keep the tone professional and practical.
 - Avoid advice that could encourage testing without authorization.
 - Use ASCII characters in Markdown.
+ - Follow `docs/ROE.md` for safe testing guidance.

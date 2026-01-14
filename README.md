@@ -1,15 +1,28 @@
-# Bug Bounty Programs: Practical Guide
+# Bug_Bounty_Hunter_AI
 
-This repository hosts the "Bug Bounty Programs: A Practical Guide for
-Engineering Teams" report. The report is informational only and is not
-legal advice. Only test systems where you have explicit authorization.
+AI-assisted bug bounty workflow system for authorized testing of AI-enabled
+applications (RAG, embeddings, fine-tuning, tool-using agents, and logging).
 
-## Contents
+This project is informational and operational guidance only. It is not legal
+advice. Only test systems where you have explicit authorization.
+
+## Docs
+- `ROADMAP.md`
+- `docs/PROJECT_OUTLINE.md`
+- `docs/ROE.md`
+- `docs/PROJECT_MANAGEMENT.md`
+- `docs/KNOWLEDGE_FORMAT.md`
+
+## Repository layout
+- `docs/` - architecture, rules, and planning docs
+- `schemas/` - data model schemas
+- `components/` - component repos (submodules or subtrees)
+- `knowledge/` - sources, cards, and checklists
+- `examples/` - sample profiles and outputs
+- `scripts/` - bootstrap and automation scripts
+
+## Notes
 - PDFs are maintained locally and are ignored by git.
-
-## How to read
-- Open the local PDF in your viewer.
-- Use your viewer's search to jump to sections and links.
 
 ## Contributing
 See `CONTRIBUTING.md` for how to suggest updates or fixes.
