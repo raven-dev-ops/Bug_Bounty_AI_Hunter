@@ -12,6 +12,8 @@ advice. Only test systems where you have explicit authorization.
 - `docs/ROE.md`
 - `docs/PROJECT_MANAGEMENT.md`
 - `docs/KNOWLEDGE_FORMAT.md`
+- `docs/ARCHITECTURE.md`
+- `docs/COMPONENTS.md`
 
 ## Repository layout
 - `docs/` - architecture, rules, and planning docs

@@ -6,3 +6,5 @@ All notable changes to this project will be documented here.
 - Added project documentation, governance files, and issue templates.
 - Added planning docs, repo skeleton directories, and knowledge placeholders.
 - Added initial schema stubs for core data types.
+- Added architecture and component guidance docs.
+- Added transcript source notes and initial knowledge cards and checklist.

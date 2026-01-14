@@ -1,7 +1,7 @@
 # Transcript Review
 
-This file summarizes the transcript set and maps each to candidate knowledge
-artifacts. It is preparatory only; no cards or checklists are created yet.
+This file summarizes the transcript set and maps each to knowledge artifacts.
+Sources and source notes live under `knowledge/sources/`.
 
 ## Summary
 - TRANSCRIPT_01 is strongly aligned with AI shadow data, prompt leakage, and RAG.
@@ -17,11 +17,14 @@ Key themes:
 - Log retention risks and legal/logging pressure.
 - Emphasis on safe handling of sensitive data and scope boundaries.
 
-Candidate cards:
-- Shadow data inventory for AI apps (RAG, fine-tuning, logs).
-- System prompt exposure and prompt leakage risks.
-- RAG context exfiltration patterns and mitigations.
-- Logging and retention risks for AI prompts and retrieved data.
+Created cards:
+- `knowledge/cards/kb-0001-shadow-data-inventory.md`
+- `knowledge/cards/kb-0002-system-prompt-exposure.md`
+- `knowledge/cards/kb-0003-rag-context-leakage.md`
+- `knowledge/cards/kb-0004-logging-retention-risk.md`
+
+Created checklist:
+- `knowledge/checklists/rag-logging-review.md`
 
 ## TRANSCRIPT_02
 Topic: Rapid discovery of bloatware vulnerabilities (local update tools).
