@@ -3,6 +3,9 @@
 Program: Example Program
 Generated: 2026-01-14T00:00:00Z
 
+## Review Required
+This output is generated; verify details before submission.
+
 ## Scope
 In scope: example.com
 

@@ -6,6 +6,9 @@ from .lib.io_utils import load_data
 from .lib.template_utils import load_template, render_template
 
 
+REVIEW_REQUIRED_NOTE = "This output is generated; verify details before submission."
+
+
 PLATFORM_TEMPLATES = {
     "github": "templates/platforms/github_issue.md",
     "hackerone": "templates/platforms/hackerone.md",
@@ -77,6 +80,7 @@ def main():
             "remediation": finding.get("remediation", ""),
             "evidence_refs": ", ".join(_list(finding.get("evidence_refs"))),
             "scope_summary": scope_summary,
+            "review_required_note": REVIEW_REQUIRED_NOTE,
         }
         content = render_template(template_text, context)
         filename = _safe_filename(finding_id) + ".md"

@@ -7,6 +7,7 @@ Reporting turns findings and evidence into report bundles and platform exports.
 - Inputs: findings, evidence, optional TargetProfile
 - Outputs: `report.md` and `findings.json`
 - Template: `templates/reporting/report_bundle.md`
+- Note: outputs include a review-required marker for human validation.
 
 ## Per-finding reports
 - Script: `python -m scripts.export_finding_reports`
@@ -16,6 +17,7 @@ Reporting turns findings and evidence into report bundles and platform exports.
 - Script: `python -m scripts.export_issue_drafts`
 - Templates: `templates/platforms/` (GitHub, HackerOne, Bugcrowd)
 - Jira CSV export: `python -m scripts.export_jira`
+- Note: issue drafts include a review-required banner by default.
 
 ## PDF export
 - Script: `python -m scripts.export_pdf`

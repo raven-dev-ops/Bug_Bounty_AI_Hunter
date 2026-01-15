@@ -6,6 +6,9 @@ from .lib.io_utils import dump_data, load_data
 from .lib.template_utils import load_template, render_template
 
 
+REVIEW_REQUIRED_NOTE = "This output is generated; verify details before submission."
+
+
 def _list(value):
     if value is None:
         return []
@@ -105,12 +108,17 @@ def main():
     evidence = _load_evidence(args.evidence)
     profile = load_data(args.target_profile) if args.target_profile else {}
 
+    for finding in findings:
+        if isinstance(finding, dict):
+            finding.setdefault("review_required", True)
+
     context = {
         "program_name": profile.get("name", "Unknown Program"),
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "scope_summary": _scope_summary(profile),
         "findings_markdown": _findings_markdown(findings),
         "evidence_summary": _evidence_summary(evidence),
+        "review_required_note": REVIEW_REQUIRED_NOTE,
     }
 
     template_text = load_template(args.template)

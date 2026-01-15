@@ -3,6 +3,9 @@
 Program: {program_name}
 Generated: {generated_at}
 
+## Review Required
+{review_required_note}
+
 ## Scope
 {scope_summary}
 

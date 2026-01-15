@@ -243,7 +243,6 @@ Definition of done:
 
 ## Issue tracking (GitHub)
 Open milestone work:
-- v0.9: #78 Output review markers
 - v0.9: #79 Ruff format check
 - v0.9: #80 Python version matrix
 - v0.9: #81 Pip cache

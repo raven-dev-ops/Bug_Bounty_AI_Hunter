@@ -7,6 +7,7 @@
     "description": "Synthetic description for a sample finding.",
     "impact": "Synthetic impact statement.",
     "remediation": "Synthetic remediation guidance.",
+    "review_required": true,
     "evidence_refs": ["evidence-001"],
     "references": ["https://example.com"]
   }

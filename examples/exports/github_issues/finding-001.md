@@ -1,3 +1,5 @@
+> Review Required: This output is generated; verify details before submission.
+
 ## Summary
 Example finding title
 
