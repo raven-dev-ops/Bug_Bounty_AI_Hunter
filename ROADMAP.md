@@ -243,7 +243,7 @@ Definition of done:
 
 ## Issue tracking (GitHub)
 Open milestone work:
-- v0.9: #91 Component registry index
+- v0.9: #92 Package bbhai CLI as console script
 
 Closed milestone work:
 - v0.1: #13-#27 Starter backlog
@@ -268,6 +268,7 @@ Closed milestone work:
 - v0.9: #88 Evidence hashing and chain of custody
 - v0.9: #89 Evidence encryption-at-rest docs
 - v0.9: #90 Component contract documentation
+- v0.9: #91 Component registry index
 - Backlog: #8 Knowledge index generator; #28-#48 Gap analysis backlog
 
 ---
