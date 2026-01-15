@@ -262,6 +262,8 @@ Priority P3:
 - #55 Add distribution packaging (Docker and/or package registry)
 - #56 Add export to issue trackers (Jira or generic)
 
+Status: Completed; all referenced issues closed.
+
 ---
 
 ## Definition of "working"
