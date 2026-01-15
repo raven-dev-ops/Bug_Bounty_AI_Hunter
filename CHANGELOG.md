@@ -81,3 +81,4 @@ All notable changes to this project will be documented here.
 - Closed v0.8 operations documentation milestone.
 - Updated repo description and project docs overview text.
 - Added README how-to-use guidance for the core workflow.
+- Added a README quick start command sequence.
