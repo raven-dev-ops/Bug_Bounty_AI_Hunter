@@ -120,6 +120,8 @@ Each outputs structured `TestCase[]` + `Finding[]` candidates.
 ---
 
 ## Milestones
+Tracking: GitHub milestones `v0.1 Documentation-first skeleton`, `v0.2 Target profiling`,
+`v0.3 Review modules and reporting outputs`, `v0.4 Labs and regression`, and `Backlog`.
 
 ### v0.1 - Documentation-first skeleton (hub foundation)
 Deliverables:
@@ -167,6 +169,18 @@ Definition of done:
 
 ---
 
+## Issue tracking (GitHub)
+Open milestone work:
+- v0.2: #1 Add dataflow map output and example; #2 Add threat model template and schema
+- v0.3: #3 Add schemas for pipeline config and outputs; #7 Add agents review checklist and test case example; #10 Clarify report generator output milestone completion
+- v0.4: #4 Add regression tests for review checklists; #5 Add markdown link checks to CI; #6 Replace lab placeholders with synthetic service stubs
+- Backlog: #8 Add knowledge index generator script; #28-#48 Gap analysis backlog (meta issue #48)
+
+Closed milestone work:
+- v0.1: #13-#27 Starter backlog
+
+---
+
 ## Project management: labels and initial issue backlog
 
 ### Recommended labels
@@ -187,82 +201,82 @@ Tags:
 - `tag/bug-bounty`, `tag/ai-security`, `tag/prompt-injection`, `tag/rag`,
   `tag/fine-tuning`, `tag/embeddings`, `tag/logging`, `tag/crypto`
 
-### Starter backlog (create as GitHub issues)
-1) Epic: Define architecture + component repo strategy  
+### Starter backlog (GitHub issues #13-#27, milestone v0.1 closed)
+1) Epic: Define architecture + component repo strategy (#13)  
    Labels: `type/epic priority/p1 area/core status/triage tag/ai-security`
 
-2) Add hub repo structure (`docs/`, `schemas/`, `components/`, `scripts/`)  
+2) Add hub repo structure (`docs/`, `schemas/`, `components/`, `scripts/`) (#14)  
    Labels: `type/feature priority/p1 area/core status/triage`
 
-3) Add label set + issue templates  
+3) Add label set + issue templates (#15)  
    Labels: `type/chore priority/p1 area/docs status/triage`
 
-4) Safety / ROE policy and guardrails (project-wide)  
+4) Safety / ROE policy and guardrails (project-wide) (#16)  
    Labels: `type/security priority/p0 area/core status/triage tag/bug-bounty`
 
-5) Define schemas: TargetProfile, Finding, Evidence, TestCase  
+5) Define schemas: TargetProfile, Finding, Evidence, TestCase (#17)  
    Labels: `type/feature priority/p1 area/core status/triage`
 
-6) Knowledge base structure + ingestion rules  
+6) Knowledge base structure + ingestion rules (#18)  
    Labels: `type/feature priority/p1 area/knowledge status/triage tag/ai-security`
 
-7) Ingest "shadow data / AI models & embeddings" transcript into knowledge base (curated, safe cards)  
+7) Ingest shadow data / AI models and embeddings transcript into knowledge base (curated, safe cards) (#22)  
    Labels: `type/docs priority/p2 area/knowledge status/triage tag/rag tag/embeddings tag/logging`
 
-8) Discovery: questionnaire -> TargetProfile generator (v0)  
+8) Discovery: questionnaire -> TargetProfile generator (v0) (#19)  
    Labels: `type/feature priority/p1 area/discovery status/triage`
 
-9) Review module: RAG checklist (authz + context handling)  
+9) Review module: RAG checklist (authz + context handling) (#20)  
    Labels: `type/feature priority/p1 area/rag status/triage tag/rag tag/ai-security`
 
-10) Review module: embeddings/vector exposure checklist  
+10) Review module: embeddings/vector exposure checklist (#21)  
     Labels: `type/feature priority/p1 area/embeddings status/triage tag/embeddings tag/ai-security`
 
-11) Review module: logging/telemetry shadow-store checklist  
+11) Review module: logging/telemetry shadow-store checklist (#23)  
     Labels: `type/feature priority/p1 area/logging status/triage tag/logging`
 
-12) Reporting: bug bounty report bundle generator (MD + JSON)  
+12) Reporting: bug bounty report bundle generator (MD + JSON) (#24)  
     Labels: `type/feature priority/p1 area/reporting status/triage tag/bug-bounty`
 
-13) Export: paste-ready GitHub issue drafts from Findings  
+13) Export: paste-ready GitHub issue drafts from Findings (#25)  
     Labels: `type/feature priority/p2 area/reporting status/triage`
 
-14) Labs: synthetic RAG + vector store environment for validation  
+14) Labs: synthetic RAG + vector store environment for validation (#26)  
     Labels: `type/feature priority/p2 area/labs status/triage`
 
-15) CI baseline: lint + schema validation (once code exists)  
+15) CI baseline: lint + schema validation (once code exists) (#27)  
     Labels: `type/chore priority/p2 area/ci status/triage`
 
 ---
 
-### Gap Analysis backlog (meta issue #58)
+### Gap Analysis backlog (meta issue #48, milestone Backlog)
 Priority P1:
-- #38 Add subdomain and asset discovery module
-- #39 Add template-based vulnerability scanning engine
-- #40 Build multi-phase recon pipeline orchestrator
-- #46 Integrate bug bounty platform scope import
+- #28 Add subdomain and asset discovery module
+- #29 Add template-based vulnerability scanning engine
+- #30 Build multi-phase recon pipeline orchestrator
+- #31 Integrate bug bounty platform scope import
 
 Priority P2:
-- #41 Implement AI-assisted triage and prioritization
-- #42 Add notification integrations (Slack/email)
-- #43 Add external intel integrations (Shodan/Censys/etc.)
-- #44 Implement plugin runtime for components
-- #45 Add performance and concurrency controls
-- #47 Add findings tracking database
-- #48 Add PDF export for report bundles
-- #49 Add per-finding report export
-- #50 Add evidence and artifact management
-- #51 Add unit and integration test suite
-- #52 Add security scanning for the codebase
-- #53 Define module boundaries for core code
-- #54 Expand README with install and usage guide
-- #57 Add platform-specific report formatting
+- #32 Implement AI-assisted triage and prioritization
+- #33 Add notification integrations (Slack and email)
+- #34 Add external intel integrations (Shodan, Censys, etc.)
+- #35 Implement plugin runtime for components
+- #36 Add performance and concurrency controls
+- #37 Add findings tracking database
+- #38 Add PDF export for report bundles
+- #39 Add per-finding report export
+- #40 Add evidence and artifact management
+- #41 Add unit and integration test suite
+- #42 Add security scanning for the codebase
+- #43 Define module boundaries for core code
+- #44 Expand README with install and usage guide
+- #45 Add platform-specific report formatting
 
 Priority P3:
-- #55 Add distribution packaging (Docker and/or package registry)
-- #56 Add export to issue trackers (Jira or generic)
+- #46 Add distribution packaging (Docker or package registry)
+- #47 Add export to issue trackers (Jira or generic)
 
-Status: Completed; all referenced issues closed.
+Status: Active; tracked in Backlog milestone.
 
 ---
 
