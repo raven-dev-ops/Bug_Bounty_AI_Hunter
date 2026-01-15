@@ -1,7 +1,14 @@
 # Security Policy
 
 ## Scope
-This repository is docs-first and does not ship executable code or run services.
+This repository is docs-first and does not provide a hosted service. It does
+include local automation scripts and a Dockerfile for running workflows.
+
+## Operational safety
+- Use only authorized targets with written permission.
+- Avoid sending sensitive data to external LLMs unless explicitly approved.
+- Treat generated outputs as untrusted until reviewed.
+- Protect evidence and logs in line with `docs/ROE.md`.
 
 ## Reporting a security issue
 If you believe the repository contains sensitive information or a security

@@ -82,3 +82,6 @@ All notable changes to this project will be documented here.
 - Updated repo description and project docs overview text.
 - Added README how-to-use guidance for the core workflow.
 - Added a README quick start command sequence.
+- Added v0.9 unified CLI and coverage backlog issues.
+- Added unified `bbhai` CLI entrypoint and README examples.
+- Clarified SECURITY scope and operational safety guidance.

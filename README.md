@@ -61,12 +61,21 @@ python -m pip install -r requirements-dev.txt
 
 ## Quick Start
 ```bash
-python -m scripts.target_profile_generate --input examples/target_profile_questionnaire.yaml --output output/target_profile.json
-python -m scripts.pipeline_orchestrator --config examples/pipeline_config.yaml --mode plan
-python -m scripts.report_bundle --findings examples/outputs/findings.json --target-profile examples/target_profile_minimal.yaml --output-dir output/report_bundle
+python -m bbhai init --workspace output
+python -m bbhai profile --workspace output
+python -m bbhai model --workspace output
+python -m bbhai plan --workspace output
+python -m bbhai report --workspace output --findings examples/outputs/findings.json
 ```
 
-## Usage
+## Unified CLI
+```bash
+python -m bbhai --help
+python -m bbhai profile --input examples/target_profile_questionnaire.yaml --output output/target_profile.json
+python -m bbhai plan --config examples/pipeline_config.yaml
+```
+
+## Module Usage
 ```bash
 python -m scripts.target_profile_generate --input examples/target_profile_questionnaire.yaml --output output/target_profile.json
 python -m scripts.dataflow_map --target-profile output/target_profile.json --output output/dataflow_map.json

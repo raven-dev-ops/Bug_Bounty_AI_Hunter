@@ -125,7 +125,8 @@ Tracking: GitHub milestones `v0.1 Documentation-first skeleton`, `v0.2 Target pr
 `v0.5 Workflow automation and component readiness`,
 `v0.6 Operational artifacts and validation`,
 `v0.7 Component integration and release readiness`,
-`v0.8 Operations documentation and validation`, and `Backlog`.
+`v0.8 Operations documentation and validation`,
+`v0.9 Unified CLI, coverage, and safety`, and `Backlog`.
 
 ### v0.1 - Documentation-first skeleton (hub foundation)
 Deliverables:
@@ -221,11 +222,50 @@ Definition of done:
 - Release template is referenced from the release checklist
 - Component runtime tests cover enable/disable and registry output
 
+### v0.9 - Unified CLI, coverage, and safety
+Deliverables:
+- [x] Unified `bbhai` CLI entrypoint with subcommands and consistent flags
+- [ ] Coverage matrix mapping to OWASP LLM Top 10, MITRE ATLAS, and NIST AI RMF
+- [x] SECURITY scope clarification and operational safety guidance
+- [ ] Artifact schema versioning and migration scaffolding
+- [ ] Integration tests and CI quality upgrades
+- [ ] Reporting/evidence enhancements (manifests, hashes, reproducibility)
+- [ ] Documentation site navigation improvements
+- [ ] Component contract and registry index validation
+
+Definition of done:
+- Unified CLI is documented and used in README examples
+- Coverage matrix is generated and enforced by CI
+- Safety guidance reflects local automation usage
+- Artifacts and tests evolve safely with schema versioning
+
 ---
 
 ## Issue tracking (GitHub)
 Open milestone work:
-- None.
+- v0.9: #68 Coverage matrix mapping
+- v0.9: #70 Schema version fields
+- v0.9: #71 Migration helper
+- v0.9: #72 Golden-file re-emit checks
+- v0.9: #73 Integration tests for demo runner
+- v0.9: #74 Property-based tests
+- v0.9: #75 Coverage reporting
+- v0.9: #76 Authorization gating
+- v0.9: #77 Budget and rate controls
+- v0.9: #78 Output review markers
+- v0.9: #79 Ruff format check
+- v0.9: #80 Python version matrix
+- v0.9: #81 Pip cache
+- v0.9: #82 Dependabot configuration
+- v0.9: #83 MkDocs build job
+- v0.9: #84 Docs nav and entrypoints
+- v0.9: #85 Severity model alignment
+- v0.9: #86 Report attachments manifest
+- v0.9: #87 Reproducibility pack metadata
+- v0.9: #88 Evidence hashing and chain of custody
+- v0.9: #89 Evidence encryption-at-rest docs
+- v0.9: #90 Component contract documentation
+- v0.9: #91 Component registry index
 
 Closed milestone work:
 - v0.1: #13-#27 Starter backlog
