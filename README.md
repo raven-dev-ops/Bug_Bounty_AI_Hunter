@@ -11,10 +11,12 @@ advice. Only test systems where you have explicit authorization.
 - `docs/PROJECT_OUTLINE.md`
 - `docs/ROE.md`
 - `docs/PROJECT_MANAGEMENT.md`
+- `docs/TARGET_PROFILE.md`
 - `docs/KNOWLEDGE_FORMAT.md`
 - `docs/KNOWLEDGE_TAGS.md`
 - `knowledge/INDEX.md`
 - `docs/ARCHITECTURE.md`
+- `docs/PIPELINE.md`
 - `docs/COMPONENTS.md`
 - `docs/COMPONENT_MANIFEST.md`
 - `docs/HACK_TYPES.md`
@@ -25,6 +27,7 @@ advice. Only test systems where you have explicit authorization.
 - `components/` - component repos (submodules or subtrees)
 - `knowledge/` - sources, cards, and checklists
 - `examples/` - sample profiles and outputs
+- `templates/` - scan planning templates
 - `scripts/` - bootstrap and automation scripts
 
 ## Notes

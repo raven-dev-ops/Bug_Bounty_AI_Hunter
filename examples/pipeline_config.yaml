@@ -1,0 +1,34 @@
+schema_version: "0.1.0"
+stages:
+  - name: scope_import
+    config:
+      input: examples/scope_generic.json
+      format: generic
+      output: output/target_profile.json
+  - name: discovery
+    config:
+      target_profile: output/target_profile.json
+      output: output/discovery.json
+      prefixes: [www, api, staging]
+  - name: scan
+    config:
+      templates: templates
+      targets: output/discovery.json
+      output: output/scan_results.json
+      max_concurrency: 3
+      min_delay_seconds: 0.2
+      canary: CANARY-1234
+  - name: triage
+    config:
+      input: output/scan_results.json
+      output: output/triage.json
+  - name: intel
+    config:
+      source: examples/intel_stub.json
+      targets: output/discovery.json
+      output: output/intel.json
+      provider: file
+  - name: notify
+    config:
+      input: output/triage.json
+      channel: console

@@ -1,7 +1,5 @@
-schema_version: "0.2.0"
-id: tp-001
-name: Example Program
 program:
+  name: Example Program
   platform: self-hosted
   policy_url: https://example.com/policy
   contact: support@ravdevops.com
@@ -9,24 +7,16 @@ scope:
   in_scope:
     - type: domain
       value: example.com
-      source: program
   out_of_scope:
     - type: domain
       value: internal.example.com
-      source: program
   restrictions:
     - No social engineering
-assets:
-  - id: asset-001
-    type: domain
-    value: example.com
-    source: seed
-    tags: [seed]
 ai_surfaces:
   rag: false
   embeddings: false
   fine_tuning: false
-  logging: false
+  logging: true
   agents: false
 constraints:
   rate_limits:
@@ -34,4 +24,4 @@ constraints:
     max_concurrency: 2
   stop_conditions:
     - Real user data observed
-notes: Synthetic example
+notes: Synthetic questionnaire example

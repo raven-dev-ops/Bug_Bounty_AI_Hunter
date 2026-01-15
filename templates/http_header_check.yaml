@@ -1,0 +1,17 @@
+id: tpl-001
+name: HTTP security header presence
+category: configuration
+description: Verify baseline security headers are present without payloads.
+target_types:
+  - url
+steps:
+  - "Send a GET request to {base_url}/ and capture response headers."
+  - "Record missing headers and note any unexpected redirects."
+expected_results:
+  - "X-Content-Type-Options is present."
+  - "Content-Security-Policy is present when applicable."
+stop_conditions:
+  - "Scope uncertainty or access issues."
+tags:
+  - baseline
+  - http

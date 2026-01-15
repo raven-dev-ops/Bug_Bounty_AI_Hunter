@@ -18,7 +18,7 @@ git subtree add --prefix components/bbhai-<feature> <repo-url> main --squash
 ## Component contract
 Each component should provide:
 - A `README.md` describing purpose and usage.
-- A manifest describing capabilities and schema compatibility.
+- A manifest at the repo root (`component_manifest.yaml` or `.json`).
 - Tests or examples that demonstrate safe behavior.
 
 See `docs/COMPONENT_MANIFEST.md` and `schemas/component_manifest.schema.json`.
@@ -30,7 +30,7 @@ version: 0.1.0
 capabilities:
   - review
 schemas:
-  target_profile: ">=0.1.0"
+  target_profile: ">=0.2.0"
   test_case: ">=0.1.0"
   finding: ">=0.1.0"
 entrypoints:

@@ -1,0 +1,24 @@
+{
+  "program": "Example Program",
+  "platform": "self-hosted",
+  "policy_url": "https://example.com/policy",
+  "contact": "support@ravdevops.com",
+  "in_scope": [
+    {
+      "type": "domain",
+      "value": "example.com",
+      "notes": "Primary domain"
+    }
+  ],
+  "out_of_scope": [
+    {
+      "type": "domain",
+      "value": "internal.example.com",
+      "notes": "Internal services"
+    }
+  ],
+  "restrictions": [
+    "No social engineering",
+    "No denial of service"
+  ]
+}

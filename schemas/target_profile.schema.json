@@ -5,12 +5,159 @@
   "type": "object",
   "description": "High-level description of an authorized target and its AI surfaces.",
   "properties": {
-    "schema_version": { "type": "string" },
+    "schema_version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
     "id": { "type": "string" },
     "name": { "type": "string" },
-    "scope": { "type": "string" },
+    "program": {
+      "type": "object",
+      "properties": {
+        "platform": { "type": "string" },
+        "policy_url": { "type": "string" },
+        "contact": { "type": "string" },
+        "notes": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "contacts": {
+      "type": "object",
+      "properties": {
+        "security": { "type": "string" },
+        "owner": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "scope": {
+      "type": "object",
+      "properties": {
+        "in_scope": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/asset" }
+        },
+        "out_of_scope": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/asset" }
+        },
+        "restrictions": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "notes": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "assets": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/asset" }
+    },
+    "ai_surfaces": {
+      "type": "object",
+      "properties": {
+        "rag": { "type": "boolean" },
+        "embeddings": { "type": "boolean" },
+        "fine_tuning": { "type": "boolean" },
+        "logging": { "type": "boolean" },
+        "agents": { "type": "boolean" },
+        "third_party": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      },
+      "additionalProperties": true
+    },
+    "data_stores": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/data_store" }
+    },
+    "data_flows": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/data_flow" }
+    },
+    "access_model": {
+      "type": "object",
+      "properties": {
+        "tenancy": { "type": "string" },
+        "auth": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "roles": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "notes": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "constraints": {
+      "type": "object",
+      "properties": {
+        "rate_limits": {
+          "type": "object",
+          "properties": {
+            "max_requests_per_minute": { "type": "integer", "minimum": 0 },
+            "max_concurrency": { "type": "integer", "minimum": 1 },
+            "min_delay_seconds": { "type": "number", "minimum": 0 }
+          },
+          "additionalProperties": true
+        },
+        "stop_conditions": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "notes": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
     "notes": { "type": "string" }
   },
-  "required": ["schema_version"],
-  "additionalProperties": true
+  "required": ["schema_version", "name"],
+  "additionalProperties": true,
+  "$defs": {
+    "asset": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "type": { "type": "string" },
+        "value": { "type": "string" },
+        "source": { "type": "string" },
+        "tags": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "notes": { "type": "string" }
+      },
+      "required": ["type", "value"],
+      "additionalProperties": true
+    },
+    "data_store": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "type": { "type": "string" },
+        "location": { "type": "string" },
+        "sensitivity": { "type": "string" },
+        "owner": { "type": "string" },
+        "notes": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "data_flow": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "source": { "type": "string" },
+        "destination": { "type": "string" },
+        "data_types": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "notes": { "type": "string" }
+      },
+      "additionalProperties": true
+    }
+  }
 }

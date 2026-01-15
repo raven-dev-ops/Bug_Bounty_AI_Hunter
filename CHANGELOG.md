@@ -14,3 +14,6 @@ All notable changes to this project will be documented here.
 - Added component manifest guidance, schema, and examples.
 - Added knowledge tag catalog and generated knowledge index.
 - Added example target profile, finding, evidence, and test case outputs.
+- Added TargetProfile v0.2 schema, questionnaire example, and generator script.
+- Added pipeline docs, scan templates, and planning scripts for recon stages.
+- Added scope import, intel enrichment, notification, and component registry tools.

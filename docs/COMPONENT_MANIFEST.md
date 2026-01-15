@@ -3,6 +3,15 @@
 Components declare a manifest that describes capabilities and schema
 compatibility. This lets the hub validate plugins and route data safely.
 
+## Location
+Store the manifest at the repo root as `component_manifest.yaml` or
+`component_manifest.json`.
+
+Schema reference: `schemas/component_manifest.schema.json`.
+
+## Validation
+Use `scripts/component_runtime.py --manifest <path>` to validate a manifest.
+
 ## Required fields
 - `name`: unique component name (string)
 - `version`: semantic version string (string)
@@ -23,7 +32,7 @@ version: 0.1.0
 capabilities:
   - review
 schemas:
-  target_profile: ">=0.1.0"
+  target_profile: ">=0.2.0"
   test_case: ">=0.1.0"
   finding: ">=0.1.0"
 entrypoints:
