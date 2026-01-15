@@ -18,4 +18,5 @@ hub. Start with rules of engagement and then follow the pipeline lifecycle.
 - `ARCHITECTURE.md`
 - `COMPONENTS.md`
 - `KNOWLEDGE_FORMAT.md`
+- `SEVERITY_MODEL.md`
 - `TESTING.md`

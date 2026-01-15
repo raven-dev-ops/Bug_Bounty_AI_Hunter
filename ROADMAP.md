@@ -243,7 +243,6 @@ Definition of done:
 
 ## Issue tracking (GitHub)
 Open milestone work:
-- v0.9: #85 Severity model alignment
 - v0.9: #86 Report attachments manifest
 - v0.9: #87 Reproducibility pack metadata
 - v0.9: #88 Evidence hashing and chain of custody
@@ -267,6 +266,8 @@ Closed milestone work:
 - v0.7: #61 Stub component
 - v0.7: #62 Distribution notes
 - v0.8: #63-#66 Operations documentation and validation
+- v0.9: #84 Docs site navigation
+- v0.9: #85 Severity model alignment
 - Backlog: #8 Knowledge index generator; #28-#48 Gap analysis backlog
 
 ---

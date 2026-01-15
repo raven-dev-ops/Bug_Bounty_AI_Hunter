@@ -5,7 +5,7 @@ Reporting turns findings and evidence into report bundles and platform exports.
 ## Report bundle
 - Script: `python -m scripts.report_bundle`
 - Inputs: findings, evidence, optional TargetProfile
-- Outputs: `report.md` and `findings.json`
+- Outputs: `report.md` and `findings.json` (includes `severity_model`)
 - Template: `templates/reporting/report_bundle.md`
 - Note: outputs include a review-required marker for human validation.
 

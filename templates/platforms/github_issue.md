@@ -6,6 +6,9 @@
 ## Severity
 {severity}
 
+## Severity Model
+{severity_model_summary}
+
 ## Description
 {description}
 

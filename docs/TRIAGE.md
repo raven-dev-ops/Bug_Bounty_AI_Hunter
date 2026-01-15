@@ -6,6 +6,7 @@ scan plans.
 ## Outputs
 Each triage item includes:
 - `severity` and `priority`
+- `severity_model` aligned to `docs/SEVERITY_MODEL.md`
 - `rationale`
 - `confidence` (0 to 1)
 - optional `next_tests`

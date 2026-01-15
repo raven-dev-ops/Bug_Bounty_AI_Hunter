@@ -3,6 +3,7 @@ import re
 from pathlib import Path
 
 from .lib.io_utils import load_data
+from .lib.severity_model import format_severity_model
 from .lib.template_utils import load_template, render_template
 
 
@@ -77,6 +78,9 @@ def main():
             "id": finding_id,
             "title": finding.get("title", "Untitled finding"),
             "severity": finding.get("severity", "unknown"),
+            "severity_model_summary": format_severity_model(
+                finding.get("severity_model")
+            ),
             "description": finding.get("description", ""),
             "impact": finding.get("impact", ""),
             "remediation": finding.get("remediation", ""),

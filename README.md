@@ -20,6 +20,7 @@ advice. Only test systems where you have explicit authorization.
 - `docs/ARCHITECTURE.md`
 - `docs/PIPELINE.md`
 - `docs/TRIAGE.md`
+- `docs/SEVERITY_MODEL.md`
 - `docs/INTEL.md`
 - `docs/ENVIRONMENT.md`
 - `docs/COMPONENTS.md`

@@ -101,3 +101,5 @@ All notable changes to this project will be documented here.
 - Added Dependabot configuration for pip and GitHub Actions.
 - Added MkDocs configuration and CI build job.
 - Added docs entrypoints and lifecycle navigation pages.
+- Added severity model documentation aligned to OWASP LLM Top 10 axes.
+- Added severity model metadata to triage and reporting outputs.

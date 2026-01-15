@@ -5,6 +5,7 @@ import os
 from urllib.request import Request, urlopen
 
 from .lib.io_utils import dump_data, load_data
+from .lib.severity_model import build_severity_model
 
 
 SEVERITY_PRIORITY = {
@@ -50,6 +51,7 @@ def _triage_item(item, index, source):
         "id": item.get("id") or f"triage-{index:04d}",
         "title": item.get("title") or item.get("name") or "Untitled item",
         "severity": severity,
+        "severity_model": build_severity_model(item),
         "priority": SEVERITY_PRIORITY.get(severity, "p3"),
         "status": "triaged" if source == "findings" else "needs-validation",
         "source": source,

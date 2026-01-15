@@ -9,6 +9,27 @@
     "id": { "type": "string" },
     "title": { "type": "string" },
     "severity": { "type": "string" },
+    "severity_model": {
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "version": { "type": "string" },
+        "category": { "type": "string" },
+        "axes": {
+          "type": "object",
+          "properties": {
+            "data_exposure": { "type": "string" },
+            "integrity": { "type": "string" },
+            "autonomy": { "type": "string" },
+            "cost_dos": { "type": "string" }
+          },
+          "additionalProperties": true
+        },
+        "method": { "type": "string" },
+        "reference": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
     "description": { "type": "string" },
     "impact": { "type": "string" },
     "remediation": { "type": "string" },

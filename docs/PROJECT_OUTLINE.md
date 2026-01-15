@@ -126,7 +126,7 @@ Each module outputs structured Findings + recommended tests.
 Define at least:
 - `TargetProfile` (what AI features exist, where data flows)
 - `TestCase` (safe steps, stop conditions, expected insecure behavior)
-- `Finding` (title, severity, affected surface, evidence links, remediation)
+- `Finding` (title, severity, severity_model, affected surface, evidence links, remediation)
 - `Evidence` (artifacts, timestamps, request IDs, screenshots)
 
 ## 7. Done criteria for "Discover, review, all the stuff mentioned"

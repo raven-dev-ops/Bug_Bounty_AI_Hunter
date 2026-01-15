@@ -12,6 +12,7 @@ In scope: example.com
 ## Findings
 ### Example finding title
 Severity: medium
+Severity model: owasp-llm-top-10 2023; category LLM06: Sensitive Information Disclosure; axes data_exposure=medium, integrity=low, autonomy=low, cost_dos=unscored
 
 Synthetic description for a sample finding.
 

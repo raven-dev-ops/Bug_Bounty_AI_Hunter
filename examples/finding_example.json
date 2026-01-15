@@ -3,6 +3,19 @@
   "id": "finding-001",
   "title": "Example finding title",
   "severity": "medium",
+  "severity_model": {
+    "name": "owasp-llm-top-10",
+    "version": "2023",
+    "category": "LLM06: Sensitive Information Disclosure",
+    "axes": {
+      "data_exposure": "medium",
+      "integrity": "low",
+      "autonomy": "low",
+      "cost_dos": "unscored"
+    },
+    "method": "overall_severity_is_max_axis",
+    "reference": "docs/SEVERITY_MODEL.md"
+  },
   "description": "Synthetic description for a sample finding.",
   "impact": "Synthetic impact statement.",
   "remediation": "Synthetic remediation guidance.",

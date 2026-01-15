@@ -3,6 +3,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from .lib.io_utils import dump_data, load_data
+from .lib.severity_model import ensure_severity_model, format_severity_model
 from .lib.template_utils import load_template, render_template
 
 
@@ -58,8 +59,10 @@ def _findings_markdown(findings):
     for finding in findings:
         title = finding.get("title", "Untitled finding")
         severity = finding.get("severity", "unknown")
+        severity_model = format_severity_model(finding.get("severity_model"))
         lines.append(f"### {title}")
         lines.append(f"Severity: {severity}")
+        lines.append(f"Severity model: {severity_model}")
         description = finding.get("description")
         if description:
             lines.append("")
@@ -110,6 +113,7 @@ def main():
 
     for finding in findings:
         if isinstance(finding, dict):
+            ensure_severity_model(finding)
             finding.setdefault("review_required", True)
 
     context = {
