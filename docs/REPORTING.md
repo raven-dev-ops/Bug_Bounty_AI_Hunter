@@ -6,7 +6,7 @@ Reporting turns findings and evidence into report bundles and platform exports.
 - Script: `python -m scripts.report_bundle`
 - Inputs: findings, evidence, optional TargetProfile
 - Outputs: `report.md`, `findings.json` (includes `severity_model` and `export_fields`),
-  and `attachments_manifest.json`
+  `attachments_manifest.json`, and `reproducibility_pack.json`
 - Template: `templates/reporting/report_bundle.md`
 - Note: outputs include a review-required marker for human validation.
 
@@ -14,6 +14,11 @@ Reporting turns findings and evidence into report bundles and platform exports.
 - Output: `attachments_manifest.json`
 - Schema: `schemas/attachments_manifest.schema.json`
 - Includes report bundle files and referenced evidence artifacts.
+
+## Reproducibility pack
+- Output: `reproducibility_pack.json`
+- Schema: `schemas/reproducibility_pack.schema.json`
+- Provide steps via `--repro-steps` (JSON/YAML list).
 
 ## Per-finding reports
 - Script: `python -m scripts.export_finding_reports`

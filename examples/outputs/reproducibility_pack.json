@@ -1,0 +1,30 @@
+{
+  "schema_version": "0.1.0",
+  "generated_at": "2026-01-14T00:00:00Z",
+  "bundle_root": "output/report_bundle",
+  "environment": {
+    "os": "Windows",
+    "os_release": "10",
+    "os_version": "10.0.22631",
+    "python_version": "3.11.6",
+    "python_implementation": "CPython"
+  },
+  "steps": [
+    "Use canary data with authorized test account.",
+    "Submit prompt that requests hidden context.",
+    "Capture request/response and log identifiers."
+  ],
+  "evidence_hashes": [
+    {
+      "path": "evidence/request.txt",
+      "status": "pending",
+      "evidence_id": "evidence-001"
+    },
+    {
+      "path": "evidence/response.txt",
+      "status": "pending",
+      "evidence_id": "evidence-001"
+    }
+  ],
+  "notes": "Populate evidence hashes when available."
+}

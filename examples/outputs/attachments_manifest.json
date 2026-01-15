@@ -19,6 +19,13 @@
     },
     {
       "id": "attachment-003",
+      "path": "reproducibility_pack.json",
+      "role": "reproducibility",
+      "description": "Reproducibility metadata pack.",
+      "content_type": "application/json"
+    },
+    {
+      "id": "attachment-004",
       "path": "evidence/request.txt",
       "role": "evidence",
       "description": "Synthetic request/response pair.",
@@ -27,7 +34,7 @@
       "finding_ids": ["finding-001"]
     },
     {
-      "id": "attachment-004",
+      "id": "attachment-005",
       "path": "evidence/response.txt",
       "role": "evidence",
       "description": "Synthetic request/response pair.",

@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ravdevops.com/schemas/reproducibility_pack.schema.json",
+  "title": "ReproducibilityPack",
+  "type": "object",
+  "description": "Metadata for reproducing findings and evidence.",
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "generated_at": { "type": "string" },
+    "bundle_root": { "type": "string" },
+    "environment": {
+      "type": "object",
+      "properties": {
+        "os": { "type": "string" },
+        "os_release": { "type": "string" },
+        "os_version": { "type": "string" },
+        "python_version": { "type": "string" },
+        "python_implementation": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "steps": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "evidence_hashes": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/evidence_hash" }
+    },
+    "notes": { "type": "string" }
+  },
+  "required": ["schema_version", "environment", "steps"],
+  "additionalProperties": true,
+  "$defs": {
+    "evidence_hash": {
+      "type": "object",
+      "properties": {
+        "path": { "type": "string" },
+        "algorithm": { "type": "string" },
+        "hash": { "type": "string" },
+        "status": { "type": "string" },
+        "evidence_id": { "type": "string" }
+      },
+      "required": ["path"],
+      "additionalProperties": true
+    }
+  }
+}

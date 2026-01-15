@@ -27,3 +27,6 @@ Evidence: evidence-001
 
 ## Attachments Manifest
 attachments_manifest.json
+
+## Reproducibility Pack
+reproducibility_pack.json

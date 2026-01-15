@@ -105,3 +105,4 @@ All notable changes to this project will be documented here.
 - Added severity model metadata to triage and reporting outputs.
 - Added report bundle attachments manifest schema and example output.
 - Added export_fields mappings for GitHub and Jira exports.
+- Added reproducibility pack schema and report bundle metadata output.

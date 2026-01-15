@@ -17,3 +17,6 @@ Generated: {generated_at}
 
 ## Attachments Manifest
 {attachments_manifest}
+
+## Reproducibility Pack
+{reproducibility_pack}

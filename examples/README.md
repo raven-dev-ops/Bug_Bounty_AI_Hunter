@@ -33,6 +33,7 @@ Sample target profiles, findings, and report outputs.
 - `outputs/report.md`
 - `outputs/findings.json`
 - `outputs/attachments_manifest.json`
+- `outputs/reproducibility_pack.json`
 - `exports/github_issues/`
 - `exports/finding_reports/`
 - `exports/jira_issues.csv`

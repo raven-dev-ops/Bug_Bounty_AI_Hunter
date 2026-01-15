@@ -1,6 +1,7 @@
 import argparse
 from datetime import datetime, timezone
 from pathlib import Path
+import platform
 
 from .lib.export_fields import ensure_export_fields
 from .lib.io_utils import dump_data, load_data
@@ -122,6 +123,13 @@ def _attachments_manifest(findings, evidence, output_dir):
             "description": "Structured findings output.",
             "content_type": "application/json",
         },
+        {
+            "id": "attachment-003",
+            "path": "reproducibility_pack.json",
+            "role": "reproducibility",
+            "description": "Reproducibility metadata pack.",
+            "content_type": "application/json",
+        },
     ]
 
     evidence_map = _evidence_to_findings(findings)
@@ -154,6 +162,58 @@ def _attachments_manifest(findings, evidence, output_dir):
     }
 
 
+def _environment_metadata():
+    return {
+        "os": platform.system(),
+        "os_release": platform.release(),
+        "os_version": platform.version(),
+        "python_version": platform.python_version(),
+        "python_implementation": platform.python_implementation(),
+    }
+
+
+def _load_repro_steps(path):
+    if not path:
+        return []
+    data = load_data(path)
+    if isinstance(data, dict) and "steps" in data:
+        steps = data.get("steps")
+    else:
+        steps = data
+    if not isinstance(steps, list):
+        raise SystemExit("Repro steps must be a list of strings.")
+    return [str(step) for step in steps if step]
+
+
+def _evidence_hashes(evidence):
+    hashes = []
+    for item in evidence:
+        if not isinstance(item, dict):
+            continue
+        evidence_id = item.get("id")
+        for artifact in _list(item.get("artifacts")):
+            entry = {
+                "path": artifact,
+                "status": "pending",
+            }
+            if evidence_id:
+                entry["evidence_id"] = evidence_id
+            hashes.append(entry)
+    return hashes
+
+
+def _reproducibility_pack(steps, evidence, output_dir):
+    return {
+        "schema_version": "0.1.0",
+        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "bundle_root": str(output_dir),
+        "environment": _environment_metadata(),
+        "steps": steps,
+        "evidence_hashes": _evidence_hashes(evidence),
+        "notes": "Populate evidence hashes when available.",
+    }
+
+
 def main():
     parser = argparse.ArgumentParser(description="Generate a report bundle.")
     parser.add_argument("--findings", required=True, help="Findings JSON/YAML.")
@@ -165,11 +225,16 @@ def main():
         default="templates/reporting/report_bundle.md",
         help="Report template path.",
     )
+    parser.add_argument(
+        "--repro-steps",
+        help="JSON/YAML path with reproducibility steps list.",
+    )
     args = parser.parse_args()
 
     findings = _load_findings(args.findings)
     evidence = _load_evidence(args.evidence)
     profile = load_data(args.target_profile) if args.target_profile else {}
+    repro_steps = _load_repro_steps(args.repro_steps)
 
     for finding in findings:
         if isinstance(finding, dict):
@@ -185,6 +250,7 @@ def main():
         "evidence_summary": _evidence_summary(evidence),
         "review_required_note": REVIEW_REQUIRED_NOTE,
         "attachments_manifest": "attachments_manifest.json",
+        "reproducibility_pack": "reproducibility_pack.json",
     }
 
     template_text = load_template(args.template)
@@ -198,6 +264,8 @@ def main():
     dump_data(output_dir / "findings.json", findings)
     manifest = _attachments_manifest(findings, evidence, output_dir)
     dump_data(output_dir / "attachments_manifest.json", manifest)
+    repro_pack = _reproducibility_pack(repro_steps, evidence, output_dir)
+    dump_data(output_dir / "reproducibility_pack.json", repro_pack)
 
 
 if __name__ == "__main__":

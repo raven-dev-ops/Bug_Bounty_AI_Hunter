@@ -29,6 +29,7 @@ SCHEMA_CASES = [
     ("schemas/evidence_registry.schema.json", "examples/evidence_registry_output.json", False),
     ("schemas/notification_output.schema.json", "examples/notification_output.json", False),
     ("schemas/attachments_manifest.schema.json", "examples/outputs/attachments_manifest.json", False),
+    ("schemas/reproducibility_pack.schema.json", "examples/outputs/reproducibility_pack.json", False),
 ]
 
 
