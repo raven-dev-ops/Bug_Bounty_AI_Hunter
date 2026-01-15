@@ -20,3 +20,6 @@ All notable changes to this project will be documented here.
 - Added reporting docs, templates, and scripts for bundles and platform exports.
 - Added findings database and evidence registry scaffolding.
 - Added labs scaffold plus sample report outputs and exports.
+- Added CI and CodeQL workflows with linting, tests, and schema validation.
+- Added module boundary guidance and expanded README install/usage.
+- Added Docker packaging, requirements files, and validation/tests scaffold.

@@ -23,4 +23,5 @@ Project automation and pipeline planning scripts live here.
 - `export_pdf.py` - export report markdown to PDF (requires pandoc)
 - `findings_db.py` - manage a simple findings database
 - `evidence_manager.py` - manage evidence registry entries
+- `validate_schemas.py` - validate example files against schemas
 - `bootstrap_issues.sh` - create labels and starter backlog

@@ -20,6 +20,7 @@ advice. Only test systems where you have explicit authorization.
 - `docs/COMPONENTS.md`
 - `docs/COMPONENT_MANIFEST.md`
 - `docs/REPORTING.md`
+- `docs/MODULE_BOUNDARIES.md`
 - `docs/HACK_TYPES.md`
 
 ## Repository layout
@@ -33,6 +34,27 @@ advice. Only test systems where you have explicit authorization.
 - `templates/` - scan planning templates
 - `scripts/` - bootstrap and automation scripts
 - `labs/` - synthetic lab scaffolding
+- `tests/` - unit and validation tests
+
+## Install
+```bash
+python -m pip install -r requirements.txt
+python -m pip install -r requirements-dev.txt
+```
+
+## Usage
+```bash
+python scripts/target_profile_generate.py --input examples/target_profile_questionnaire.yaml --output output/target_profile.json
+python scripts/pipeline_orchestrator.py --config examples/pipeline_config.yaml --mode plan
+python scripts/report_bundle.py --findings examples/outputs/findings.json --target-profile examples/target_profile_minimal.yaml --output-dir output/report_bundle
+python scripts/export_issue_drafts.py --findings examples/outputs/findings.json --output-dir output/issue_drafts
+```
+
+## Docker
+```bash
+docker build -t bbhai .
+docker run --rm bbhai
+```
 
 ## Notes
 - PDFs are maintained locally and are ignored by git.
