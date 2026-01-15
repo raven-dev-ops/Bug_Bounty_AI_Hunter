@@ -52,3 +52,4 @@ All notable changes to this project will be documented here.
 - Added component bootstrap script and documentation.
 - Updated roadmap tracking for component bootstrap completion.
 - Added demo runner script and documentation.
+- Updated roadmap tracking for demo runner completion.
