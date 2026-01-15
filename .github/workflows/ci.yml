@@ -31,7 +31,7 @@ jobs:
       - name: Format
         run: python -m ruff format --check scripts tests
       - name: Check markdown links
-        uses: lycheeverse/lychee-action@v1
+        uses: lycheeverse/lychee-action@v2
         with:
           args: --config .lychee.toml "**/*.md"
       - name: Tests
