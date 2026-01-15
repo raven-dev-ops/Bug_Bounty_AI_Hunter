@@ -72,3 +72,4 @@ All notable changes to this project will be documented here.
 - Updated roadmap tracking for stub component completion.
 - Added distribution notes to README.
 - Updated roadmap tracking for distribution notes completion.
+- Closed v0.7 component integration milestone.
