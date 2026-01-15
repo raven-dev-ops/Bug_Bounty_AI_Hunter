@@ -61,3 +61,8 @@ python -m scripts.component_runtime --output examples/component_registry_output.
 
 ## Safety
 All components must follow `docs/ROE.md` and avoid weaponized content.
+
+## Local stub component
+This repo includes a placeholder component under
+`components/bbhai-review-sample/` for registry validation. Replace or remove it
+when real component repos are available.

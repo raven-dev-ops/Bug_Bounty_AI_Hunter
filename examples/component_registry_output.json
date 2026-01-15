@@ -3,9 +3,9 @@
   "generated_at": "2026-01-10T12:00:00Z",
   "components": [
     {
-      "path": "components/bbhai-review-rag/component_manifest.yaml",
+      "path": "components/bbhai-review-sample/component_manifest.yaml",
       "manifest": {
-        "name": "bbhai-review-rag",
+        "name": "bbhai-review-sample",
         "version": "0.1.0",
         "capabilities": ["review"],
         "schemas": {
@@ -13,7 +13,8 @@
           "test_case": ">=0.1.0",
           "finding": ">=0.1.0"
         },
-        "description": "RAG review module"
+        "description": "Sample stub component for registry validation.",
+        "repository": "local"
       },
       "errors": [],
       "enabled": true

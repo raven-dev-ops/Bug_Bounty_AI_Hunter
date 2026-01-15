@@ -1,0 +1,12 @@
+name: bbhai-review-sample
+version: 0.1.0
+capabilities:
+  - review
+schemas:
+  target_profile: ">=0.2.0"
+  test_case: ">=0.1.0"
+  finding: ">=0.1.0"
+description: Sample stub component for registry validation.
+repository: local
+license: Apache-2.0
+contact: support@ravdevops.com
