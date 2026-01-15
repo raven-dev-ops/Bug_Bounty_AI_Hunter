@@ -171,12 +171,12 @@ Definition of done:
 
 ### v0.5 - Workflow automation and component readiness
 Deliverables:
-- [ ] Pipeline stage for dataflow map generation
-- [ ] Threat model generator script and pipeline stage
-- [ ] Pipeline plan schema and example output
-- [ ] Knowledge index CI check
-- [ ] Component repo bootstrap script
-- [ ] End-to-end demo runner script
+- [x] Pipeline stage for dataflow map generation
+- [x] Threat model generator script and pipeline stage
+- [x] Pipeline plan schema and example output
+- [x] Knowledge index CI check
+- [x] Component repo bootstrap script
+- [x] End-to-end demo runner script
 
 Definition of done:
 - Pipeline can generate core artifacts with example data
@@ -185,10 +185,10 @@ Definition of done:
 
 ### v0.6 - Operational artifacts and validation
 Deliverables:
-- [ ] Findings database schema and example output
-- [ ] Evidence registry schema and example output
-- [ ] Notification output schema and example payload
-- [ ] Demo runner CI smoke test (plan mode)
+- [x] Findings database schema and example output
+- [x] Evidence registry schema and example output
+- [x] Notification output schema and example payload
+- [x] Demo runner CI smoke test (plan mode)
 
 Definition of done:
 - Operational outputs are captured by schemas and examples
@@ -198,7 +198,7 @@ Definition of done:
 
 ## Issue tracking (GitHub)
 Open milestone work:
-- v0.6: #58 Demo runner CI
+- None.
 
 Closed milestone work:
 - v0.1: #13-#27 Starter backlog
@@ -210,6 +210,7 @@ Closed milestone work:
 - v0.5: #52 Knowledge index CI check
 - v0.5: #53 Component bootstrap
 - v0.5: #54 Demo runner
+- v0.6: #55-#58 Operational artifacts and validation
 - Backlog: #8 Knowledge index generator; #28-#48 Gap analysis backlog
 
 ---

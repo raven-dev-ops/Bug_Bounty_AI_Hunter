@@ -31,3 +31,5 @@ jobs:
         run: |
           python -m scripts.knowledge_index --output knowledge/INDEX.md
           git diff --exit-code -- knowledge/INDEX.md
+      - name: Demo runner plan
+        run: python -m scripts.demo_runner --mode plan

@@ -10,6 +10,7 @@
 - Unit tests: `python -m unittest discover -s tests`
 - Checklist examples: `tests/test_checklist_examples.py`
 - Knowledge index freshness: `python -m scripts.knowledge_index`
+- Demo runner plan: `python -m scripts.demo_runner --mode plan`
 
 ## Run locally
 ```bash
