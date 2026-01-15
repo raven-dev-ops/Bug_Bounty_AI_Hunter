@@ -54,3 +54,4 @@ All notable changes to this project will be documented here.
 - Added demo runner script and documentation.
 - Updated roadmap tracking for demo runner completion.
 - Closed v0.5 workflow automation milestone.
+- Added v0.6 operational backlog issues.

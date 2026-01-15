@@ -122,7 +122,8 @@ Each outputs structured `TestCase[]` + `Finding[]` candidates.
 ## Milestones
 Tracking: GitHub milestones `v0.1 Documentation-first skeleton`, `v0.2 Target profiling`,
 `v0.3 Review modules and reporting outputs`, `v0.4 Labs and regression`,
-`v0.5 Workflow automation and component readiness`, and `Backlog`.
+`v0.5 Workflow automation and component readiness`,
+`v0.6 Operational artifacts and validation`, and `Backlog`.
 
 ### v0.1 - Documentation-first skeleton (hub foundation)
 Deliverables:
@@ -182,11 +183,22 @@ Definition of done:
 - Component repo scaffolding is automated and documented
 - CI enforces knowledge index freshness
 
+### v0.6 - Operational artifacts and validation
+Deliverables:
+- [ ] Findings database schema and example output
+- [ ] Evidence registry schema and example output
+- [ ] Notification output schema and example payload
+- [ ] Demo runner CI smoke test (plan mode)
+
+Definition of done:
+- Operational outputs are captured by schemas and examples
+- CI validates demo runner plan execution
+
 ---
 
 ## Issue tracking (GitHub)
 Open milestone work:
-- None.
+- v0.6: #55 Findings DB schema; #56 Evidence registry schema; #57 Notification schema; #58 Demo runner CI
 
 Closed milestone work:
 - v0.1: #13-#27 Starter backlog
