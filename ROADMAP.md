@@ -123,7 +123,8 @@ Each outputs structured `TestCase[]` + `Finding[]` candidates.
 Tracking: GitHub milestones `v0.1 Documentation-first skeleton`, `v0.2 Target profiling`,
 `v0.3 Review modules and reporting outputs`, `v0.4 Labs and regression`,
 `v0.5 Workflow automation and component readiness`,
-`v0.6 Operational artifacts and validation`, and `Backlog`.
+`v0.6 Operational artifacts and validation`,
+`v0.7 Component integration and release readiness`, and `Backlog`.
 
 ### v0.1 - Documentation-first skeleton (hub foundation)
 Deliverables:
@@ -194,11 +195,24 @@ Definition of done:
 - Operational outputs are captured by schemas and examples
 - CI validates demo runner plan execution
 
+### v0.7 - Component integration and release readiness
+Deliverables:
+- [ ] Component registry example output and generation docs
+- [ ] Release readiness checklist
+- [ ] Stub component for integration demo
+- [ ] Distribution notes in README
+
+Definition of done:
+- Component registry example exists and is documented
+- Release checklist is available for tagging and release notes
+- Stub component validates registry tooling
+- Distribution notes align with Docker and scripts usage
+
 ---
 
 ## Issue tracking (GitHub)
 Open milestone work:
-- None.
+- v0.7: #59 Component registry example; #60 Release checklist; #61 Stub component; #62 Distribution notes
 
 Closed milestone work:
 - v0.1: #13-#27 Starter backlog

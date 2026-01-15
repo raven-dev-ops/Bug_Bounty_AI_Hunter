@@ -63,3 +63,4 @@ All notable changes to this project will be documented here.
 - Updated roadmap tracking for notification schema completion.
 - Added CI demo runner plan smoke test.
 - Closed v0.6 operational artifacts milestone.
+- Added v0.7 integration backlog issues.
