@@ -58,6 +58,11 @@ advice. Only test systems where you have explicit authorization.
 python -m pip install -r requirements.txt
 python -m pip install -r requirements-dev.txt
 ```
+Editable installs:
+```bash
+python -m pip install -e .
+python -m pip install -e .[dev]
+```
 
 ## How To Use
 - Start with `docs/ROE.md` and confirm written authorization.
