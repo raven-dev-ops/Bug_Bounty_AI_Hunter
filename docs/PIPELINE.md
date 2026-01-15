@@ -27,6 +27,7 @@ underscores in config keys to map to CLI flags with hyphens.
 
 ## Artifacts and schemas
 - Pipeline config: `schemas/pipeline_config.schema.json` (`examples/pipeline_config.yaml`)
+- Pipeline plan output: `schemas/pipeline_plan.schema.json` (`examples/pipeline_plan_output.json`)
 - Discovery output: `schemas/discovery_output.schema.json` (`examples/discovery_output.json`)
 - Dataflow map: `schemas/dataflow_map.schema.json` (`examples/dataflow_map_example.json`)
 - Threat model: `schemas/threat_model.schema.json` (`examples/threat_model_example.json`)

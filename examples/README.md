@@ -7,6 +7,7 @@ Sample target profiles, findings, and report outputs.
 - `target_profile_minimal.yaml`
 - `target_profile_questionnaire.yaml`
 - `pipeline_config.yaml`
+- `pipeline_plan_output.json`
 - `finding_example.json`
 - `evidence_example.json`
 - `test_case_example.json`

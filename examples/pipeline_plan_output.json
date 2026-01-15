@@ -1,0 +1,31 @@
+{
+  "schema_version": "0.1.0",
+  "plan": [
+    {
+      "stage": "scope_import",
+      "argv": [
+        "python",
+        "-m",
+        "scripts.import_scope",
+        "--input",
+        "examples/scope_generic.json",
+        "--format",
+        "generic",
+        "--output",
+        "output/target_profile.json"
+      ]
+    },
+    {
+      "stage": "dataflow_map",
+      "argv": [
+        "python",
+        "-m",
+        "scripts.dataflow_map",
+        "--target-profile",
+        "output/target_profile.json",
+        "--output",
+        "output/dataflow_map.json"
+      ]
+    }
+  ]
+}

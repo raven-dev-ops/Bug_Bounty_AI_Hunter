@@ -45,3 +45,4 @@ All notable changes to this project will be documented here.
 - Added v0.5 automation backlog with new GitHub issues.
 - Added threat model generator script and pipeline stages for dataflow and threat modeling.
 - Updated roadmap tracking for completed v0.5 pipeline stages.
+- Added pipeline plan schema and example output.

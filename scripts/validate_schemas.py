@@ -19,6 +19,7 @@ SCHEMA_CASES = [
     ("schemas/dataflow_map.schema.json", "examples/dataflow_map_example.json", False),
     ("schemas/threat_model.schema.json", "examples/threat_model_example.json", False),
     ("schemas/pipeline_config.schema.json", "examples/pipeline_config.yaml", False),
+    ("schemas/pipeline_plan.schema.json", "examples/pipeline_plan_output.json", False),
     ("schemas/discovery_output.schema.json", "examples/discovery_output.json", False),
     ("schemas/scan_plan.schema.json", "examples/scan_plan_output.json", False),
     ("schemas/triage_output.schema.json", "examples/triage_output.json", False),

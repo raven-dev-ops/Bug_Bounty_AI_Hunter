@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ravdevops.com/schemas/pipeline_plan.schema.json",
+  "title": "PipelinePlan",
+  "type": "object",
+  "description": "Planned pipeline stages and their CLI arguments.",
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "plan": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/plan_item" }
+    }
+  },
+  "required": ["schema_version", "plan"],
+  "additionalProperties": true,
+  "$defs": {
+    "plan_item": {
+      "type": "object",
+      "properties": {
+        "stage": { "type": "string" },
+        "argv": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      },
+      "required": ["stage", "argv"],
+      "additionalProperties": true
+    }
+  }
+}

@@ -9,6 +9,7 @@ This folder contains JSON Schema definitions for core data types:
 - `dataflow_map.schema.json`
 - `threat_model.schema.json`
 - `pipeline_config.schema.json`
+- `pipeline_plan.schema.json`
 - `discovery_output.schema.json`
 - `scan_plan.schema.json`
 - `triage_output.schema.json`
