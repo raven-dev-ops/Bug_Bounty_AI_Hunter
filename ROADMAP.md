@@ -186,7 +186,7 @@ Definition of done:
 
 ## Issue tracking (GitHub)
 Open milestone work:
-- v0.5: #52 Knowledge index CI; #53 Component bootstrap; #54 Demo runner
+- v0.5: #53 Component bootstrap; #54 Demo runner
 
 Closed milestone work:
 - v0.1: #13-#27 Starter backlog
@@ -195,6 +195,7 @@ Closed milestone work:
 - v0.4: #4-#6 Labs and regression
 - v0.5: #49-#50 Dataflow map and threat model stages
 - v0.5: #51 Pipeline plan schema
+- v0.5: #52 Knowledge index CI check
 - Backlog: #8 Knowledge index generator; #28-#48 Gap analysis backlog
 
 ---

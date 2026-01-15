@@ -48,3 +48,4 @@ All notable changes to this project will be documented here.
 - Added pipeline plan schema and example output.
 - Updated roadmap tracking for pipeline plan schema completion.
 - Added CI check to keep knowledge index in sync.
+- Updated roadmap tracking for knowledge index CI completion.
