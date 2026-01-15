@@ -115,3 +115,4 @@ All notable changes to this project will be documented here.
 - Added runtime and dev dependencies to pyproject optional extras.
 - Expanded pipeline docs and example config with reporting and export stages.
 - Added reproducibility steps example file and docs reference.
+- Updated README roadmap milestone note.

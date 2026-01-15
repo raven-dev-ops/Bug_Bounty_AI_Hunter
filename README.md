@@ -127,7 +127,7 @@ docker run --rm bbhai
 ## Notes
 - PDFs are maintained locally and are ignored by git.
 - Milestone status and backlog tracking are aligned with `ROADMAP.md` and GitHub milestones.
-- Roadmap planning now extends through the v0.8 ops documentation milestone.
+- Roadmap planning now reflects completion through the v0.9 milestone.
 - Evidence registry entries can include hashes and custody metadata (see `docs/REPORTING.md`).
 - Evidence storage can use encryption at rest guidance in `docs/REPORTING.md`.
 - Component registry index lives at `data/component_registry_index.json`.
