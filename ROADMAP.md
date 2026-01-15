@@ -198,7 +198,7 @@ Definition of done:
 
 ## Issue tracking (GitHub)
 Open milestone work:
-- v0.6: #55 Findings DB schema; #56 Evidence registry schema; #57 Notification schema; #58 Demo runner CI
+- v0.6: #56 Evidence registry schema; #57 Notification schema; #58 Demo runner CI
 
 Closed milestone work:
 - v0.1: #13-#27 Starter backlog

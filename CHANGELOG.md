@@ -56,3 +56,4 @@ All notable changes to this project will be documented here.
 - Closed v0.5 workflow automation milestone.
 - Added v0.6 operational backlog issues.
 - Added findings database schema and example output.
+- Updated roadmap tracking for findings database schema completion.
