@@ -73,6 +73,7 @@ python -m pip install -e .[dev]
   and `reproducibility_pack.json`.
 - Use `bbhai report --repro-steps <path>` and `--attachments-manifest` to enrich
   report bundles and issue drafts with reproducibility metadata.
+- Start from `examples/repro_steps.json` when authoring repro steps.
 - Configure optional integrations via `docs/ENVIRONMENT.md` and
   `docs/NOTIFICATIONS.md`.
 

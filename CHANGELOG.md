@@ -114,3 +114,4 @@ All notable changes to this project will be documented here.
 - Added bbhai report flags for repro steps and attachments manifest paths.
 - Added runtime and dev dependencies to pyproject optional extras.
 - Expanded pipeline docs and example config with reporting and export stages.
+- Added reproducibility steps example file and docs reference.

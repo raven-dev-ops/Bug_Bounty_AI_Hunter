@@ -25,6 +25,7 @@ Sample target profiles, findings, and report outputs.
 - `intel_output.json`
 - `triage_ai_config.yaml`
 - `triage_output.json`
+- `repro_steps.json`
 - `component_runtime_config.yaml`
 - `component_registry_output.json`
 - `findings_db_output.json`
