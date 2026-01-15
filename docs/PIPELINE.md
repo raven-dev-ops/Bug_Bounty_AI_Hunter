@@ -44,6 +44,15 @@ Use `python -m scripts.pipeline_orchestrator` to plan or run stages.
 python -m scripts.pipeline_orchestrator --config examples/pipeline_config.yaml --mode plan
 ```
 
+## Demo runner
+Use `python -m scripts.demo_runner` to run the example pipeline with outputs
+stored under `output/demo` by default.
+
+```bash
+python -m scripts.demo_runner --mode plan
+python -m scripts.demo_runner --mode run
+```
+
 ## Performance controls
 Scan planning supports `max_concurrency` and `min_delay_seconds`. Pair those
 with TargetProfile `constraints` and ROE guardrails.
