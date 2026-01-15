@@ -1,0 +1,25 @@
+{
+  "schema_version": "0.1.0",
+  "components": [
+    {
+      "name": "bbhai-review-sample",
+      "version": "0.1.0",
+      "path": "components/bbhai-review-sample",
+      "manifest_path": "components/bbhai-review-sample/component_manifest.yaml",
+      "capabilities": [
+        "review"
+      ],
+      "schemas": {
+        "target_profile": ">=0.2.0",
+        "test_case": ">=0.1.0",
+        "finding": ">=0.1.0"
+      },
+      "entrypoints": {},
+      "description": "Sample stub component for registry validation.",
+      "repository": "local",
+      "license": "Apache-2.0",
+      "contact": "support@ravdevops.com",
+      "errors": []
+    }
+  ]
+}

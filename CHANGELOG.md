@@ -109,3 +109,4 @@ All notable changes to this project will be documented here.
 - Added evidence hashes and chain-of-custody metadata in evidence schemas and examples.
 - Added encryption-at-rest guidance for evidence handling.
 - Added component contract documentation and readiness checklist.
+- Added component registry index file and generator script.

@@ -25,6 +25,7 @@ SCHEMA_CASES = [
     ("schemas/triage_output.schema.json", "examples/triage_output.json", False),
     ("schemas/intel_output.schema.json", "examples/intel_output.json", False),
     ("schemas/component_registry.schema.json", "examples/component_registry_output.json", False),
+    ("schemas/component_registry_index.schema.json", "data/component_registry_index.json", False),
     ("schemas/findings_db.schema.json", "examples/findings_db_output.json", False),
     ("schemas/evidence_registry.schema.json", "examples/evidence_registry_output.json", False),
     ("schemas/notification_output.schema.json", "examples/notification_output.json", False),

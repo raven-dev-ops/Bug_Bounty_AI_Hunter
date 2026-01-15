@@ -20,6 +20,7 @@ Use `python -m scripts.<module>` to run a script from the repo root.
 - `external_intel.py` - enrich assets with intel records
 - `notify.py` - send summary notifications (console/file by default)
 - `component_runtime.py` - validate component manifests
+- `component_registry_index.py` - generate the component registry index
 - `pipeline_orchestrator.py` - plan or run pipeline stages
 - `report_bundle.py` - generate report.md and findings.json bundles
 - `export_finding_reports.py` - render per-finding markdown reports

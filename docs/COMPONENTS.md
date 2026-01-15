@@ -55,6 +55,13 @@ Generate the example registry output with:
 python -m scripts.component_runtime --output examples/component_registry_output.json
 ```
 
+## Registry index
+Generate the machine-readable index with:
+```bash
+python -m scripts.component_registry_index --output data/component_registry_index.json
+```
+CI validates the index is current.
+
 ## Versioning and compatibility
 - Use semantic versioning.
 - Document schema compatibility in the manifest.

@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ravdevops.com/schemas/component_registry_index.schema.json",
+  "title": "ComponentRegistryIndex",
+  "type": "object",
+  "description": "Index of component manifests for quick lookup.",
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "components": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/component" }
+    }
+  },
+  "required": ["schema_version", "components"],
+  "additionalProperties": true,
+  "$defs": {
+    "component": {
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "version": { "type": "string" },
+        "path": { "type": "string" },
+        "manifest_path": { "type": "string" },
+        "capabilities": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "schemas": { "type": "object" },
+        "entrypoints": { "type": "object" },
+        "description": { "type": "string" },
+        "repository": { "type": "string" },
+        "license": { "type": "string" },
+        "contact": { "type": "string" },
+        "errors": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      },
+      "required": ["name", "manifest_path"],
+      "additionalProperties": true
+    }
+  }
+}
