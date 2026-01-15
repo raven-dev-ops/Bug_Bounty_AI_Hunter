@@ -9,6 +9,11 @@ hub. Start with rules of engagement and then follow the pipeline lifecycle.
 - `PIPELINE.md` for orchestration steps.
 - `REPORTING.md` for report and export guidance.
 
+## Choose your path
+- `paths/bug-bounty-hunter.md`
+- `paths/appsec-review.md`
+- `paths/threat-model-only.md`
+
 ## Core references
 - `ARCHITECTURE.md`
 - `COMPONENTS.md`

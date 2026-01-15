@@ -100,3 +100,4 @@ All notable changes to this project will be documented here.
 - Added pip caching in CI.
 - Added Dependabot configuration for pip and GitHub Actions.
 - Added MkDocs configuration and CI build job.
+- Added docs entrypoints and lifecycle navigation pages.

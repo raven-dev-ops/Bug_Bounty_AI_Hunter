@@ -230,7 +230,7 @@ Deliverables:
 - [x] Artifact schema versioning and migration scaffolding
 - [ ] Integration tests and CI quality upgrades
 - [ ] Reporting/evidence enhancements (manifests, hashes, reproducibility)
-- [ ] Documentation site navigation improvements
+- [x] Documentation site navigation improvements
 - [ ] Component contract and registry index validation
 
 Definition of done:
@@ -243,7 +243,6 @@ Definition of done:
 
 ## Issue tracking (GitHub)
 Open milestone work:
-- v0.9: #84 Docs nav and entrypoints
 - v0.9: #85 Severity model alignment
 - v0.9: #86 Report attachments manifest
 - v0.9: #87 Reproducibility pack metadata

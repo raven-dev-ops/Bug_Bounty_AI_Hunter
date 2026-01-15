@@ -33,6 +33,11 @@ advice. Only test systems where you have explicit authorization.
 - `docs/RELEASE_NOTES_TEMPLATE.md`
 - `docs/RELEASE_CHECKLIST.md`
 
+## Choose Your Path
+- `docs/paths/bug-bounty-hunter.md`
+- `docs/paths/appsec-review.md`
+- `docs/paths/threat-model-only.md`
+
 ## Repository layout
 - `docs/` - architecture, rules, and planning docs
 - `schemas/` - data model schemas

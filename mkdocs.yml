@@ -4,11 +4,22 @@ site_dir: site
 theme: readthedocs
 nav:
   - Home: index.md
-  - Project Outline: PROJECT_OUTLINE.md
-  - ROE: ROE.md
-  - Architecture: ARCHITECTURE.md
-  - Pipeline: PIPELINE.md
-  - Reporting: REPORTING.md
-  - Components: COMPONENTS.md
-  - Knowledge Format: KNOWLEDGE_FORMAT.md
-  - Testing: TESTING.md
+  - Choose Your Path:
+      - Bug Bounty Hunter: paths/bug-bounty-hunter.md
+      - AppSec Review: paths/appsec-review.md
+      - Threat Model Only: paths/threat-model-only.md
+  - Lifecycle:
+      - Scope: TARGET_PROFILE.md
+      - Model: THREAT_MODEL.md
+      - Plan: PIPELINE.md
+      - Execute: TESTING.md
+      - Triage: TRIAGE.md
+      - Report: REPORTING.md
+  - Reference:
+      - Project Outline: PROJECT_OUTLINE.md
+      - ROE: ROE.md
+      - Architecture: ARCHITECTURE.md
+      - Components: COMPONENTS.md
+      - Component Manifest: COMPONENT_MANIFEST.md
+      - Knowledge Format: KNOWLEDGE_FORMAT.md
+      - Knowledge Tags: KNOWLEDGE_TAGS.md
