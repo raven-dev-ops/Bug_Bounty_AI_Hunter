@@ -28,6 +28,7 @@ advice. Only test systems where you have explicit authorization.
 - `docs/NOTIFICATIONS.md`
 - `docs/MODULE_BOUNDARIES.md`
 - `docs/HACK_TYPES.md`
+- `docs/COVERAGE_MATRIX.md`
 - `docs/TESTING.md`
 - `docs/RELEASE_NOTES_TEMPLATE.md`
 - `docs/RELEASE_CHECKLIST.md`

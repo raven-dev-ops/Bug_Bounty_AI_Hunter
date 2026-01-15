@@ -5,6 +5,7 @@
     {
       "path": "components/bbhai-review-sample/component_manifest.yaml",
       "manifest": {
+        "schema_version": "0.1.0",
         "name": "bbhai-review-sample",
         "version": "0.1.0",
         "capabilities": ["review"],
@@ -14,7 +15,9 @@
           "finding": ">=0.1.0"
         },
         "description": "Sample stub component for registry validation.",
-        "repository": "local"
+        "repository": "local",
+        "license": "Apache-2.0",
+        "contact": "support@ravdevops.com"
       },
       "errors": [],
       "enabled": true

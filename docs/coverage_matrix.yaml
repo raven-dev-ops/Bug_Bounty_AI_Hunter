@@ -1,0 +1,160 @@
+schema_version: "0.1.0"
+updated_at: "2026-01-15"
+sources:
+  - name: OWASP Top 10 for LLM Applications
+    url: https://owasp.org/www-project-top-10-for-large-language-model-applications/
+  - name: MITRE ATLAS
+    url: https://atlas.mitre.org/
+  - name: NIST AI RMF
+    url: https://www.nist.gov/itl/ai-risk-management-framework
+coverage:
+  owasp_llm_top10:
+    - id: LLM01
+      name: Prompt Injection
+      status: partial
+      coverage:
+        - knowledge/checklists/agents-review.md
+        - knowledge/checklists/rag-logging-review.md
+        - knowledge/cards/kb-0020-prompt-social-engineering.md
+        - docs/HACK_TYPES.md
+      notes: Indirect prompt injection and tool use review guidance.
+    - id: LLM02
+      name: Insecure Output Handling
+      status: planned
+      coverage:
+        - docs/REPORTING.md
+      issues:
+        - "#78"
+      notes: Add output review markers and sanitization guidance.
+    - id: LLM03
+      name: Training Data Poisoning
+      status: partial
+      coverage:
+        - docs/THREAT_MODEL.md
+        - knowledge/cards/kb-0005-fine-tuning-data-leakage.md
+        - docs/HACK_TYPES.md
+      notes: Threat modeling and fine-tuning data handling risks.
+    - id: LLM04
+      name: Model Denial of Service
+      status: partial
+      coverage:
+        - docs/PIPELINE.md
+        - docs/ROE.md
+      notes: Rate limiting and safe execution expectations.
+    - id: LLM05
+      name: Supply Chain Vulnerabilities
+      status: partial
+      coverage:
+        - knowledge/checklists/update-installer-review.md
+        - knowledge/cards/kb-0008-untrusted-update-fetch.md
+        - knowledge/cards/kb-0009-dll-search-order-hijack.md
+      notes: Update and dependency integrity review.
+    - id: LLM06
+      name: Sensitive Information Disclosure
+      status: partial
+      coverage:
+        - knowledge/checklists/rag-logging-review.md
+        - knowledge/cards/kb-0003-rag-context-leakage.md
+        - knowledge/cards/kb-0004-logging-retention-risk.md
+        - docs/ROE.md
+      notes: RAG and logging exposure guidance.
+    - id: LLM07
+      name: Insecure Plugin Design
+      status: partial
+      coverage:
+        - knowledge/checklists/agents-review.md
+        - docs/COMPONENT_MANIFEST.md
+        - docs/COMPONENTS.md
+      notes: Agent and component integration expectations.
+    - id: LLM08
+      name: Excessive Agency
+      status: partial
+      coverage:
+        - knowledge/checklists/agents-review.md
+        - docs/ROE.md
+      notes: Tool use and approval guardrails.
+    - id: LLM09
+      name: Overreliance
+      status: planned
+      coverage:
+        - docs/TRIAGE.md
+        - docs/REPORTING.md
+      notes: Add explicit human review checkpoints.
+    - id: LLM10
+      name: Model Theft
+      status: planned
+      coverage:
+        - docs/THREAT_MODEL.md
+        - docs/HACK_TYPES.md
+      notes: Model protection and extraction risks are documented at a high level.
+  mitre_atlas:
+    - name: Reconnaissance
+      status: partial
+      coverage:
+        - docs/PIPELINE.md
+        - scripts/import_scope.py
+        - scripts/discovery_assets.py
+      notes: Scope import and discovery planning.
+    - name: Resource Development
+      status: partial
+      coverage:
+        - docs/KNOWLEDGE_FORMAT.md
+        - knowledge/INDEX.md
+      notes: Knowledge sourcing and curation.
+    - name: Initial Access
+      status: planned
+      coverage:
+        - docs/THREAT_MODEL.md
+      notes: Threat modeling only; no exploitation.
+    - name: Execution
+      status: partial
+      coverage:
+        - docs/PIPELINE.md
+        - scripts/pipeline_orchestrator.py
+      notes: Orchestrated planning and run modes.
+    - name: Collection
+      status: partial
+      coverage:
+        - docs/REPORTING.md
+        - evidence/README.md
+      notes: Evidence capture and reporting guidance.
+    - name: Impact
+      status: partial
+      coverage:
+        - docs/TRIAGE.md
+        - docs/REPORTING.md
+      notes: Severity and impact framing in reports.
+  nist_ai_rmf:
+    - id: GOVERN
+      name: Govern
+      status: partial
+      coverage:
+        - docs/ROE.md
+        - docs/PROJECT_MANAGEMENT.md
+        - SECURITY.md
+      notes: Governance, safety, and disclosure expectations.
+    - id: MAP
+      name: Map
+      status: partial
+      coverage:
+        - docs/TARGET_PROFILE.md
+        - docs/THREAT_MODEL.md
+        - scripts/target_profile_generate.py
+        - scripts/dataflow_map.py
+      notes: Target profiling and dataflow modeling.
+    - id: MEASURE
+      name: Measure
+      status: partial
+      coverage:
+        - docs/TESTING.md
+        - docs/TRIAGE.md
+        - scripts/scan_templates.py
+      notes: Test planning and triage measurement.
+    - id: MANAGE
+      name: Manage
+      status: partial
+      coverage:
+        - docs/REPORTING.md
+        - docs/NOTIFICATIONS.md
+        - docs/RELEASE_CHECKLIST.md
+      notes: Reporting, notification, and release practices.

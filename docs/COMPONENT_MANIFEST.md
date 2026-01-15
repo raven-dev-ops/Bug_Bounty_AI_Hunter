@@ -13,6 +13,7 @@ Schema reference: `schemas/component_manifest.schema.json`.
 Use `python -m scripts.component_runtime --manifest <path>` to validate a manifest.
 
 ## Required fields
+- `schema_version`: manifest schema version (string)
 - `name`: unique component name (string)
 - `version`: semantic version string (string)
 - `capabilities`: list of capabilities (array of strings)
@@ -27,6 +28,7 @@ Use `python -m scripts.component_runtime --manifest <path>` to validate a manife
 
 ## Example
 ```yaml
+schema_version: "0.1.0"
 name: bbhai-review-rag
 version: 0.1.0
 capabilities:

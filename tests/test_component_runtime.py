@@ -31,6 +31,7 @@ class ComponentRuntimeTest(unittest.TestCase):
 
     def test_load_manifest_respects_config_disable(self):
         manifest = {
+            "schema_version": "0.1.0",
             "name": "sample",
             "version": "0.1.0",
             "capabilities": ["discovery"],

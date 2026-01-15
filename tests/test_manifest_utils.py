@@ -6,10 +6,12 @@ from scripts.lib.manifest_utils import validate_manifest
 class ManifestUtilsTest(unittest.TestCase):
     def test_validate_manifest_missing_fields(self):
         errors = validate_manifest({"name": "example"})
+        self.assertTrue(any("schema_version" in error for error in errors))
         self.assertTrue(any("version" in error for error in errors))
 
     def test_validate_manifest_ok(self):
         manifest = {
+            "schema_version": "0.1.0",
             "name": "example",
             "version": "0.1.0",
             "capabilities": ["discovery"],

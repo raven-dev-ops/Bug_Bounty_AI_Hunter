@@ -85,3 +85,5 @@ All notable changes to this project will be documented here.
 - Added v0.9 unified CLI and coverage backlog issues.
 - Added unified `bbhai` CLI entrypoint and README examples.
 - Clarified SECURITY scope and operational safety guidance.
+- Added coverage matrix source, generated docs, and CI sync check.
+- Added schema_version to component manifests and updated examples and docs.

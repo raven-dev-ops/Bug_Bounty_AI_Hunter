@@ -29,6 +29,7 @@ Use `python -m scripts.<module>` to run a script from the repo root.
 - `findings_db.py` - manage a simple findings database
 - `evidence_manager.py` - manage evidence registry entries
 - `knowledge_index.py` - generate knowledge index from frontmatter
+- `coverage_matrix.py` - generate coverage matrix docs from YAML
 - `component_bootstrap.py` - scaffold a component repo skeleton
 - `demo_runner.py` - run the example pipeline end-to-end
 - `validate_schemas.py` - validate example files against schemas

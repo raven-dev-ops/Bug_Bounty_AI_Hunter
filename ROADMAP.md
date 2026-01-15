@@ -225,7 +225,7 @@ Definition of done:
 ### v0.9 - Unified CLI, coverage, and safety
 Deliverables:
 - [x] Unified `bbhai` CLI entrypoint with subcommands and consistent flags
-- [ ] Coverage matrix mapping to OWASP LLM Top 10, MITRE ATLAS, and NIST AI RMF
+- [x] Coverage matrix mapping to OWASP LLM Top 10, MITRE ATLAS, and NIST AI RMF
 - [x] SECURITY scope clarification and operational safety guidance
 - [ ] Artifact schema versioning and migration scaffolding
 - [ ] Integration tests and CI quality upgrades
@@ -243,8 +243,6 @@ Definition of done:
 
 ## Issue tracking (GitHub)
 Open milestone work:
-- v0.9: #68 Coverage matrix mapping
-- v0.9: #70 Schema version fields
 - v0.9: #71 Migration helper
 - v0.9: #72 Golden-file re-emit checks
 - v0.9: #73 Integration tests for demo runner

@@ -66,6 +66,11 @@ def main():
     parser.add_argument("--description", help="Short component description.")
     parser.add_argument("--version", default="0.1.0")
     parser.add_argument(
+        "--schema-version",
+        default="0.1.0",
+        help="Component manifest schema version.",
+    )
+    parser.add_argument(
         "--capabilities",
         default="review",
         help="Comma-separated capabilities (default: review).",
@@ -121,6 +126,7 @@ def main():
         raise SystemExit("At least one capability is required.")
 
     manifest = {
+        "schema_version": args.schema_version,
         "name": args.name,
         "version": args.version,
         "capabilities": capabilities,
