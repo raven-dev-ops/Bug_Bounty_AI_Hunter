@@ -243,7 +243,6 @@ Definition of done:
 
 ## Issue tracking (GitHub)
 Open milestone work:
-- v0.9: #74 Property-based tests
 - v0.9: #75 Coverage reporting
 - v0.9: #76 Authorization gating
 - v0.9: #77 Budget and rate controls
