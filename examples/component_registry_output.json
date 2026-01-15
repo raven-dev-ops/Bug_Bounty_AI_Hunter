@@ -7,11 +7,20 @@
       "manifest": {
         "name": "bbhai-review-rag",
         "version": "0.1.0",
+        "capabilities": ["review"],
+        "schemas": {
+          "target_profile": ">=0.2.0",
+          "test_case": ">=0.1.0",
+          "finding": ">=0.1.0"
+        },
         "description": "RAG review module"
       },
       "errors": [],
       "enabled": true
     }
   ],
-  "notes": ["Component registry is informational only."]
+  "notes": [
+    "Component registry is informational only.",
+    "Schema validation requires the jsonschema package."
+  ]
 }

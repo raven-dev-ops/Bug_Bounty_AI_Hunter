@@ -49,6 +49,11 @@ Enable or disable components via a config file such as
 `examples/component_runtime_config.yaml`.
 Schema validation requires the `jsonschema` package.
 
+Generate the example registry output with:
+```bash
+python -m scripts.component_runtime --output examples/component_registry_output.json
+```
+
 ## Versioning and compatibility
 - Use semantic versioning.
 - Document schema compatibility in the manifest.
