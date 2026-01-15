@@ -65,6 +65,11 @@ docker build -t bbhai .
 docker run --rm bbhai
 ```
 
+## Distribution
+- Docker image builds are the primary distribution mechanism today.
+- Tag releases in git and update `docs/RELEASE_CHECKLIST.md` before publishing.
+- Package registry support can be added later if needed.
+
 ## Notes
 - PDFs are maintained locally and are ignored by git.
 - Milestone status and backlog tracking are aligned with `ROADMAP.md` and GitHub milestones.
