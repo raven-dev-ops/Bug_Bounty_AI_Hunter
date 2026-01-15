@@ -24,6 +24,7 @@ advice. Only test systems where you have explicit authorization.
 - `docs/INTEL.md`
 - `docs/ENVIRONMENT.md`
 - `docs/COMPONENTS.md`
+- `docs/COMPONENT_CONTRACT.md`
 - `docs/COMPONENT_MANIFEST.md`
 - `docs/REPORTING.md`
 - `docs/NOTIFICATIONS.md`

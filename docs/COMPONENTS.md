@@ -27,7 +27,8 @@ Each component should provide:
 - A manifest at the repo root (`component_manifest.yaml` or `.json`).
 - Tests or examples that demonstrate safe behavior.
 
-See `docs/COMPONENT_MANIFEST.md` and `schemas/component_manifest.schema.json`.
+See `docs/COMPONENT_CONTRACT.md`, `docs/COMPONENT_MANIFEST.md`, and
+`schemas/component_manifest.schema.json`.
 
 ## Manifest example
 ```yaml

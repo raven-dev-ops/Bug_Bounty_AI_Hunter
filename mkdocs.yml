@@ -20,6 +20,7 @@ nav:
       - ROE: ROE.md
       - Architecture: ARCHITECTURE.md
       - Components: COMPONENTS.md
+      - Component Contract: COMPONENT_CONTRACT.md
       - Component Manifest: COMPONENT_MANIFEST.md
       - Knowledge Format: KNOWLEDGE_FORMAT.md
       - Knowledge Tags: KNOWLEDGE_TAGS.md

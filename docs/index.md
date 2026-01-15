@@ -17,6 +17,7 @@ hub. Start with rules of engagement and then follow the pipeline lifecycle.
 ## Core references
 - `ARCHITECTURE.md`
 - `COMPONENTS.md`
+- `COMPONENT_CONTRACT.md`
 - `KNOWLEDGE_FORMAT.md`
 - `SEVERITY_MODEL.md`
 - `TESTING.md`
