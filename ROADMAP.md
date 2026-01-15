@@ -171,13 +171,14 @@ Definition of done:
 
 ## Issue tracking (GitHub)
 Open milestone work:
-- v0.2: #1 Add dataflow map output and example; #2 Add threat model template and schema
-- v0.3: #3 Add schemas for pipeline config and outputs; #7 Add agents review checklist and test case example; #10 Clarify report generator output milestone completion
-- v0.4: #4 Add regression tests for review checklists; #5 Add markdown link checks to CI; #6 Replace lab placeholders with synthetic service stubs
-- Backlog: #28-#48 Gap analysis backlog (meta issue #48)
+- None.
 
 Closed milestone work:
 - v0.1: #13-#27 Starter backlog
+- v0.2: #1-#2 Target profiling
+- v0.3: #3, #7, #10 Review modules and reporting outputs
+- v0.4: #4-#6 Labs and regression
+- Backlog: #8 Knowledge index generator; #28-#48 Gap analysis backlog
 
 ---
 
@@ -276,7 +277,7 @@ Priority P3:
 - #46 Add distribution packaging (Docker or package registry)
 - #47 Add export to issue trackers (Jira or generic)
 
-Status: Active; tracked in Backlog milestone.
+Status: Completed; all referenced issues closed.
 
 ---
 
