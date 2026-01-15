@@ -13,6 +13,18 @@
       "type": "array",
       "items": { "$ref": "#/$defs/stage" }
     },
+    "limits": {
+      "type": "object",
+      "properties": {
+        "max_concurrency": { "type": "integer", "minimum": 1 },
+        "min_delay_seconds": { "type": "number", "minimum": 0 },
+        "timeout_seconds": { "type": "number", "minimum": 0 },
+        "stage_timeout_seconds": { "type": "number", "minimum": 1 },
+        "request_budget": { "type": "integer", "minimum": 0 },
+        "token_budget": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": false
+    },
     "notes": { "type": "string" }
   },
   "required": ["schema_version", "stages"],

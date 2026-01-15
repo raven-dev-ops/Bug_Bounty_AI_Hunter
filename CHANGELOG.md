@@ -93,3 +93,4 @@ All notable changes to this project will be documented here.
 - Added property-based tests for severity and dataflow normalization.
 - Added coverage reporting configuration and CI step.
 - Added ROE acknowledgement gating for pipeline run mode.
+- Added pipeline limits and budget enforcement scaffolding.

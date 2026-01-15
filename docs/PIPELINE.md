@@ -29,6 +29,16 @@ Use `examples/pipeline_config.yaml` as a starting point. Each stage defines a
 `name` and a `config` mapping that matches the stage script flags. Use
 underscores in config keys to map to CLI flags with hyphens.
 
+### Limits and budgets
+Top-level `limits` can enforce guardrails across stages:
+- `max_concurrency` and `min_delay_seconds` apply to scan planning.
+- `timeout_seconds` applies to intel lookups.
+- `stage_timeout_seconds` caps each stage runtime.
+- `request_budget` and `token_budget` compare against per-stage estimates.
+
+Stage configs can include `estimated_requests` or `estimated_tokens` for budget
+checks. These estimates are orchestration-only and are not passed to scripts.
+
 ## Artifacts and schemas
 - Pipeline config: `schemas/pipeline_config.schema.json` (`examples/pipeline_config.yaml`)
 - Pipeline plan output: `schemas/pipeline_plan.schema.json` (`examples/pipeline_plan_output.json`)

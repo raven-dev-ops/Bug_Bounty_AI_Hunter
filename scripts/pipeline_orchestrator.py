@@ -23,10 +23,18 @@ STAGE_MODULES = {
     "pdf_export": "scripts.export_pdf",
 }
 
+ORCHESTRATOR_ONLY_KEYS = {"estimated_requests", "estimated_tokens"}
+LIMITED_STAGE_KEYS = {
+    "scan": {"max_concurrency", "min_delay_seconds"},
+    "intel": {"timeout_seconds"},
+}
+
 
 def _config_to_args(config):
     args = []
     for key, value in config.items():
+        if key in ORCHESTRATOR_ONLY_KEYS:
+            continue
         flag = "--" + key.replace("_", "-")
         if isinstance(value, bool):
             if value:
@@ -36,6 +44,64 @@ def _config_to_args(config):
         else:
             args.extend([flag, str(value)])
     return args
+
+
+def _apply_limits(stage, limits):
+    if not isinstance(limits, dict):
+        return stage
+    config = stage.get("config", {}) or {}
+    stage_name = stage.get("name")
+    limit_keys = LIMITED_STAGE_KEYS.get(stage_name, set())
+
+    for key in limit_keys:
+        limit_value = limits.get(key)
+        if limit_value is None:
+            continue
+        value = config.get(key)
+        if value is None:
+            config[key] = limit_value
+            continue
+        try:
+            value_num = float(value)
+            limit_num = float(limit_value)
+        except (TypeError, ValueError):
+            raise SystemExit(f"Invalid numeric limit for {key}.")
+        if key == "min_delay_seconds":
+            if value_num < limit_num:
+                raise SystemExit(
+                    f"{key} {value} is below the configured limit {limit_value}."
+                )
+        else:
+            if value_num > limit_num:
+                raise SystemExit(
+                    f"{key} {value} exceeds the configured limit {limit_value}."
+                )
+    stage["config"] = config
+    return stage
+
+
+def _parse_budget(value, label):
+    if value is None:
+        return None
+    try:
+        parsed = int(value)
+    except (TypeError, ValueError):
+        raise SystemExit(f"{label} must be an integer.")
+    if parsed < 0:
+        raise SystemExit(f"{label} must be non-negative.")
+    return parsed
+
+
+def _parse_timeout(value, label):
+    if value is None:
+        return None
+    try:
+        parsed = float(value)
+    except (TypeError, ValueError):
+        raise SystemExit(f"{label} must be a number.")
+    if parsed <= 0:
+        raise SystemExit(f"{label} must be greater than zero.")
+    return parsed
 
 
 def build_command(stage):
@@ -94,6 +160,39 @@ def main():
     if not stages:
         raise SystemExit("No stages found in pipeline config.")
 
+    limits = config.get("limits", {}) or {}
+    request_budget = _parse_budget(limits.get("request_budget"), "request_budget")
+    token_budget = _parse_budget(limits.get("token_budget"), "token_budget")
+    stage_timeout = _parse_timeout(
+        limits.get("stage_timeout_seconds"), "stage_timeout_seconds"
+    )
+    total_requests = 0
+    total_tokens = 0
+
+    for stage in stages:
+        _apply_limits(stage, limits)
+        config_map = stage.get("config", {}) or {}
+        est_requests = _parse_budget(
+            config_map.get("estimated_requests"), "estimated_requests"
+        )
+        est_tokens = _parse_budget(
+            config_map.get("estimated_tokens"), "estimated_tokens"
+        )
+        if est_requests is not None:
+            total_requests += est_requests
+        if est_tokens is not None:
+            total_tokens += est_tokens
+        stage["config"] = config_map
+
+    if request_budget is not None and total_requests > request_budget:
+        raise SystemExit(
+            f"Estimated requests {total_requests} exceed request_budget {request_budget}."
+        )
+    if token_budget is not None and total_tokens > token_budget:
+        raise SystemExit(
+            f"Estimated tokens {total_tokens} exceed token_budget {token_budget}."
+        )
+
     plan = []
     for stage in stages:
         cmd = build_command(stage)
@@ -117,7 +216,10 @@ def main():
 
     for stage in stages:
         cmd = build_command(stage)
-        subprocess.run(cmd, check=True)
+        if stage_timeout:
+            subprocess.run(cmd, check=True, timeout=stage_timeout)
+        else:
+            subprocess.run(cmd, check=True)
 
 
 if __name__ == "__main__":

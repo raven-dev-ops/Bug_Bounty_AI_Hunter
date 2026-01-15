@@ -1,4 +1,11 @@
 schema_version: "0.1.0"
+limits:
+  request_budget: 500
+  token_budget: 20000
+  max_concurrency: 3
+  min_delay_seconds: 0.2
+  timeout_seconds: 10
+  stage_timeout_seconds: 300
 stages:
   - name: scope_import
     config:
@@ -26,16 +33,20 @@ stages:
       max_concurrency: 3
       min_delay_seconds: 0.2
       canary: CANARY-1234
+      estimated_requests: 50
   - name: triage
     config:
       input: output/scan_results.json
       output: output/triage.json
+      estimated_tokens: 2000
   - name: intel
     config:
       source: examples/intel_stub.json
       targets: output/discovery.json
       output: output/intel.json
       provider: file
+      timeout_seconds: 10
+      estimated_requests: 5
   - name: notify
     config:
       input: output/triage.json
