@@ -207,7 +207,15 @@ def report_command(args, workspace, output_root):
         report_args.extend(["--target-profile", str(target_profile)])
     if args.evidence:
         report_args.extend(["--evidence", str(args.evidence)])
+    if args.repro_steps:
+        report_args.extend(["--repro-steps", str(args.repro_steps)])
     _run_module("scripts.report_bundle", report_args, args.dry_run)
+
+    attachments_manifest = args.attachments_manifest
+    if not attachments_manifest:
+        default_manifest = report_dir / "attachments_manifest.json"
+        if default_manifest.exists():
+            attachments_manifest = default_manifest
 
     issue_args = [
         "--findings",
@@ -219,6 +227,8 @@ def report_command(args, workspace, output_root):
     ]
     if target_profile:
         issue_args.extend(["--target-profile", str(target_profile)])
+    if attachments_manifest:
+        issue_args.extend(["--attachments-manifest", str(attachments_manifest)])
     _run_module("scripts.export_issue_drafts", issue_args, args.dry_run)
 
 
@@ -305,6 +315,8 @@ def build_parser():
     report_parser.add_argument("--evidence")
     report_parser.add_argument("--report-dir")
     report_parser.add_argument("--issue-dir")
+    report_parser.add_argument("--repro-steps")
+    report_parser.add_argument("--attachments-manifest")
     report_parser.add_argument(
         "--platform",
         default="github",

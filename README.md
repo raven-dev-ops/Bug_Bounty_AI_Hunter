@@ -66,6 +66,8 @@ python -m pip install -r requirements-dev.txt
 - Review outputs and produce report bundles or issue drafts (`docs/REPORTING.md`).
 - Report bundles emit `report.md`, `findings.json`, `attachments_manifest.json`,
   and `reproducibility_pack.json`.
+- Use `bbhai report --repro-steps <path>` and `--attachments-manifest` to enrich
+  report bundles and issue drafts with reproducibility metadata.
 - Configure optional integrations via `docs/ENVIRONMENT.md` and
   `docs/NOTIFICATIONS.md`.
 

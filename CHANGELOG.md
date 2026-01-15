@@ -111,3 +111,4 @@ All notable changes to this project will be documented here.
 - Added component contract documentation and readiness checklist.
 - Added component registry index file and generator script.
 - Added pyproject metadata and console script entrypoint for bbhai.
+- Added bbhai report flags for repro steps and attachments manifest paths.
