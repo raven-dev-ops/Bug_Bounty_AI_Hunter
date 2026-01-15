@@ -51,6 +51,14 @@ python -m pip install -r requirements.txt
 python -m pip install -r requirements-dev.txt
 ```
 
+## How To Use
+- Start with `docs/ROE.md` and confirm written authorization.
+- Create a TargetProfile from the questionnaire or a minimal YAML in `examples/`.
+- Run the pipeline in plan mode (`docs/PIPELINE.md`) to generate artifacts.
+- Review outputs and produce report bundles or issue drafts (`docs/REPORTING.md`).
+- Configure optional integrations via `docs/ENVIRONMENT.md` and
+  `docs/NOTIFICATIONS.md`.
+
 ## Usage
 ```bash
 python -m scripts.target_profile_generate --input examples/target_profile_questionnaire.yaml --output output/target_profile.json
