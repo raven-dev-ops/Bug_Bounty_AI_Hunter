@@ -91,3 +91,4 @@ All notable changes to this project will be documented here.
 - Added golden example re-emit script and CI check for JSON artifacts.
 - Added demo runner plan integration tests and bbhai plan smoke test.
 - Added property-based tests for severity and dataflow normalization.
+- Added coverage reporting configuration and CI step.
