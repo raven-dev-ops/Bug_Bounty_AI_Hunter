@@ -47,6 +47,34 @@ stages:
       provider: file
       timeout_seconds: 10
       estimated_requests: 5
+  - name: report_bundle
+    config:
+      findings: examples/outputs/findings.json
+      target_profile: output/target_profile.json
+      evidence: examples/evidence_example.json
+      output_dir: output/report_bundle
+      repro_steps: examples/repro_steps.json
+  - name: issue_drafts
+    config:
+      findings: output/report_bundle/findings.json
+      target_profile: output/target_profile.json
+      output_dir: output/issue_drafts
+      platform: github
+      attachments_manifest: output/report_bundle/attachments_manifest.json
+  - name: finding_reports
+    config:
+      findings: output/report_bundle/findings.json
+      evidence: examples/evidence_example.json
+      output_dir: output/finding_reports
+      attachments_manifest: output/report_bundle/attachments_manifest.json
+  - name: jira_export
+    config:
+      findings: output/report_bundle/findings.json
+      output: output/jira_issues.csv
+  - name: pdf_export
+    config:
+      input: output/report_bundle/report.md
+      output: output/report_bundle/report.pdf
   - name: notify
     config:
       input: output/triage.json

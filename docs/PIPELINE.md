@@ -12,6 +12,11 @@ avoid live exploitation.
 - Template scan planning: `python -m scripts.scan_templates`
 - Triage: `python -m scripts.triage_findings`
 - External intel: `python -m scripts.external_intel`
+- Report bundle: `python -m scripts.report_bundle`
+- Issue drafts: `python -m scripts.export_issue_drafts`
+- Finding reports: `python -m scripts.export_finding_reports`
+- Jira export: `python -m scripts.export_jira`
+- PDF export: `python -m scripts.export_pdf`
 - Notifications: `python -m scripts.notify`
 - Component registry: `python -m scripts.component_runtime`
 
@@ -52,6 +57,10 @@ checks. These estimates are orchestration-only and are not passed to scripts.
   (`examples/component_registry_output.json`)
 - Notification output: `schemas/notification_output.schema.json`
   (`examples/notification_output.json`)
+- Attachments manifest: `schemas/attachments_manifest.schema.json`
+  (`examples/outputs/attachments_manifest.json`)
+- Reproducibility pack: `schemas/reproducibility_pack.schema.json`
+  (`examples/outputs/reproducibility_pack.json`)
 
 ## Orchestrator
 Use `python -m scripts.pipeline_orchestrator` to plan or run stages.

@@ -130,6 +130,7 @@ docker run --rm bbhai
 - Evidence registry entries can include hashes and custody metadata (see `docs/REPORTING.md`).
 - Evidence storage can use encryption at rest guidance in `docs/REPORTING.md`.
 - Component registry index lives at `data/component_registry_index.json`.
+- Example pipeline config includes reporting and export stages (`examples/pipeline_config.yaml`).
 - CI runs lint and format checks, schema validation, coverage reporting,
   knowledge index and coverage matrix checks, golden example re-emits, and a
   demo runner plan.
