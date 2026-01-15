@@ -46,3 +46,4 @@ All notable changes to this project will be documented here.
 - Added threat model generator script and pipeline stages for dataflow and threat modeling.
 - Updated roadmap tracking for completed v0.5 pipeline stages.
 - Added pipeline plan schema and example output.
+- Updated roadmap tracking for pipeline plan schema completion.
