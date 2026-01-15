@@ -174,7 +174,7 @@ Open milestone work:
 - v0.2: #1 Add dataflow map output and example; #2 Add threat model template and schema
 - v0.3: #3 Add schemas for pipeline config and outputs; #7 Add agents review checklist and test case example; #10 Clarify report generator output milestone completion
 - v0.4: #4 Add regression tests for review checklists; #5 Add markdown link checks to CI; #6 Replace lab placeholders with synthetic service stubs
-- Backlog: #8 Add knowledge index generator script; #28-#48 Gap analysis backlog (meta issue #48)
+- Backlog: #28-#48 Gap analysis backlog (meta issue #48)
 
 Closed milestone work:
 - v0.1: #13-#27 Starter backlog

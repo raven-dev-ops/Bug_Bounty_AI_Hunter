@@ -27,5 +27,6 @@ Use `python -m scripts.<module>` to run a script from the repo root.
 - `export_pdf.py` - export report markdown to PDF (requires pandoc)
 - `findings_db.py` - manage a simple findings database
 - `evidence_manager.py` - manage evidence registry entries
+- `knowledge_index.py` - generate knowledge index from frontmatter
 - `validate_schemas.py` - validate example files against schemas
 - `bootstrap_issues.sh` - create labels and starter backlog

@@ -1,6 +1,14 @@
 # Knowledge Index
 
-This index lists knowledge cards and checklists with status.
+This index lists knowledge sources, cards, and checklists with status.
+
+## Sources
+- kb-src-0001 | Transcript 01 - Exploiting shadow data and AI models and embeddings | draft | `knowledge/sources/TRANSCRIPT_01.source.md`
+- kb-src-0002 | Transcript 02 - Rapid analysis of bloatware and update tooling | draft | `knowledge/sources/TRANSCRIPT_02.source.md`
+- kb-src-0003 | Transcript 03 - Prompts, cognition, and human-in-the-loop thinking | draft | `knowledge/sources/TRANSCRIPT_03.source.md`
+- kb-src-0004 | Transcript 04 - Reverse engineering a mobile API | draft | `knowledge/sources/TRANSCRIPT_04.source.md`
+- kb-src-0005 | Transcript 05 - Mainframe permissions and testing workflow | draft | `knowledge/sources/TRANSCRIPT_05.source.md`
+- kb-src-0006 | Transcript 06 - Apple endpoint security basics | draft | `knowledge/sources/TRANSCRIPT_06.source.md`
 
 ## Cards
 - kb-0001 | Shadow data inventory for AI applications | draft | `knowledge/cards/kb-0001-shadow-data-inventory.md`

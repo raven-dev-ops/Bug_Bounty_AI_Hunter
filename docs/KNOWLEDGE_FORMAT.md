@@ -6,6 +6,11 @@ sections. Keep content safe and non-weaponized.
 See `docs/KNOWLEDGE_TAGS.md` for standard tags and `knowledge/INDEX.md` for the
 current catalog.
 
+Regenerate the index with:
+```bash
+python -m scripts.knowledge_index --output knowledge/INDEX.md
+```
+
 ## Frontmatter (required)
 ```yaml
 ---
