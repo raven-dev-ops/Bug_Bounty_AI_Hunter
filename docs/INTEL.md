@@ -1,7 +1,7 @@
 # External Intel
 
 External intelligence enrichment is optional and must respect scope and rate
-limits. Use `scripts/external_intel.py`.
+limits. Use `python -m scripts.external_intel`.
 
 ## Providers
 - `file` (default): load records from a local JSON/YAML file
@@ -14,7 +14,7 @@ explicitly authorized.
 
 ## Example
 ```bash
-python scripts/external_intel.py --provider file --source examples/intel_stub.json --targets output/discovery.json --output output/intel.json
+python -m scripts.external_intel --provider file --source examples/intel_stub.json --targets output/discovery.json --output output/intel.json
 ```
 
 ## Safety

@@ -3,16 +3,11 @@ from datetime import datetime, timezone
 import base64
 import json
 import os
-from pathlib import Path
-import sys
 from urllib.parse import urlencode
 from urllib.request import Request, urlopen
 
-SCRIPT_DIR = Path(__file__).resolve().parent
-sys.path.insert(0, str(SCRIPT_DIR))
-
-from lib.io_utils import dump_data, load_data
-from lib.rate_limit import RateLimiter
+from .lib.io_utils import dump_data, load_data
+from .lib.rate_limit import RateLimiter
 
 
 def _list(value):

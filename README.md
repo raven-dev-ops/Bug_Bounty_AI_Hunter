@@ -46,10 +46,10 @@ python -m pip install -r requirements-dev.txt
 
 ## Usage
 ```bash
-python scripts/target_profile_generate.py --input examples/target_profile_questionnaire.yaml --output output/target_profile.json
-python scripts/pipeline_orchestrator.py --config examples/pipeline_config.yaml --mode plan
-python scripts/report_bundle.py --findings examples/outputs/findings.json --target-profile examples/target_profile_minimal.yaml --output-dir output/report_bundle
-python scripts/export_issue_drafts.py --findings examples/outputs/findings.json --output-dir output/issue_drafts
+python -m scripts.target_profile_generate --input examples/target_profile_questionnaire.yaml --output output/target_profile.json
+python -m scripts.pipeline_orchestrator --config examples/pipeline_config.yaml --mode plan
+python -m scripts.report_bundle --findings examples/outputs/findings.json --target-profile examples/target_profile_minimal.yaml --output-dir output/report_bundle
+python -m scripts.export_issue_drafts --findings examples/outputs/findings.json --output-dir output/issue_drafts
 ```
 
 ## Docker

@@ -5,13 +5,13 @@ triage, intel enrichment, and notifications. Scripts are planning oriented and
 avoid live exploitation.
 
 ## Stages
-- Scope import: `scripts/import_scope.py`
-- Discovery: `scripts/discovery_assets.py`
-- Template scan planning: `scripts/scan_templates.py`
-- Triage: `scripts/triage_findings.py`
-- External intel: `scripts/external_intel.py`
-- Notifications: `scripts/notify.py`
-- Component registry: `scripts/component_runtime.py`
+- Scope import: `python -m scripts.import_scope`
+- Discovery: `python -m scripts.discovery_assets`
+- Template scan planning: `python -m scripts.scan_templates`
+- Triage: `python -m scripts.triage_findings`
+- External intel: `python -m scripts.external_intel`
+- Notifications: `python -m scripts.notify`
+- Component registry: `python -m scripts.component_runtime`
 
 ## Scope import formats
 - `generic` (default) using `examples/scope_generic.json`
@@ -24,10 +24,10 @@ Use `examples/pipeline_config.yaml` as a starting point. Each stage defines a
 underscores in config keys to map to CLI flags with hyphens.
 
 ## Orchestrator
-Use `scripts/pipeline_orchestrator.py` to plan or run stages.
+Use `python -m scripts.pipeline_orchestrator` to plan or run stages.
 
 ```bash
-python scripts/pipeline_orchestrator.py --config examples/pipeline_config.yaml --mode plan
+python -m scripts.pipeline_orchestrator --config examples/pipeline_config.yaml --mode plan
 ```
 
 ## Performance controls

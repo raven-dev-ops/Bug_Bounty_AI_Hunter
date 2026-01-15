@@ -22,7 +22,7 @@ Document where prompts, retrieval context, embeddings, logs, or training data
 move. Keep this high level and avoid real user data.
 
 ## Generator
-Use `scripts/target_profile_generate.py` to convert a questionnaire into a
+Use `python -m scripts.target_profile_generate` to convert a questionnaire into a
 TargetProfile artifact.
 
 See `examples/target_profile_minimal.yaml` and

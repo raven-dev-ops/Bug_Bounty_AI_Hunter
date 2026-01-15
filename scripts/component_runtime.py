@@ -1,14 +1,11 @@
 import argparse
 from datetime import datetime, timezone
 from pathlib import Path
-import sys
 
-SCRIPT_DIR = Path(__file__).resolve().parent
-REPO_ROOT = SCRIPT_DIR.parent
-sys.path.insert(0, str(SCRIPT_DIR))
+from .lib.io_utils import dump_data, load_data
+from .lib.manifest_utils import validate_manifest
 
-from lib.io_utils import dump_data, load_data
-from lib.manifest_utils import validate_manifest
+REPO_ROOT = Path(__file__).resolve().parent.parent
 
 try:
     import jsonschema

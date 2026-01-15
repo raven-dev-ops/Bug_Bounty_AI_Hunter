@@ -38,7 +38,7 @@ entrypoints:
 ```
 
 ## Runtime registry
-Use `scripts/component_runtime.py` to validate manifests and build a registry.
+Use `python -m scripts.component_runtime` to validate manifests and build a registry.
 Enable or disable components via a config file such as
 `examples/component_runtime_config.yaml`.
 Schema validation requires the `jsonschema` package.

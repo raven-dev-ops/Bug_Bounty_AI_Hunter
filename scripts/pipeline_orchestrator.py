@@ -1,28 +1,23 @@
 import argparse
 import subprocess
-from pathlib import Path
 import sys
 
-SCRIPT_DIR = Path(__file__).resolve().parent
-REPO_ROOT = SCRIPT_DIR.parent
-sys.path.insert(0, str(SCRIPT_DIR))
-
-from lib.io_utils import dump_data, load_data
+from .lib.io_utils import dump_data, load_data
 
 
-STAGE_SCRIPTS = {
-    "scope_import": "scripts/import_scope.py",
-    "discovery": "scripts/discovery_assets.py",
-    "scan": "scripts/scan_templates.py",
-    "triage": "scripts/triage_findings.py",
-    "notify": "scripts/notify.py",
-    "intel": "scripts/external_intel.py",
-    "component_registry": "scripts/component_runtime.py",
-    "report_bundle": "scripts/report_bundle.py",
-    "issue_drafts": "scripts/export_issue_drafts.py",
-    "finding_reports": "scripts/export_finding_reports.py",
-    "jira_export": "scripts/export_jira.py",
-    "pdf_export": "scripts/export_pdf.py",
+STAGE_MODULES = {
+    "scope_import": "scripts.import_scope",
+    "discovery": "scripts.discovery_assets",
+    "scan": "scripts.scan_templates",
+    "triage": "scripts.triage_findings",
+    "notify": "scripts.notify",
+    "intel": "scripts.external_intel",
+    "component_registry": "scripts.component_runtime",
+    "report_bundle": "scripts.report_bundle",
+    "issue_drafts": "scripts.export_issue_drafts",
+    "finding_reports": "scripts.export_finding_reports",
+    "jira_export": "scripts.export_jira",
+    "pdf_export": "scripts.export_pdf",
 }
 
 
@@ -43,10 +38,10 @@ def _config_to_args(config):
 def build_command(stage):
     name = stage.get("name")
     config = stage.get("config", {})
-    if name not in STAGE_SCRIPTS:
+    if name not in STAGE_MODULES:
         raise SystemExit(f"Unknown stage: {name}")
-    script_path = REPO_ROOT / STAGE_SCRIPTS[name]
-    cmd = [sys.executable, str(script_path)]
+    module_name = STAGE_MODULES[name]
+    cmd = [sys.executable, "-m", module_name]
     cmd.extend(_config_to_args(config))
     return cmd
 

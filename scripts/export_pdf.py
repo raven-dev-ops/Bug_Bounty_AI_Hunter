@@ -2,7 +2,6 @@ import argparse
 import shutil
 import subprocess
 from pathlib import Path
-import sys
 
 
 def _run_pandoc(input_path, output_path):

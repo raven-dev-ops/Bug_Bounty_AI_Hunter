@@ -26,7 +26,7 @@ minimal inputs unless you explicitly allow full data.
 
 ### Example
 ```bash
-python scripts/triage_findings.py --input examples/outputs/findings.json --output output/triage.json --ai-enabled --ai-config examples/triage_ai_config.yaml
+python -m scripts.triage_findings --input examples/outputs/findings.json --output output/triage.json --ai-enabled --ai-config examples/triage_ai_config.yaml
 ```
 
 ## Safety

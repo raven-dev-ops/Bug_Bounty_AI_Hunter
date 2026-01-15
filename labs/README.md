@@ -31,13 +31,13 @@ docker compose -f labs/docker-compose.yaml down
 ## Example regression path
 1. Generate a TargetProfile from the questionnaire:
    ```bash
-   python scripts/target_profile_generate.py --input examples/target_profile_questionnaire.yaml --output output/target_profile.json
+   python -m scripts.target_profile_generate --input examples/target_profile_questionnaire.yaml --output output/target_profile.json
    ```
 2. Plan scan tests using safe templates:
    ```bash
-   python scripts/scan_templates.py --templates templates --targets output/target_profile.json --output output/scan_plan.json
+   python -m scripts.scan_templates --templates templates --targets output/target_profile.json --output output/scan_plan.json
    ```
 3. Generate a report bundle from sample findings:
    ```bash
-   python scripts/report_bundle.py --findings examples/outputs/findings.json --target-profile output/target_profile.json --output-dir output/report_bundle
+   python -m scripts.report_bundle --findings examples/outputs/findings.json --target-profile output/target_profile.json --output-dir output/report_bundle
    ```

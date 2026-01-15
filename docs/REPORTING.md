@@ -3,28 +3,28 @@
 Reporting turns findings and evidence into report bundles and platform exports.
 
 ## Report bundle
-- Script: `scripts/report_bundle.py`
+- Script: `python -m scripts.report_bundle`
 - Inputs: findings, evidence, optional TargetProfile
 - Outputs: `report.md` and `findings.json`
 - Template: `templates/reporting/report_bundle.md`
 
 ## Per-finding reports
-- Script: `scripts/export_finding_reports.py`
+- Script: `python -m scripts.export_finding_reports`
 - Template: `templates/reporting/finding.md`
 
 ## Issue and platform exports
-- Script: `scripts/export_issue_drafts.py`
+- Script: `python -m scripts.export_issue_drafts`
 - Templates: `templates/platforms/` (GitHub, HackerOne, Bugcrowd)
-- Jira CSV export: `scripts/export_jira.py`
+- Jira CSV export: `python -m scripts.export_jira`
 
 ## PDF export
-- Script: `scripts/export_pdf.py`
+- Script: `python -m scripts.export_pdf`
 - Requires `pandoc` or `wkhtmltopdf`
 
 ## Evidence registry
-- Script: `scripts/evidence_manager.py`
+- Script: `python -m scripts.evidence_manager`
 - Registry: `evidence/registry.json`
 
 ## Findings database
-- Script: `scripts/findings_db.py`
+- Script: `python -m scripts.findings_db`
 - Database: `data/findings_db.json`

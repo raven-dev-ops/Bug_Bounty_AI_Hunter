@@ -1,11 +1,6 @@
-import sys
-from pathlib import Path
 import unittest
 
-ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(ROOT / "scripts"))
-
-from lib.template_utils import render_template
+from scripts.lib.template_utils import render_template
 
 
 class TemplateUtilsTest(unittest.TestCase):

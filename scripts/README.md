@@ -6,6 +6,9 @@ Project automation and pipeline planning scripts live here.
 - Python 3.10+
 - PyYAML for YAML inputs (`pip install pyyaml`)
 
+## Running scripts
+Use `python -m scripts.<module>` to run a script from the repo root.
+
 ## Tools
 - `target_profile_generate.py` - build TargetProfile from questionnaires
 - `import_scope.py` - import scope exports into a TargetProfile (generic or HackerOne)

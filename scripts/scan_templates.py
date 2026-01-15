@@ -2,13 +2,9 @@ import argparse
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime, timezone
 from pathlib import Path
-import sys
 
-SCRIPT_DIR = Path(__file__).resolve().parent
-sys.path.insert(0, str(SCRIPT_DIR))
-
-from lib.io_utils import dump_data, load_data
-from lib.rate_limit import RateLimiter
+from .lib.io_utils import dump_data, load_data
+from .lib.rate_limit import RateLimiter
 
 
 class SafeDict(dict):

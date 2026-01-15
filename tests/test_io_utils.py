@@ -1,12 +1,8 @@
-import sys
 from pathlib import Path
 import tempfile
 import unittest
 
-ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(ROOT / "scripts"))
-
-from lib.io_utils import load_data
+from scripts.lib.io_utils import load_data
 
 
 class IoUtilsTest(unittest.TestCase):

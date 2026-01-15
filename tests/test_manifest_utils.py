@@ -1,11 +1,6 @@
-import sys
-from pathlib import Path
 import unittest
 
-ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(ROOT / "scripts"))
-
-from lib.manifest_utils import validate_manifest
+from scripts.lib.manifest_utils import validate_manifest
 
 
 class ManifestUtilsTest(unittest.TestCase):

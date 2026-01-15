@@ -10,7 +10,7 @@ Store the manifest at the repo root as `component_manifest.yaml` or
 Schema reference: `schemas/component_manifest.schema.json`.
 
 ## Validation
-Use `scripts/component_runtime.py --manifest <path>` to validate a manifest.
+Use `python -m scripts.component_runtime --manifest <path>` to validate a manifest.
 
 ## Required fields
 - `name`: unique component name (string)

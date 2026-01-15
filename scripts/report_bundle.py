@@ -1,13 +1,9 @@
 import argparse
 from datetime import datetime, timezone
 from pathlib import Path
-import sys
 
-SCRIPT_DIR = Path(__file__).resolve().parent
-sys.path.insert(0, str(SCRIPT_DIR))
-
-from lib.io_utils import dump_data, load_data
-from lib.template_utils import load_template, render_template
+from .lib.io_utils import dump_data, load_data
+from .lib.template_utils import load_template, render_template
 
 
 def _list(value):

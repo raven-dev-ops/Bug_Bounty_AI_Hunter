@@ -29,3 +29,4 @@ All notable changes to this project will be documented here.
 - Added HackerOne scope import support and sample payload.
 - Added component runtime enable/disable configuration support.
 - Expanded labs documentation with setup and regression guidance.
+- Refactored scripts into a Python package and updated run commands.
