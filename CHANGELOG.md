@@ -88,3 +88,4 @@ All notable changes to this project will be documented here.
 - Added coverage matrix source, generated docs, and CI sync check.
 - Added schema_version to component manifests and updated examples and docs.
 - Added migration helper for component manifests with tests and CLI wiring.
+- Added golden example re-emit script and CI check for JSON artifacts.

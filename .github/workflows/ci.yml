@@ -35,5 +35,9 @@ jobs:
         run: |
           python -m scripts.coverage_matrix --input docs/coverage_matrix.yaml --output docs/COVERAGE_MATRIX.md
           git diff --exit-code -- docs/COVERAGE_MATRIX.md
+      - name: Check golden examples
+        run: |
+          python -m scripts.golden_examples --roots examples --roots data --roots evidence --extensions json
+          git diff --exit-code -- examples data evidence
       - name: Demo runner plan
         run: python -m scripts.demo_runner --mode plan

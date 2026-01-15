@@ -104,7 +104,8 @@ docker run --rm bbhai
 - PDFs are maintained locally and are ignored by git.
 - Milestone status and backlog tracking are aligned with `ROADMAP.md` and GitHub milestones.
 - Roadmap planning now extends through the v0.8 ops documentation milestone.
-- CI runs lint, schema validation, knowledge index checks, and a demo runner plan.
+- CI runs lint, schema validation, knowledge index and coverage matrix checks,
+  golden example re-emits, and a demo runner plan.
 
 ## Contributing
 See `CONTRIBUTING.md` for how to suggest updates or fixes.

@@ -30,6 +30,7 @@ Use `python -m scripts.<module>` to run a script from the repo root.
 - `evidence_manager.py` - manage evidence registry entries
 - `knowledge_index.py` - generate knowledge index from frontmatter
 - `coverage_matrix.py` - generate coverage matrix docs from YAML
+- `golden_examples.py` - re-emit JSON examples deterministically
 - `migrate.py` - migrate artifacts between schema versions
 - `component_bootstrap.py` - scaffold a component repo skeleton
 - `demo_runner.py` - run the example pipeline end-to-end

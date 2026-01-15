@@ -243,7 +243,6 @@ Definition of done:
 
 ## Issue tracking (GitHub)
 Open milestone work:
-- v0.9: #72 Golden-file re-emit checks
 - v0.9: #73 Integration tests for demo runner
 - v0.9: #74 Property-based tests
 - v0.9: #75 Coverage reporting
