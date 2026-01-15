@@ -37,6 +37,12 @@ entrypoints:
   review: "bbhai_review_rag:run"
 ```
 
+## Runtime registry
+Use `scripts/component_runtime.py` to validate manifests and build a registry.
+Enable or disable components via a config file such as
+`examples/component_runtime_config.yaml`.
+Schema validation requires the `jsonschema` package.
+
 ## Versioning and compatibility
 - Use semantic versioning.
 - Document schema compatibility in the manifest.

@@ -1,0 +1,20 @@
+{
+  "schema_version": "0.1.0",
+  "id": "tc-logging-001",
+  "title": "Prompt logging retention check",
+  "objective": "Confirm prompt and retrieval logs do not expose sensitive data.",
+  "steps": [
+    "Submit an authorized prompt containing a canary string.",
+    "Review logging and export locations for the canary.",
+    "Verify retention controls are documented and enforced."
+  ],
+  "stop_conditions": [
+    "Any exposure of real user data.",
+    "Any scope ambiguity or unapproved testing technique."
+  ],
+  "expected_results": [
+    "Canary appears only in approved logging paths.",
+    "Retention and access controls restrict log visibility."
+  ],
+  "safety_notes": "Use synthetic data and approved test accounts only."
+}

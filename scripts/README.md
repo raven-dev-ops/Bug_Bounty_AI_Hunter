@@ -8,10 +8,10 @@ Project automation and pipeline planning scripts live here.
 
 ## Tools
 - `target_profile_generate.py` - build TargetProfile from questionnaires
-- `import_scope.py` - import scope exports into a TargetProfile
+- `import_scope.py` - import scope exports into a TargetProfile (generic or HackerOne)
 - `discovery_assets.py` - generate candidate assets (no live checks)
 - `scan_templates.py` - render template-based scan plans
-- `triage_findings.py` - assign priorities and status
+- `triage_findings.py` - assign priorities and status (optional AI config)
 - `external_intel.py` - enrich assets with intel records
 - `notify.py` - send summary notifications (console/file by default)
 - `component_runtime.py` - validate component manifests

@@ -31,3 +31,4 @@ This index lists knowledge cards and checklists with status.
 - kb-checklist-0004 | Legacy access control review checklist | draft | `knowledge/checklists/legacy-access-control-review.md`
 - kb-checklist-0005 | Endpoint telemetry review checklist | draft | `knowledge/checklists/endpoint-telemetry-review.md`
 - kb-checklist-0006 | Human-in-the-loop prompt review checklist | draft | `knowledge/checklists/human-in-loop-review.md`
+- kb-checklist-0007 | Embeddings and vector exposure review checklist | draft | `knowledge/checklists/embeddings-review.md`

@@ -17,6 +17,8 @@ advice. Only test systems where you have explicit authorization.
 - `knowledge/INDEX.md`
 - `docs/ARCHITECTURE.md`
 - `docs/PIPELINE.md`
+- `docs/TRIAGE.md`
+- `docs/INTEL.md`
 - `docs/COMPONENTS.md`
 - `docs/COMPONENT_MANIFEST.md`
 - `docs/REPORTING.md`

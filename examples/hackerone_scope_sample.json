@@ -1,0 +1,30 @@
+{
+  "data": {
+    "id": "program-123",
+    "type": "program",
+    "attributes": {
+      "name": "Example Program",
+      "handle": "example",
+      "policy_url": "https://example.com/policy"
+    },
+    "relationships": {
+      "structured_scopes": {
+        "data": [
+          { "id": "scope-1", "type": "structured_scope" }
+        ]
+      }
+    }
+  },
+  "included": [
+    {
+      "id": "scope-1",
+      "type": "structured_scope",
+      "attributes": {
+        "asset_identifier": "example.com",
+        "asset_type": "DOMAIN",
+        "eligible_for_submission": true,
+        "instruction": "No social engineering"
+      }
+    }
+  ]
+}

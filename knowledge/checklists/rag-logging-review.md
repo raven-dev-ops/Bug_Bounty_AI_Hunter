@@ -12,6 +12,8 @@ date: 2026-01-14
 Review RAG retrieval, prompt assembly, and logging behavior for authorized
 targets.
 
+Reference: `knowledge/cards/kb-0004-logging-retention-risk.md`.
+
 ## Preconditions
 - Written authorization and clear scope.
 - Canary or synthetic data available.
@@ -37,3 +39,7 @@ targets.
 ## Outputs
 - TestCase entries with safe steps and stop conditions.
 - Finding drafts if access controls or logging safeguards fail.
+
+## Example test cases
+- `examples/test_case_rag_minimal.json`
+- `examples/test_case_logging_minimal.json`

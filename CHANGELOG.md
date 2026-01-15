@@ -23,3 +23,9 @@ All notable changes to this project will be documented here.
 - Added CI and CodeQL workflows with linting, tests, and schema validation.
 - Added module boundary guidance and expanded README install/usage.
 - Added Docker packaging, requirements files, and validation/tests scaffold.
+- Added RAG/logging/embeddings checklist examples and new embeddings checklist.
+- Added AI-assisted triage docs, config example, and enhanced triage output.
+- Added external intel provider integrations with scope enforcement.
+- Added HackerOne scope import support and sample payload.
+- Added component runtime enable/disable configuration support.
+- Expanded labs documentation with setup and regression guidance.

@@ -1,0 +1,6 @@
+provider: ollama
+endpoint: http://localhost:11434/api/generate
+model: llama3
+timeout_seconds: 10
+input_mode: minimal
+allow_data: false

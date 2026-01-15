@@ -13,6 +13,11 @@ avoid live exploitation.
 - Notifications: `scripts/notify.py`
 - Component registry: `scripts/component_runtime.py`
 
+## Scope import formats
+- `generic` (default) using `examples/scope_generic.json`
+- `hackerone` using API credentials (`HACKERONE_API_ID`, `HACKERONE_API_TOKEN`)
+  and a program handle via `--program`
+
 ## Pipeline config
 Use `examples/pipeline_config.yaml` as a starting point. Each stage defines a
 `name` and a `config` mapping that matches the stage script flags. Use

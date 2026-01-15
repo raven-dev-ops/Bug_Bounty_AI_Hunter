@@ -1,0 +1,20 @@
+{
+  "schema_version": "0.1.0",
+  "id": "tc-rag-001",
+  "title": "RAG retrieval isolation check",
+  "objective": "Ensure retrieval results honor tenant and document access boundaries.",
+  "steps": [
+    "Submit an authorized query with a canary string tied to a permitted document.",
+    "Submit a query for a document outside the authorized tenant scope.",
+    "Record retrieval metadata and response snippets."
+  ],
+  "stop_conditions": [
+    "Any exposure of real user data.",
+    "Any ambiguity about authorization."
+  ],
+  "expected_results": [
+    "Only permitted documents appear in retrieval context.",
+    "Out-of-scope content is denied or omitted."
+  ],
+  "safety_notes": "Use synthetic data and approved test accounts only."
+}

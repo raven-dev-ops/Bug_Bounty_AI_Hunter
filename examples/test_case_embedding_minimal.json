@@ -1,0 +1,20 @@
+{
+  "schema_version": "0.1.0",
+  "id": "tc-embed-001",
+  "title": "Embedding export access check",
+  "objective": "Ensure embeddings and vector exports are access controlled.",
+  "steps": [
+    "Request embedding export or snapshot using an approved account.",
+    "Attempt export with a lower-privileged account.",
+    "Record any access errors or unexpected data exposure."
+  ],
+  "stop_conditions": [
+    "Any exposure of real user data.",
+    "Any scope ambiguity or unapproved testing technique."
+  ],
+  "expected_results": [
+    "Export is restricted to authorized roles.",
+    "No embedding data is exposed to unauthorized users."
+  ],
+  "safety_notes": "Use synthetic data and approved test accounts only."
+}

@@ -16,6 +16,9 @@ SCHEMA_CASES = [
     ("schemas/finding.schema.json", "examples/outputs/findings.json", True),
     ("schemas/evidence.schema.json", "examples/evidence_example.json", False),
     ("schemas/test_case.schema.json", "examples/test_case_example.json", False),
+    ("schemas/test_case.schema.json", "examples/test_case_rag_minimal.json", False),
+    ("schemas/test_case.schema.json", "examples/test_case_logging_minimal.json", False),
+    ("schemas/test_case.schema.json", "examples/test_case_embedding_minimal.json", False),
     ("schemas/component_manifest.schema.json", "examples/component_manifest.yaml", False),
 ]
 

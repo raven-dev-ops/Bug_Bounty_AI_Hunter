@@ -1,0 +1,20 @@
+{
+  "schema_version": "0.1.0",
+  "generated_at": "2026-01-15T00:00:00Z",
+  "items": [
+    {
+      "id": "finding-001",
+      "title": "Example finding title",
+      "severity": "medium",
+      "priority": "p2",
+      "status": "triaged",
+      "source": "findings",
+      "rationale": "Severity derived as medium.",
+      "confidence": 0.6,
+      "next_tests": [
+        "Validate access control boundaries with canary data."
+      ],
+      "ai_used": false
+    }
+  ]
+}
