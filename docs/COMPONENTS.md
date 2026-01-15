@@ -15,6 +15,12 @@ Subtree (alternative):
 git subtree add --prefix components/bbhai-<feature> <repo-url> main --squash
 ```
 
+## Bootstrap a component repo
+Use the scaffold script to create a new component skeleton:
+```bash
+python -m scripts.component_bootstrap --name bbhai-review-example --output-dir components/bbhai-review-example
+```
+
 ## Component contract
 Each component should provide:
 - A `README.md` describing purpose and usage.

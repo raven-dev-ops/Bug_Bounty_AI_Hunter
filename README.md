@@ -54,6 +54,7 @@ python -m scripts.threat_model_generate --target-profile output/target_profile.j
 python -m scripts.pipeline_orchestrator --config examples/pipeline_config.yaml --mode plan
 python -m scripts.report_bundle --findings examples/outputs/findings.json --target-profile examples/target_profile_minimal.yaml --output-dir output/report_bundle
 python -m scripts.export_issue_drafts --findings examples/outputs/findings.json --output-dir output/issue_drafts
+python -m scripts.component_bootstrap --name bbhai-review-example --output-dir components/bbhai-review-example
 ```
 
 ## Docker
