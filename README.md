@@ -63,6 +63,7 @@ python -m pip install -r requirements-dev.txt
 - Create a TargetProfile from the questionnaire or a minimal YAML in `examples/`.
 - Run the pipeline in plan mode (`docs/PIPELINE.md`) to generate artifacts.
 - Review outputs and produce report bundles or issue drafts (`docs/REPORTING.md`).
+- Report bundles emit `report.md`, `findings.json`, and `attachments_manifest.json`.
 - Configure optional integrations via `docs/ENVIRONMENT.md` and
   `docs/NOTIFICATIONS.md`.
 

@@ -1,0 +1,39 @@
+{
+  "schema_version": "0.1.0",
+  "generated_at": "2026-01-14T00:00:00Z",
+  "bundle_root": "output/report_bundle",
+  "attachments": [
+    {
+      "id": "attachment-001",
+      "path": "report.md",
+      "role": "report",
+      "description": "Report bundle markdown.",
+      "content_type": "text/markdown"
+    },
+    {
+      "id": "attachment-002",
+      "path": "findings.json",
+      "role": "findings",
+      "description": "Structured findings output.",
+      "content_type": "application/json"
+    },
+    {
+      "id": "attachment-003",
+      "path": "evidence/request.txt",
+      "role": "evidence",
+      "description": "Synthetic request/response pair.",
+      "content_type": "application/octet-stream",
+      "evidence_id": "evidence-001",
+      "finding_ids": ["finding-001"]
+    },
+    {
+      "id": "attachment-004",
+      "path": "evidence/response.txt",
+      "role": "evidence",
+      "description": "Synthetic request/response pair.",
+      "content_type": "application/octet-stream",
+      "evidence_id": "evidence-001",
+      "finding_ids": ["finding-001"]
+    }
+  ]
+}

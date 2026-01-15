@@ -103,3 +103,5 @@ All notable changes to this project will be documented here.
 - Added docs entrypoints and lifecycle navigation pages.
 - Added severity model documentation aligned to OWASP LLM Top 10 axes.
 - Added severity model metadata to triage and reporting outputs.
+- Added report bundle attachments manifest schema and example output.
+- Added export_fields mappings for GitHub and Jira exports.

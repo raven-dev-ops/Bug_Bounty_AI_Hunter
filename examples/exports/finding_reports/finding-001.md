@@ -15,3 +15,6 @@ Synthetic remediation guidance.
 
 ## Evidence
 - evidence-001: Synthetic request/response pair.
+
+## Attachments Manifest
+attachments_manifest.json

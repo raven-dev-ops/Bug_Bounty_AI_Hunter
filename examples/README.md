@@ -32,6 +32,7 @@ Sample target profiles, findings, and report outputs.
 - `notification_output.json`
 - `outputs/report.md`
 - `outputs/findings.json`
+- `outputs/attachments_manifest.json`
 - `exports/github_issues/`
 - `exports/finding_reports/`
 - `exports/jira_issues.csv`

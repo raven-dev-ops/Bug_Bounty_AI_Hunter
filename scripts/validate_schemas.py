@@ -28,6 +28,7 @@ SCHEMA_CASES = [
     ("schemas/findings_db.schema.json", "examples/findings_db_output.json", False),
     ("schemas/evidence_registry.schema.json", "examples/evidence_registry_output.json", False),
     ("schemas/notification_output.schema.json", "examples/notification_output.json", False),
+    ("schemas/attachments_manifest.schema.json", "examples/outputs/attachments_manifest.json", False),
 ]
 
 

@@ -2,16 +2,8 @@ import argparse
 import csv
 from pathlib import Path
 
+from .lib.export_fields import build_export_fields
 from .lib.io_utils import load_data
-
-
-SEVERITY_PRIORITY = {
-    "critical": "Highest",
-    "high": "High",
-    "medium": "Medium",
-    "low": "Low",
-    "info": "Lowest",
-}
 
 
 def _list(value):
@@ -31,9 +23,13 @@ def _load_findings(path):
     return _list(data)
 
 
-def _priority_for_finding(finding):
-    severity = str(finding.get("severity", "info")).lower()
-    return SEVERITY_PRIORITY.get(severity, "Low")
+def _jira_fields_for_finding(finding):
+    export_fields = finding.get("export_fields")
+    if isinstance(export_fields, dict):
+        jira_fields = export_fields.get("jira")
+        if isinstance(jira_fields, dict):
+            return jira_fields
+    return build_export_fields(finding).get("jira", {})
 
 
 def main():
@@ -52,6 +48,7 @@ def main():
         )
         writer.writeheader()
         for finding in findings:
+            jira_fields = _jira_fields_for_finding(finding)
             description_lines = [
                 finding.get("description", ""),
                 "",
@@ -59,12 +56,17 @@ def main():
                 f"Remediation: {finding.get('remediation', '')}",
                 f"Evidence: {', '.join(_list(finding.get('evidence_refs')))}",
             ]
+            description = jira_fields.get("description") or "\n".join(
+                line for line in description_lines if line
+            )
+            labels = jira_fields.get("labels") or ["bug-bounty", "ai-security"]
             writer.writerow(
                 {
-                    "Summary": finding.get("title", "Untitled finding"),
-                    "Description": "\n".join(line for line in description_lines if line),
-                    "Priority": _priority_for_finding(finding),
-                    "Labels": "bug-bounty,ai-security",
+                    "Summary": jira_fields.get("summary")
+                    or finding.get("title", "Untitled finding"),
+                    "Description": description,
+                    "Priority": jira_fields.get("priority", "Low"),
+                    "Labels": ", ".join(str(label) for label in labels),
                 }
             )
 

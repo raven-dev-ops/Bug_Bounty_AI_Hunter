@@ -14,3 +14,6 @@ Generated: {generated_at}
 
 ## Evidence
 {evidence_summary}
+
+## Attachments Manifest
+{attachments_manifest}

@@ -5,9 +5,15 @@ Reporting turns findings and evidence into report bundles and platform exports.
 ## Report bundle
 - Script: `python -m scripts.report_bundle`
 - Inputs: findings, evidence, optional TargetProfile
-- Outputs: `report.md` and `findings.json` (includes `severity_model`)
+- Outputs: `report.md`, `findings.json` (includes `severity_model` and `export_fields`),
+  and `attachments_manifest.json`
 - Template: `templates/reporting/report_bundle.md`
 - Note: outputs include a review-required marker for human validation.
+
+## Attachments manifest
+- Output: `attachments_manifest.json`
+- Schema: `schemas/attachments_manifest.schema.json`
+- Includes report bundle files and referenced evidence artifacts.
 
 ## Per-finding reports
 - Script: `python -m scripts.export_finding_reports`
@@ -18,6 +24,7 @@ Reporting turns findings and evidence into report bundles and platform exports.
 - Templates: `templates/platforms/` (GitHub, HackerOne, Bugcrowd)
 - Jira CSV export: `python -m scripts.export_jira`
 - Note: issue drafts include a review-required banner by default.
+- Tip: pass `--attachments-manifest` to reference the manifest in exports.
 
 ## PDF export
 - Script: `python -m scripts.export_pdf`

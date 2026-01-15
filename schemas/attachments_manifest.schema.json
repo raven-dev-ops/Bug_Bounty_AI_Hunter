@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ravdevops.com/schemas/attachments_manifest.schema.json",
+  "title": "AttachmentsManifest",
+  "type": "object",
+  "description": "Manifest of report bundle attachments.",
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "generated_at": { "type": "string" },
+    "bundle_root": { "type": "string" },
+    "attachments": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/attachment" }
+    }
+  },
+  "required": ["schema_version", "attachments"],
+  "additionalProperties": true,
+  "$defs": {
+    "attachment": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "path": { "type": "string" },
+        "role": { "type": "string" },
+        "description": { "type": "string" },
+        "content_type": { "type": "string" },
+        "evidence_id": { "type": "string" },
+        "finding_ids": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      },
+      "required": ["path", "role"],
+      "additionalProperties": true
+    }
+  }
+}

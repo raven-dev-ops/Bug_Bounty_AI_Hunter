@@ -53,6 +53,10 @@ def main():
         default="templates/reporting/finding.md",
         help="Finding template path.",
     )
+    parser.add_argument(
+        "--attachments-manifest",
+        help="Attachments manifest path to reference in outputs.",
+    )
     args = parser.parse_args()
 
     findings = _load_findings(args.findings)
@@ -62,6 +66,7 @@ def main():
     output_dir = Path(args.output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
 
+    attachments_manifest = args.attachments_manifest or "Not provided"
     for index, finding in enumerate(findings, 1):
         finding_id = finding.get("id") or f"finding-{index:03d}"
         evidence_refs = _list(finding.get("evidence_refs"))
@@ -86,6 +91,7 @@ def main():
             "remediation": finding.get("remediation", ""),
             "evidence_refs": "\n".join(f"- {line}" for line in evidence_lines)
             or "None",
+            "attachments_manifest": attachments_manifest,
         }
 
         content = render_template(template_text, context)

@@ -2,6 +2,7 @@ import argparse
 from datetime import datetime, timezone
 from pathlib import Path
 
+from .lib.export_fields import ensure_export_fields
 from .lib.io_utils import dump_data, load_data
 from .lib.severity_model import ensure_severity_model, format_severity_model
 from .lib.template_utils import load_template, render_template
@@ -94,6 +95,65 @@ def _evidence_summary(evidence):
     return "\n".join(lines)
 
 
+def _evidence_to_findings(findings):
+    mapping = {}
+    for finding in findings:
+        finding_id = finding.get("id")
+        if not finding_id:
+            continue
+        for ref in _list(finding.get("evidence_refs")):
+            mapping.setdefault(ref, set()).add(finding_id)
+    return mapping
+
+
+def _attachments_manifest(findings, evidence, output_dir):
+    attachments = [
+        {
+            "id": "attachment-001",
+            "path": "report.md",
+            "role": "report",
+            "description": "Report bundle markdown.",
+            "content_type": "text/markdown",
+        },
+        {
+            "id": "attachment-002",
+            "path": "findings.json",
+            "role": "findings",
+            "description": "Structured findings output.",
+            "content_type": "application/json",
+        },
+    ]
+
+    evidence_map = _evidence_to_findings(findings)
+    for item in evidence:
+        if not isinstance(item, dict):
+            continue
+        evidence_id = item.get("id")
+        description = item.get("description", "")
+        artifacts = _list(item.get("artifacts"))
+        for artifact in artifacts:
+            entry = {
+                "id": f"attachment-{len(attachments) + 1:03d}",
+                "path": artifact,
+                "role": "evidence",
+                "description": description,
+                "content_type": "application/octet-stream",
+            }
+            if evidence_id:
+                entry["evidence_id"] = evidence_id
+                finding_ids = evidence_map.get(evidence_id)
+                if finding_ids:
+                    entry["finding_ids"] = sorted(finding_ids)
+            attachments.append(entry)
+
+    return {
+        "schema_version": "0.1.0",
+        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "bundle_root": str(output_dir),
+        "attachments": attachments,
+    }
+
+
 def main():
     parser = argparse.ArgumentParser(description="Generate a report bundle.")
     parser.add_argument("--findings", required=True, help="Findings JSON/YAML.")
@@ -114,6 +174,7 @@ def main():
     for finding in findings:
         if isinstance(finding, dict):
             ensure_severity_model(finding)
+            ensure_export_fields(finding)
             finding.setdefault("review_required", True)
 
     context = {
@@ -123,6 +184,7 @@ def main():
         "findings_markdown": _findings_markdown(findings),
         "evidence_summary": _evidence_summary(evidence),
         "review_required_note": REVIEW_REQUIRED_NOTE,
+        "attachments_manifest": "attachments_manifest.json",
     }
 
     template_text = load_template(args.template)
@@ -134,6 +196,8 @@ def main():
     report_path.write_text(report_body + "\n", encoding="utf-8")
 
     dump_data(output_dir / "findings.json", findings)
+    manifest = _attachments_manifest(findings, evidence, output_dir)
+    dump_data(output_dir / "attachments_manifest.json", manifest)
 
 
 if __name__ == "__main__":

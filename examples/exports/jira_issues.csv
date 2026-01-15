@@ -1,6 +1,8 @@
 Summary,Description,Priority,Labels
 Example finding title,"Synthetic description for a sample finding.
 
+Severity: medium
+Severity model: owasp-llm-top-10 2023; category LLM06: Sensitive Information Disclosure; axes data_exposure=medium, integrity=low, autonomy=low, cost_dos=unscored
 Impact: Synthetic impact statement.
 Remediation: Synthetic remediation guidance.
-Evidence: evidence-001",Medium,"bug-bounty,ai-security"
+Evidence: evidence-001",Medium,"bug-bounty,ai-security,severity/medium,owasp/llm06"

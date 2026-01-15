@@ -9,6 +9,9 @@
 ## Severity Model
 {severity_model_summary}
 
+## Labels
+{github_labels}
+
 ## Description
 {description}
 
@@ -20,6 +23,9 @@
 
 ## Evidence
 {evidence_refs}
+
+## Attachments Manifest
+{attachments_manifest}
 
 ## Scope
 {scope_summary}

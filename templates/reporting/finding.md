@@ -15,3 +15,6 @@ Severity model: {severity_model_summary}
 
 ## Evidence
 {evidence_refs}
+
+## Attachments Manifest
+{attachments_manifest}

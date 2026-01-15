@@ -46,6 +46,38 @@
           },
           "additionalProperties": true
         },
+        "export_fields": {
+          "type": "object",
+          "properties": {
+            "github": {
+              "type": "object",
+              "properties": {
+                "title": { "type": "string" },
+                "body": { "type": "string" },
+                "labels": {
+                  "type": "array",
+                  "items": { "type": "string" }
+                }
+              },
+              "additionalProperties": true
+            },
+            "jira": {
+              "type": "object",
+              "properties": {
+                "summary": { "type": "string" },
+                "description": { "type": "string" },
+                "priority": { "type": "string" },
+                "labels": {
+                  "type": "array",
+                  "items": { "type": "string" }
+                },
+                "issue_type": { "type": "string" }
+              },
+              "additionalProperties": true
+            }
+          },
+          "additionalProperties": true
+        },
         "status": { "type": "string" },
         "source": { "type": "string" },
         "description": { "type": "string" },
