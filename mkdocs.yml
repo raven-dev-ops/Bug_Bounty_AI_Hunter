@@ -1,0 +1,14 @@
+site_name: Bug_Bounty_Hunter_AI
+docs_dir: docs
+site_dir: site
+theme: readthedocs
+nav:
+  - Home: index.md
+  - Project Outline: PROJECT_OUTLINE.md
+  - ROE: ROE.md
+  - Architecture: ARCHITECTURE.md
+  - Pipeline: PIPELINE.md
+  - Reporting: REPORTING.md
+  - Components: COMPONENTS.md
+  - Knowledge Format: KNOWLEDGE_FORMAT.md
+  - Testing: TESTING.md

@@ -99,3 +99,4 @@ All notable changes to this project will be documented here.
 - Added Python 3.10-3.12 matrix to CI.
 - Added pip caching in CI.
 - Added Dependabot configuration for pip and GitHub Actions.
+- Added MkDocs configuration and CI build job.

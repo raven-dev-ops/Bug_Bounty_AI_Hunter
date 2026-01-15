@@ -243,7 +243,6 @@ Definition of done:
 
 ## Issue tracking (GitHub)
 Open milestone work:
-- v0.9: #83 MkDocs build job
 - v0.9: #84 Docs nav and entrypoints
 - v0.9: #85 Severity model alignment
 - v0.9: #86 Report attachments manifest
