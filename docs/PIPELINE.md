@@ -7,6 +7,8 @@ avoid live exploitation.
 ## Stages
 - Scope import: `python -m scripts.import_scope`
 - Discovery: `python -m scripts.discovery_assets`
+- Dataflow map: `python -m scripts.dataflow_map`
+- Threat model: `python -m scripts.threat_model_generate`
 - Template scan planning: `python -m scripts.scan_templates`
 - Triage: `python -m scripts.triage_findings`
 - External intel: `python -m scripts.external_intel`
@@ -26,6 +28,8 @@ underscores in config keys to map to CLI flags with hyphens.
 ## Artifacts and schemas
 - Pipeline config: `schemas/pipeline_config.schema.json` (`examples/pipeline_config.yaml`)
 - Discovery output: `schemas/discovery_output.schema.json` (`examples/discovery_output.json`)
+- Dataflow map: `schemas/dataflow_map.schema.json` (`examples/dataflow_map_example.json`)
+- Threat model: `schemas/threat_model.schema.json` (`examples/threat_model_example.json`)
 - Scan plan output: `schemas/scan_plan.schema.json` (`examples/scan_plan_output.json`)
 - Triage output: `schemas/triage_output.schema.json` (`examples/triage_output.json`)
 - Intel output: `schemas/intel_output.schema.json` (`examples/intel_output.json`)

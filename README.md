@@ -50,6 +50,7 @@ python -m pip install -r requirements-dev.txt
 ```bash
 python -m scripts.target_profile_generate --input examples/target_profile_questionnaire.yaml --output output/target_profile.json
 python -m scripts.dataflow_map --target-profile output/target_profile.json --output output/dataflow_map.json
+python -m scripts.threat_model_generate --target-profile output/target_profile.json --output output/threat_model.json
 python -m scripts.pipeline_orchestrator --config examples/pipeline_config.yaml --mode plan
 python -m scripts.report_bundle --findings examples/outputs/findings.json --target-profile examples/target_profile_minimal.yaml --output-dir output/report_bundle
 python -m scripts.export_issue_drafts --findings examples/outputs/findings.json --output-dir output/issue_drafts

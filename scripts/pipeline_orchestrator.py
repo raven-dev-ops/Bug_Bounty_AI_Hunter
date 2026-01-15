@@ -8,6 +8,8 @@ from .lib.io_utils import dump_data, load_data
 STAGE_MODULES = {
     "scope_import": "scripts.import_scope",
     "discovery": "scripts.discovery_assets",
+    "dataflow_map": "scripts.dataflow_map",
+    "threat_model": "scripts.threat_model_generate",
     "scan": "scripts.scan_templates",
     "triage": "scripts.triage_findings",
     "notify": "scripts.notify",

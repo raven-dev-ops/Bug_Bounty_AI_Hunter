@@ -5,6 +5,14 @@ stages:
       input: examples/scope_generic.json
       format: generic
       output: output/target_profile.json
+  - name: dataflow_map
+    config:
+      target_profile: output/target_profile.json
+      output: output/dataflow_map.json
+  - name: threat_model
+    config:
+      target_profile: output/target_profile.json
+      output: output/threat_model.json
   - name: discovery
     config:
       target_profile: output/target_profile.json

@@ -12,6 +12,7 @@ Use `python -m scripts.<module>` to run a script from the repo root.
 ## Tools
 - `target_profile_generate.py` - build TargetProfile from questionnaires
 - `dataflow_map.py` - generate a dataflow map from a TargetProfile
+- `threat_model_generate.py` - generate a threat model from a TargetProfile
 - `import_scope.py` - import scope exports into a TargetProfile (generic or HackerOne)
 - `discovery_assets.py` - generate candidate assets (no live checks)
 - `scan_templates.py` - render template-based scan plans
