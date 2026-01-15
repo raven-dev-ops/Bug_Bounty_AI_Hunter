@@ -212,7 +212,7 @@ Definition of done:
 
 ## Issue tracking (GitHub)
 Open milestone work:
-- v0.7: #61 Stub component; #62 Distribution notes
+- v0.7: #62 Distribution notes
 
 Closed milestone work:
 - v0.1: #13-#27 Starter backlog
@@ -227,6 +227,7 @@ Closed milestone work:
 - v0.6: #55-#58 Operational artifacts and validation
 - v0.7: #59 Component registry example
 - v0.7: #60 Release checklist
+- v0.7: #61 Stub component
 - Backlog: #8 Knowledge index generator; #28-#48 Gap analysis backlog
 
 ---
