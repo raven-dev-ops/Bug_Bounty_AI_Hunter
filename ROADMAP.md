@@ -243,7 +243,6 @@ Definition of done:
 
 ## Issue tracking (GitHub)
 Open milestone work:
-- v0.9: #76 Authorization gating
 - v0.9: #77 Budget and rate controls
 - v0.9: #78 Output review markers
 - v0.9: #79 Ruff format check

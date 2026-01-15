@@ -13,6 +13,10 @@
 - Use allowlists, rate limits, and clear stop conditions.
 - Avoid load or stress testing unless it is explicitly permitted.
 
+## ROE acknowledgement
+Before running any pipeline in run mode, record authorization in a local
+`ROE_ACK.yaml` file or pass `--ack-authorization` to acknowledge it explicitly.
+
 ## Evidence and reporting
 - Record minimal reproduction steps and relevant request IDs.
 - Capture only the minimum evidence needed to demonstrate impact.

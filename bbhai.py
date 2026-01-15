@@ -171,6 +171,12 @@ def pipeline_command(args, workspace, output_root, mode):
         )
         _ensure_path(plan_output, args.strict)
         module_args.extend(["--output", str(plan_output)])
+    else:
+        if args.ack_authorization:
+            module_args.append("--ack-authorization")
+        else:
+            roe_ack = args.roe_ack or (workspace / "ROE_ACK.yaml")
+            module_args.extend(["--roe-ack", str(roe_ack)])
     _run_module("scripts.pipeline_orchestrator", module_args, args.dry_run)
 
 
@@ -244,6 +250,15 @@ def build_parser():
     common_parser.add_argument("--format", choices=["json", "yaml"], default="json")
     common_parser.add_argument("--strict", action="store_true")
     common_parser.add_argument("--dry-run", action="store_true")
+    common_parser.add_argument(
+        "--ack-authorization",
+        action="store_true",
+        help="Acknowledge authorization before running.",
+    )
+    common_parser.add_argument(
+        "--roe-ack",
+        help="ROE acknowledgement YAML/JSON path.",
+    )
 
     parser = argparse.ArgumentParser(
         description="Unified CLI for Bug_Bounty_Hunter_AI workflows."

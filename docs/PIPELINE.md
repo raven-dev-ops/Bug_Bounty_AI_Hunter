@@ -50,6 +50,9 @@ Use `python -m scripts.pipeline_orchestrator` to plan or run stages.
 python -m scripts.pipeline_orchestrator --config examples/pipeline_config.yaml --mode plan
 ```
 
+Run mode requires a ROE acknowledgement file (`ROE_ACK.yaml`) or the
+`--ack-authorization` flag.
+
 ## Demo runner
 Use `python -m scripts.demo_runner` to run the example pipeline with outputs
 stored under `output/demo` by default.

@@ -1,6 +1,7 @@
 import argparse
 import subprocess
 import sys
+from pathlib import Path
 
 from .lib.io_utils import dump_data, load_data
 
@@ -48,6 +49,24 @@ def build_command(stage):
     return cmd
 
 
+def _validate_roe_ack(path):
+    ack_path = Path(path)
+    if not ack_path.exists():
+        raise SystemExit(
+            f"ROE acknowledgement not found: {ack_path}. "
+            "Provide --ack-authorization or --roe-ack."
+        )
+    data = load_data(ack_path)
+    if not isinstance(data, dict):
+        raise SystemExit("ROE acknowledgement must be a mapping.")
+    required = ["acknowledged_at", "acknowledged_by", "authorized_target"]
+    missing = [field for field in required if not data.get(field)]
+    if missing:
+        raise SystemExit(
+            "ROE acknowledgement missing fields: " + ", ".join(missing)
+        )
+
+
 def main():
     parser = argparse.ArgumentParser(description="Orchestrate pipeline stages.")
     parser.add_argument("--config", required=True, help="Pipeline config path.")
@@ -58,6 +77,16 @@ def main():
         help="Plan or run the pipeline.",
     )
     parser.add_argument("--output", help="Plan output JSON/YAML path.")
+    parser.add_argument(
+        "--ack-authorization",
+        action="store_true",
+        help="Acknowledge authorization before running.",
+    )
+    parser.add_argument(
+        "--roe-ack",
+        default="ROE_ACK.yaml",
+        help="ROE acknowledgement YAML/JSON path.",
+    )
     args = parser.parse_args()
 
     config = load_data(args.config)
@@ -82,6 +111,9 @@ def main():
         else:
             dump_data("output/pipeline_plan.json", output)
         return
+
+    if not args.ack_authorization:
+        _validate_roe_ack(args.roe_ack)
 
     for stage in stages:
         cmd = build_command(stage)
