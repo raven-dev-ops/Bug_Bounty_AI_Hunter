@@ -9,6 +9,7 @@
 - Schema validation: `python -m scripts.validate_schemas`
 - Unit tests: `python -m unittest discover -s tests`
 - Checklist examples: `tests/test_checklist_examples.py`
+- Knowledge index freshness: `python -m scripts.knowledge_index`
 
 ## Run locally
 ```bash

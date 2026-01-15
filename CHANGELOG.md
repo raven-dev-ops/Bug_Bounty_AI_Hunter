@@ -47,3 +47,4 @@ All notable changes to this project will be documented here.
 - Updated roadmap tracking for completed v0.5 pipeline stages.
 - Added pipeline plan schema and example output.
 - Updated roadmap tracking for pipeline plan schema completion.
+- Added CI check to keep knowledge index in sync.

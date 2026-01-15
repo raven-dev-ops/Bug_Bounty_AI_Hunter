@@ -27,3 +27,7 @@ jobs:
           args: --config .lychee.toml "**/*.md"
       - name: Tests
         run: python -m unittest discover -s tests
+      - name: Check knowledge index
+        run: |
+          python -m scripts.knowledge_index --output knowledge/INDEX.md
+          git diff --exit-code -- knowledge/INDEX.md

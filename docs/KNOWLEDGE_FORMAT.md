@@ -11,6 +11,9 @@ Regenerate the index with:
 python -m scripts.knowledge_index --output knowledge/INDEX.md
 ```
 
+CI enforces index freshness by regenerating `knowledge/INDEX.md` and failing if
+it changes.
+
 ## Frontmatter (required)
 ```yaml
 ---
