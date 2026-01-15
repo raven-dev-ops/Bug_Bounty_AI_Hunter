@@ -1,0 +1,18 @@
+{
+  "schema_version": "0.1.0",
+  "id": "tc-001",
+  "title": "Example test case",
+  "objective": "Verify access control for a sample endpoint.",
+  "steps": [
+    "Send request with a standard user account.",
+    "Attempt to access a resource outside the user's scope."
+  ],
+  "stop_conditions": [
+    "Any exposure of real user data.",
+    "Any ambiguity about authorization."
+  ],
+  "expected_results": [
+    "Access is denied for out-of-scope resources."
+  ],
+  "safety_notes": "Use synthetic data and approved test accounts only."
+}

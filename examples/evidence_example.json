@@ -1,0 +1,9 @@
+{
+  "schema_version": "0.1.0",
+  "id": "evidence-001",
+  "type": "http",
+  "description": "Synthetic request/response pair.",
+  "artifacts": ["evidence/request.txt", "evidence/response.txt"],
+  "timestamps": ["2026-01-14T00:00:00Z"],
+  "source": "synthetic"
+}

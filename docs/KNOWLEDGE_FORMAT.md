@@ -3,6 +3,9 @@
 All knowledge items use a short YAML frontmatter block followed by Markdown
 sections. Keep content safe and non-weaponized.
 
+See `docs/KNOWLEDGE_TAGS.md` for standard tags and `knowledge/INDEX.md` for the
+current catalog.
+
 ## Frontmatter (required)
 ```yaml
 ---

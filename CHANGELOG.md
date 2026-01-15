@@ -11,3 +11,6 @@ All notable changes to this project will be documented here.
 - Added hack type catalog derived from transcripts.
 - Added knowledge cards and checklists for transcript-derived hack types.
 - Added gap analysis backlog section to the roadmap.
+- Added component manifest guidance, schema, and examples.
+- Added knowledge tag catalog and generated knowledge index.
+- Added example target profile, finding, evidence, and test case outputs.

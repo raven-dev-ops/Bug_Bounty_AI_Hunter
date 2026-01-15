@@ -1,0 +1,13 @@
+schema_version: "0.1.0"
+id: tp-001
+name: Example Program
+scope: example.com
+assets:
+  - type: domain
+    value: example.com
+    source: manual
+ai_surfaces:
+  rag: false
+  embeddings: false
+  fine_tuning: false
+notes: Synthetic example

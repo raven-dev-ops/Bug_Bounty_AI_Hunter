@@ -12,8 +12,11 @@ advice. Only test systems where you have explicit authorization.
 - `docs/ROE.md`
 - `docs/PROJECT_MANAGEMENT.md`
 - `docs/KNOWLEDGE_FORMAT.md`
+- `docs/KNOWLEDGE_TAGS.md`
+- `knowledge/INDEX.md`
 - `docs/ARCHITECTURE.md`
 - `docs/COMPONENTS.md`
+- `docs/COMPONENT_MANIFEST.md`
 - `docs/HACK_TYPES.md`
 
 ## Repository layout

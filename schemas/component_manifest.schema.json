@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ravdevops.com/schemas/component_manifest.schema.json",
+  "title": "ComponentManifest",
+  "type": "object",
+  "description": "Manifest describing a component's capabilities and schema compatibility.",
+  "properties": {
+    "name": { "type": "string", "minLength": 1 },
+    "version": { "type": "string", "minLength": 1 },
+    "capabilities": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 1
+    },
+    "schemas": {
+      "type": "object",
+      "additionalProperties": { "type": "string" }
+    },
+    "entrypoints": {
+      "type": "object",
+      "additionalProperties": { "type": "string" }
+    },
+    "description": { "type": "string" },
+    "repository": { "type": "string" },
+    "license": { "type": "string" },
+    "contact": { "type": "string" }
+  },
+  "required": ["name", "version", "capabilities", "schemas"],
+  "additionalProperties": false
+}
