@@ -123,11 +123,11 @@ Each outputs structured `TestCase[]` + `Finding[]` candidates.
 
 ### v0.1 - Documentation-first skeleton (hub foundation)
 Deliverables:
-- [ ] Create hub structure: `docs/`, `schemas/`, `components/`, `scripts/`, `examples/`
-- [ ] Add `docs/ROE.md` and reference it from README
-- [ ] Define label taxonomy + add GitHub issue templates
-- [ ] Add initial schemas (empty/minimal drafts accepted)
-- [ ] Add initial knowledge structure and 3-5 safe checklist docs
+- [x] Create hub structure: `docs/`, `schemas/`, `components/`, `scripts/`, `examples/`
+- [x] Add `docs/ROE.md` and reference it from README
+- [x] Define label taxonomy + add GitHub issue templates
+- [x] Add initial schemas (empty/minimal drafts accepted)
+- [x] Add initial knowledge structure and 3-5 safe checklist docs
 
 Definition of done:
 - Repo looks like a real project (structure, docs, templates)
@@ -135,8 +135,8 @@ Definition of done:
 
 ### v0.2 - Target profiling (Discovery -> TargetProfile)
 Deliverables:
-- [ ] `TargetProfile` schema finalized (versioned)
-- [ ] Questionnaire -> TargetProfile generator (YAML in, JSON out)
+- [x] `TargetProfile` schema finalized (versioned)
+- [x] Questionnaire -> TargetProfile generator (YAML in, JSON out)
 - [ ] Dataflow map output describing "shadow stores" (indexes/logs/eval stores)
 
 Definition of done:
@@ -144,20 +144,20 @@ Definition of done:
 
 ### v0.3 - Review modules + reporting outputs
 Deliverables:
-- [ ] RAG review module outputs test cases (ACL, retrieval isolation, context handling)
-- [ ] Embeddings review module outputs test cases (vector exposure, export, logs)
-- [ ] Logging/telemetry review module outputs test cases (prompt + retrieval logs)
+- [x] RAG review module outputs test cases (ACL, retrieval isolation, context handling)
+- [x] Embeddings review module outputs test cases (vector exposure, export, logs)
+- [x] Logging/telemetry review module outputs test cases (prompt + retrieval logs)
 - [ ] Report generator outputs:
-  - [ ] `report.md`
-  - [ ] `findings.json`
-  - [ ] optional "GitHub issue draft" markdown per finding
+  - [x] `report.md`
+  - [x] `findings.json`
+  - [x] optional "GitHub issue draft" markdown per finding
 
 Definition of done:
 - End-to-end: TargetProfile -> Review -> Findings -> Report bundle
 
 ### v0.4 - Labs + regression (repeatable, safe validation)
 Deliverables:
-- [ ] Synthetic lab environment (RAG + vector DB + canaries)
+- [x] Synthetic lab environment (RAG + vector DB + canaries)
 - [ ] Regression tests verifying review modules produce expected outputs
 - [ ] CI baseline: lint + schema validation + markdown link checks
 

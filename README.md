@@ -60,6 +60,7 @@ docker run --rm bbhai
 
 ## Notes
 - PDFs are maintained locally and are ignored by git.
+- Milestone status is tracked in `ROADMAP.md`.
 
 ## Contributing
 See `CONTRIBUTING.md` for how to suggest updates or fixes.

@@ -30,3 +30,4 @@ All notable changes to this project will be documented here.
 - Added component runtime enable/disable configuration support.
 - Expanded labs documentation with setup and regression guidance.
 - Refactored scripts into a Python package and updated run commands.
+- Updated roadmap milestone status for completed deliverables.
