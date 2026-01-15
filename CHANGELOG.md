@@ -110,3 +110,4 @@ All notable changes to this project will be documented here.
 - Added encryption-at-rest guidance for evidence handling.
 - Added component contract documentation and readiness checklist.
 - Added component registry index file and generator script.
+- Added pyproject metadata and console script entrypoint for bbhai.
