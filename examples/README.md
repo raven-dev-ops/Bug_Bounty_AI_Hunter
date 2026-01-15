@@ -28,6 +28,7 @@ Sample target profiles, findings, and report outputs.
 - `component_runtime_config.yaml`
 - `component_registry_output.json`
 - `findings_db_output.json`
+- `evidence_registry_output.json`
 - `outputs/report.md`
 - `outputs/findings.json`
 - `exports/github_issues/`

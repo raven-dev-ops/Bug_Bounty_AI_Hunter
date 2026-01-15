@@ -57,3 +57,4 @@ All notable changes to this project will be documented here.
 - Added v0.6 operational backlog issues.
 - Added findings database schema and example output.
 - Updated roadmap tracking for findings database schema completion.
+- Added evidence registry schema and example output.

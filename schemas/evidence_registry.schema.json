@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ravdevops.com/schemas/evidence_registry.schema.json",
+  "title": "EvidenceRegistry",
+  "type": "object",
+  "description": "Registry of evidence artifacts captured for findings.",
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "created_at": { "type": "string" },
+    "updated_at": { "type": "string" },
+    "evidence": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/evidence_item" }
+    }
+  },
+  "required": ["schema_version", "evidence"],
+  "additionalProperties": true,
+  "$defs": {
+    "evidence_item": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "type": { "type": "string" },
+        "description": { "type": "string" },
+        "artifacts": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "timestamps": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "source": { "type": "string" },
+        "notes": { "type": "string" }
+      },
+      "required": ["id", "type", "description"],
+      "additionalProperties": true
+    }
+  }
+}

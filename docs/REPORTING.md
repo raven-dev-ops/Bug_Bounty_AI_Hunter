@@ -24,6 +24,7 @@ Reporting turns findings and evidence into report bundles and platform exports.
 ## Evidence registry
 - Script: `python -m scripts.evidence_manager`
 - Registry: `evidence/registry.json`
+- Example output: `examples/evidence_registry_output.json`
 
 ## Findings database
 - Script: `python -m scripts.findings_db`

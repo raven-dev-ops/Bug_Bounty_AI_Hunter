@@ -16,3 +16,4 @@ This folder contains JSON Schema definitions for core data types:
 - `intel_output.schema.json`
 - `component_registry.schema.json`
 - `findings_db.schema.json`
+- `evidence_registry.schema.json`
