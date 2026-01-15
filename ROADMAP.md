@@ -243,7 +243,6 @@ Definition of done:
 
 ## Issue tracking (GitHub)
 Open milestone work:
-- v0.9: #81 Pip cache
 - v0.9: #82 Dependabot configuration
 - v0.9: #83 MkDocs build job
 - v0.9: #84 Docs nav and entrypoints
