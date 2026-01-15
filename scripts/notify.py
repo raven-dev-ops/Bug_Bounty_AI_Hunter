@@ -1,6 +1,7 @@
 import argparse
 import json
 import os
+from datetime import datetime, timezone
 from urllib.request import Request, urlopen
 
 from .lib.io_utils import dump_data, load_data
@@ -42,8 +43,15 @@ def notify_console(summary):
 
 def notify_file(summary, output):
     payload = {
+        "schema_version": "0.1.0",
+        "generated_at": datetime.now(timezone.utc).isoformat(),
         "channel": "file",
         "summary": summary,
+        "payload": {
+            "channel": "file",
+            "summary": summary,
+        },
+        "notes": ["Synthetic notification payload."],
     }
     dump_data(output, payload)
 

@@ -36,6 +36,8 @@ underscores in config keys to map to CLI flags with hyphens.
 - Intel output: `schemas/intel_output.schema.json` (`examples/intel_output.json`)
 - Component registry: `schemas/component_registry.schema.json`
   (`examples/component_registry_output.json`)
+- Notification output: `schemas/notification_output.schema.json`
+  (`examples/notification_output.json`)
 
 ## Orchestrator
 Use `python -m scripts.pipeline_orchestrator` to plan or run stages.

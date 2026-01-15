@@ -59,3 +59,4 @@ All notable changes to this project will be documented here.
 - Updated roadmap tracking for findings database schema completion.
 - Added evidence registry schema and example output.
 - Updated roadmap tracking for evidence registry schema completion.
+- Added notification output schema and example payload.

@@ -1,0 +1,17 @@
+{
+  "schema_version": "0.1.0",
+  "generated_at": "2026-01-14T00:00:00Z",
+  "channel": "file",
+  "summary": {
+    "count": 2,
+    "sample_titles": ["Example finding title", "Another example"]
+  },
+  "payload": {
+    "channel": "file",
+    "summary": {
+      "count": 2,
+      "sample_titles": ["Example finding title", "Another example"]
+    }
+  },
+  "notes": ["Synthetic notification payload."]
+}

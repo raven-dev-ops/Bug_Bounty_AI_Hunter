@@ -17,3 +17,4 @@ This folder contains JSON Schema definitions for core data types:
 - `component_registry.schema.json`
 - `findings_db.schema.json`
 - `evidence_registry.schema.json`
+- `notification_output.schema.json`
