@@ -50,3 +50,4 @@ All notable changes to this project will be documented here.
 - Added CI check to keep knowledge index in sync.
 - Updated roadmap tracking for knowledge index CI completion.
 - Added component bootstrap script and documentation.
+- Updated roadmap tracking for component bootstrap completion.
