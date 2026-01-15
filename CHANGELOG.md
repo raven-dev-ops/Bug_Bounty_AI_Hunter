@@ -40,3 +40,4 @@ All notable changes to this project will be documented here.
 - Replaced lab placeholders with synthetic service stubs and updated labs docs.
 - Clarified roadmap report generator completion status.
 - Added knowledge index generator script and refreshed index guidance.
+- Added testing plan documentation and run instructions.

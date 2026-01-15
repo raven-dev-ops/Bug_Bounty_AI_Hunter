@@ -25,6 +25,7 @@ advice. Only test systems where you have explicit authorization.
 - `docs/REPORTING.md`
 - `docs/MODULE_BOUNDARIES.md`
 - `docs/HACK_TYPES.md`
+- `docs/TESTING.md`
 
 ## Repository layout
 - `docs/` - architecture, rules, and planning docs
