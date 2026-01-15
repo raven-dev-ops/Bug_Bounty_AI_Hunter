@@ -15,3 +15,4 @@ This folder contains JSON Schema definitions for core data types:
 - `triage_output.schema.json`
 - `intel_output.schema.json`
 - `component_registry.schema.json`
+- `findings_db.schema.json`

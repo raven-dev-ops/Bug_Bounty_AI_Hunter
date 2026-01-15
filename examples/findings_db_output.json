@@ -1,0 +1,21 @@
+{
+  "schema_version": "0.1.0",
+  "created_at": "2026-01-14T00:00:00Z",
+  "updated_at": "2026-01-14T00:00:00Z",
+  "findings": [
+    {
+      "id": "finding-001",
+      "title": "Example finding title",
+      "severity": "medium",
+      "status": "open",
+      "source": "import",
+      "description": "Synthetic description for a sample finding.",
+      "impact": "Synthetic impact statement.",
+      "remediation": "Synthetic remediation guidance.",
+      "evidence_refs": ["evidence-001"],
+      "references": ["https://example.com"],
+      "created_at": "2026-01-14T00:00:00Z",
+      "updated_at": "2026-01-14T00:00:00Z"
+    }
+  ]
+}

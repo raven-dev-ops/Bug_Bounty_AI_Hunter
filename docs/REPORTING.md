@@ -28,3 +28,4 @@ Reporting turns findings and evidence into report bundles and platform exports.
 ## Findings database
 - Script: `python -m scripts.findings_db`
 - Database: `data/findings_db.json`
+- Example output: `examples/findings_db_output.json`

@@ -25,6 +25,7 @@ SCHEMA_CASES = [
     ("schemas/triage_output.schema.json", "examples/triage_output.json", False),
     ("schemas/intel_output.schema.json", "examples/intel_output.json", False),
     ("schemas/component_registry.schema.json", "examples/component_registry_output.json", False),
+    ("schemas/findings_db.schema.json", "examples/findings_db_output.json", False),
 ]
 
 

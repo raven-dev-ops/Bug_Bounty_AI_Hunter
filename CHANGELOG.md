@@ -55,3 +55,4 @@ All notable changes to this project will be documented here.
 - Updated roadmap tracking for demo runner completion.
 - Closed v0.5 workflow automation milestone.
 - Added v0.6 operational backlog issues.
+- Added findings database schema and example output.
