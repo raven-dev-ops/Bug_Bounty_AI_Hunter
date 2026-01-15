@@ -53,3 +53,4 @@ All notable changes to this project will be documented here.
 - Updated roadmap tracking for component bootstrap completion.
 - Added demo runner script and documentation.
 - Updated roadmap tracking for demo runner completion.
+- Closed v0.5 workflow automation milestone.
