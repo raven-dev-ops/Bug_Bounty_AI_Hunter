@@ -63,7 +63,7 @@ docker run --rm bbhai
 
 ## Notes
 - PDFs are maintained locally and are ignored by git.
-- Milestone status and backlog tracking are aligned with `ROADMAP.md` and GitHub milestones.
+- Milestone status and backlog tracking are aligned with `ROADMAP.md` and GitHub milestones (now includes v0.5 automation backlog).
 
 ## Contributing
 See `CONTRIBUTING.md` for how to suggest updates or fixes.

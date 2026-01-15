@@ -42,3 +42,4 @@ All notable changes to this project will be documented here.
 - Added knowledge index generator script and refreshed index guidance.
 - Added testing plan documentation and run instructions.
 - Closed gap analysis backlog tracking and updated roadmap status.
+- Added v0.5 automation backlog with new GitHub issues.

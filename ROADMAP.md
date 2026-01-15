@@ -121,7 +121,8 @@ Each outputs structured `TestCase[]` + `Finding[]` candidates.
 
 ## Milestones
 Tracking: GitHub milestones `v0.1 Documentation-first skeleton`, `v0.2 Target profiling`,
-`v0.3 Review modules and reporting outputs`, `v0.4 Labs and regression`, and `Backlog`.
+`v0.3 Review modules and reporting outputs`, `v0.4 Labs and regression`,
+`v0.5 Workflow automation and component readiness`, and `Backlog`.
 
 ### v0.1 - Documentation-first skeleton (hub foundation)
 Deliverables:
@@ -167,11 +168,25 @@ Definition of done:
 - Changes to checklists/modules don't regress silently
 - Everything can be tested without touching real targets
 
+### v0.5 - Workflow automation and component readiness
+Deliverables:
+- [ ] Pipeline stage for dataflow map generation
+- [ ] Threat model generator script and pipeline stage
+- [ ] Pipeline plan schema and example output
+- [ ] Knowledge index CI check
+- [ ] Component repo bootstrap script
+- [ ] End-to-end demo runner script
+
+Definition of done:
+- Pipeline can generate core artifacts with example data
+- Component repo scaffolding is automated and documented
+- CI enforces knowledge index freshness
+
 ---
 
 ## Issue tracking (GitHub)
 Open milestone work:
-- None.
+- v0.5: #49 Dataflow map stage; #50 Threat model generator; #51 Pipeline plan schema; #52 Knowledge index CI; #53 Component bootstrap; #54 Demo runner
 
 Closed milestone work:
 - v0.1: #13-#27 Starter backlog
