@@ -1,8 +1,9 @@
 # Bug_Bounty_Hunter_AI - Project Outline & Roadmap
 
 ## 0. Purpose
-Build an AI-assisted bug bounty workflow system that:
+Build a docs-first, AI-assisted bug bounty workflow hub that:
 - Helps a human hunter or security team **discover**, **review**, and **report** vulnerabilities.
+- Provides schemas, checklists, and pipeline guidance for safe automation.
 - Focuses on **authorized testing only** and bakes in safety/ROE constraints.
 - Treats AI systems as security-critical software: RAG, embeddings, fine-tuning, logs, tool-using agents, and integrations.
 

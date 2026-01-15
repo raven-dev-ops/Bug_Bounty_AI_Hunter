@@ -1,6 +1,7 @@
 # Bug_Bounty_Hunter_AI
 
-AI-assisted bug bounty workflow system for authorized testing of AI-enabled
+Docs-first hub for AI bug bounty workflows with schemas, checklists, pipeline
+scripts, and component integration guidance for authorized testing of AI-enabled
 applications (RAG, embeddings, fine-tuning, tool-using agents, and logging).
 
 This project is informational and operational guidance only. It is not legal

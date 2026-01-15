@@ -79,3 +79,4 @@ All notable changes to this project will be documented here.
 - Added release notes template and linked it from the release checklist.
 - Added component runtime configuration tests.
 - Closed v0.8 operations documentation milestone.
+- Updated repo description and project docs overview text.
