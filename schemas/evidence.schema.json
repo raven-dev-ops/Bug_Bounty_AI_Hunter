@@ -13,12 +13,58 @@
       "type": "array",
       "items": { "type": "string" }
     },
+    "hashes": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/hash_entry" }
+    },
     "timestamps": {
       "type": "array",
       "items": { "type": "string" }
     },
-    "source": { "type": "string" }
+    "source": { "type": "string" },
+    "custody": { "$ref": "#/$defs/custody" }
   },
   "required": ["schema_version", "type"],
-  "additionalProperties": true
+  "additionalProperties": true,
+  "$defs": {
+    "hash_entry": {
+      "type": "object",
+      "properties": {
+        "path": { "type": "string" },
+        "algorithm": { "type": "string" },
+        "hash": { "type": "string" },
+        "computed_at": { "type": "string" },
+        "size_bytes": { "type": "integer" },
+        "status": { "type": "string" },
+        "notes": { "type": "string" }
+      },
+      "required": ["path"],
+      "additionalProperties": true
+    },
+    "custody": {
+      "type": "object",
+      "properties": {
+        "collected_at": { "type": "string" },
+        "collected_by": { "type": "string" },
+        "collection_method": { "type": "string" },
+        "source_system": { "type": "string" },
+        "chain": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/custody_event" }
+        }
+      },
+      "additionalProperties": true
+    },
+    "custody_event": {
+      "type": "object",
+      "properties": {
+        "timestamp": { "type": "string" },
+        "actor": { "type": "string" },
+        "action": { "type": "string" },
+        "notes": { "type": "string" }
+      },
+      "required": ["timestamp", "action"],
+      "additionalProperties": true
+    }
+  }
 }

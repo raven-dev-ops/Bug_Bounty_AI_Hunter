@@ -112,6 +112,7 @@ docker run --rm bbhai
 - PDFs are maintained locally and are ignored by git.
 - Milestone status and backlog tracking are aligned with `ROADMAP.md` and GitHub milestones.
 - Roadmap planning now extends through the v0.8 ops documentation milestone.
+- Evidence registry entries can include hashes and custody metadata (see `docs/REPORTING.md`).
 - CI runs lint and format checks, schema validation, coverage reporting,
   knowledge index and coverage matrix checks, golden example re-emits, and a
   demo runner plan.

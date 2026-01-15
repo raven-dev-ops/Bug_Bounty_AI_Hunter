@@ -17,11 +17,15 @@
   "evidence_hashes": [
     {
       "path": "evidence/request.txt",
+      "algorithm": "sha256",
+      "hash": "pending",
       "status": "pending",
       "evidence_id": "evidence-001"
     },
     {
       "path": "evidence/response.txt",
+      "algorithm": "sha256",
+      "hash": "pending",
       "status": "pending",
       "evidence_id": "evidence-001"
     }

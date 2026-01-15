@@ -39,6 +39,8 @@ Reporting turns findings and evidence into report bundles and platform exports.
 - Script: `python -m scripts.evidence_manager`
 - Registry: `evidence/registry.json`
 - Example output: `examples/evidence_registry_output.json`
+- Evidence entries support `hashes` and `custody` metadata for chain-of-custody.
+- Use `add --hash-artifacts --hash-algorithm sha256` to compute artifact hashes.
 
 ## Notifications
 - Script: `python -m scripts.notify`

@@ -4,6 +4,36 @@
   "type": "http",
   "description": "Synthetic request/response pair.",
   "artifacts": ["evidence/request.txt", "evidence/response.txt"],
+  "hashes": [
+    {
+      "path": "evidence/request.txt",
+      "algorithm": "sha256",
+      "hash": "pending",
+      "computed_at": "2026-01-14T00:00:00Z",
+      "status": "pending"
+    },
+    {
+      "path": "evidence/response.txt",
+      "algorithm": "sha256",
+      "hash": "pending",
+      "computed_at": "2026-01-14T00:00:00Z",
+      "status": "pending"
+    }
+  ],
   "timestamps": ["2026-01-14T00:00:00Z"],
-  "source": "synthetic"
+  "source": "synthetic",
+  "custody": {
+    "collected_at": "2026-01-14T00:00:00Z",
+    "collected_by": "analyst@example.com",
+    "collection_method": "proxy capture",
+    "source_system": "synthetic",
+    "chain": [
+      {
+        "timestamp": "2026-01-14T00:00:00Z",
+        "actor": "analyst@example.com",
+        "action": "captured",
+        "notes": "Canary data only."
+      }
+    ]
+  }
 }

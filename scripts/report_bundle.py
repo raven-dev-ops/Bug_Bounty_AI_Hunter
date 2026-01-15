@@ -191,6 +191,18 @@ def _evidence_hashes(evidence):
         if not isinstance(item, dict):
             continue
         evidence_id = item.get("id")
+        hash_entries = _list(item.get("hashes"))
+        if hash_entries:
+            for entry in hash_entries:
+                if not isinstance(entry, dict) or not entry.get("path"):
+                    continue
+                normalized = dict(entry)
+                if not normalized.get("status"):
+                    normalized["status"] = "ok" if normalized.get("hash") else "pending"
+                if evidence_id:
+                    normalized["evidence_id"] = evidence_id
+                hashes.append(normalized)
+            continue
         for artifact in _list(item.get("artifacts")):
             entry = {
                 "path": artifact,
