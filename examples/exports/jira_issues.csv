@@ -1,0 +1,6 @@
+Summary,Description,Priority,Labels
+Example finding title,"Synthetic description for a sample finding.
+
+Impact: Synthetic impact statement.
+Remediation: Synthetic remediation guidance.
+Evidence: evidence-001",Medium,"bug-bounty,ai-security"

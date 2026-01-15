@@ -19,6 +19,7 @@ advice. Only test systems where you have explicit authorization.
 - `docs/PIPELINE.md`
 - `docs/COMPONENTS.md`
 - `docs/COMPONENT_MANIFEST.md`
+- `docs/REPORTING.md`
 - `docs/HACK_TYPES.md`
 
 ## Repository layout
@@ -27,8 +28,11 @@ advice. Only test systems where you have explicit authorization.
 - `components/` - component repos (submodules or subtrees)
 - `knowledge/` - sources, cards, and checklists
 - `examples/` - sample profiles and outputs
+- `data/` - local tracking data and registries
+- `evidence/` - evidence registry entries
 - `templates/` - scan planning templates
 - `scripts/` - bootstrap and automation scripts
+- `labs/` - synthetic lab scaffolding
 
 ## Notes
 - PDFs are maintained locally and are ignored by git.

@@ -12,3 +12,9 @@ Sample target profiles, findings, and report outputs.
 - `test_case_example.json`
 - `scope_generic.json`
 - `intel_stub.json`
+- `outputs/report.md`
+- `outputs/findings.json`
+- `exports/github_issues/`
+- `exports/finding_reports/`
+- `exports/jira_issues.csv`
+- `exports/platforms/`

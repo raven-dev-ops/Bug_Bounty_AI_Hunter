@@ -18,6 +18,11 @@ STAGE_SCRIPTS = {
     "notify": "scripts/notify.py",
     "intel": "scripts/external_intel.py",
     "component_registry": "scripts/component_runtime.py",
+    "report_bundle": "scripts/report_bundle.py",
+    "issue_drafts": "scripts/export_issue_drafts.py",
+    "finding_reports": "scripts/export_finding_reports.py",
+    "jira_export": "scripts/export_jira.py",
+    "pdf_export": "scripts/export_pdf.py",
 }
 
 

@@ -17,3 +17,6 @@ All notable changes to this project will be documented here.
 - Added TargetProfile v0.2 schema, questionnaire example, and generator script.
 - Added pipeline docs, scan templates, and planning scripts for recon stages.
 - Added scope import, intel enrichment, notification, and component registry tools.
+- Added reporting docs, templates, and scripts for bundles and platform exports.
+- Added findings database and evidence registry scaffolding.
+- Added labs scaffold plus sample report outputs and exports.

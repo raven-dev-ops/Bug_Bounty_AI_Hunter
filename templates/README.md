@@ -1,7 +1,11 @@
 # Scan Templates
 
-Templates define safe, non-weaponized test plans for the scan planner. Avoid
-exploit payloads and keep steps high level.
+Templates define scan plans and reporting formats. Avoid exploit payloads and
+keep steps high level.
+
+## Subfolders
+- `reporting/` - report bundle and per-finding templates
+- `platforms/` - platform-specific issue or report formats
 
 ## Fields
 - `id`
