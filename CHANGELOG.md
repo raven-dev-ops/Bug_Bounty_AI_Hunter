@@ -73,3 +73,9 @@ All notable changes to this project will be documented here.
 - Added distribution notes to README.
 - Updated roadmap tracking for distribution notes completion.
 - Closed v0.7 component integration milestone.
+- Added v0.8 operations documentation and validation backlog issues.
+- Updated roadmap tracking for v0.2, v0.4, and v0.7 deliverables plus v0.8.
+- Added notifications configuration and environment variable reference docs.
+- Added release notes template and linked it from the release checklist.
+- Added component runtime configuration tests.
+- Closed v0.8 operations documentation milestone.

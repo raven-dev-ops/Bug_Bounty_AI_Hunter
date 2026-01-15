@@ -29,6 +29,7 @@ Reporting turns findings and evidence into report bundles and platform exports.
 ## Notifications
 - Script: `python -m scripts.notify`
 - Example output: `examples/notification_output.json`
+- Guide: `docs/NOTIFICATIONS.md`
 
 ## Findings database
 - Script: `python -m scripts.findings_db`

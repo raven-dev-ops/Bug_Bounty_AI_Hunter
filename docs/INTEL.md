@@ -8,6 +8,8 @@ limits. Use `python -m scripts.external_intel`.
 - `shodan`: requires `SHODAN_API_KEY`
 - `censys`: requires `CENSYS_API_ID` and `CENSYS_API_SECRET`
 
+Environment variables are summarized in `docs/ENVIRONMENT.md`.
+
 ## Scope enforcement
 Scope allowlists are enforced by default. Use `--no-scope-enforcement` only if
 explicitly authorized.

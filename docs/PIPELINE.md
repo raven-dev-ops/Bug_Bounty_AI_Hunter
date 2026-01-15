@@ -15,10 +15,14 @@ avoid live exploitation.
 - Notifications: `python -m scripts.notify`
 - Component registry: `python -m scripts.component_runtime`
 
+Notification setup details live in `docs/NOTIFICATIONS.md`.
+
 ## Scope import formats
 - `generic` (default) using `examples/scope_generic.json`
 - `hackerone` using API credentials (`HACKERONE_API_ID`, `HACKERONE_API_TOKEN`)
   and a program handle via `--program`
+
+Environment variables are summarized in `docs/ENVIRONMENT.md`.
 
 ## Pipeline config
 Use `examples/pipeline_config.yaml` as a starting point. Each stage defines a

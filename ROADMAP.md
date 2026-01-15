@@ -124,7 +124,8 @@ Tracking: GitHub milestones `v0.1 Documentation-first skeleton`, `v0.2 Target pr
 `v0.3 Review modules and reporting outputs`, `v0.4 Labs and regression`,
 `v0.5 Workflow automation and component readiness`,
 `v0.6 Operational artifacts and validation`,
-`v0.7 Component integration and release readiness`, and `Backlog`.
+`v0.7 Component integration and release readiness`,
+`v0.8 Operations documentation and validation`, and `Backlog`.
 
 ### v0.1 - Documentation-first skeleton (hub foundation)
 Deliverables:
@@ -142,7 +143,7 @@ Definition of done:
 Deliverables:
 - [x] `TargetProfile` schema finalized (versioned)
 - [x] Questionnaire -> TargetProfile generator (YAML in, JSON out)
-- [ ] Dataflow map output describing "shadow stores" (indexes/logs/eval stores)
+- [x] Dataflow map output describing "shadow stores" (indexes/logs/eval stores)
 
 Definition of done:
 - You can describe a target in a standard format and validate it
@@ -163,8 +164,8 @@ Definition of done:
 ### v0.4 - Labs + regression (repeatable, safe validation)
 Deliverables:
 - [x] Synthetic lab environment (RAG + vector DB + canaries)
-- [ ] Regression tests verifying review modules produce expected outputs
-- [ ] CI baseline: lint + schema validation + markdown link checks
+- [x] Regression tests verifying review modules produce expected outputs
+- [x] CI baseline: lint + schema validation + markdown link checks
 
 Definition of done:
 - Changes to checklists/modules don't regress silently
@@ -197,16 +198,28 @@ Definition of done:
 
 ### v0.7 - Component integration and release readiness
 Deliverables:
-- [ ] Component registry example output and generation docs
-- [ ] Release readiness checklist
-- [ ] Stub component for integration demo
-- [ ] Distribution notes in README
+- [x] Component registry example output and generation docs
+- [x] Release readiness checklist
+- [x] Stub component for integration demo
+- [x] Distribution notes in README
 
 Definition of done:
 - Component registry example exists and is documented
 - Release checklist is available for tagging and release notes
 - Stub component validates registry tooling
 - Distribution notes align with Docker and scripts usage
+
+### v0.8 - Operations documentation and validation
+Deliverables:
+- [x] Notifications configuration guide
+- [x] Environment variable reference
+- [x] Release notes template
+- [x] Component runtime configuration tests
+
+Definition of done:
+- Notifications and environment docs cover setup and safety notes
+- Release template is referenced from the release checklist
+- Component runtime tests cover enable/disable and registry output
 
 ---
 
@@ -229,6 +242,7 @@ Closed milestone work:
 - v0.7: #60 Release checklist
 - v0.7: #61 Stub component
 - v0.7: #62 Distribution notes
+- v0.8: #63-#66 Operations documentation and validation
 - Backlog: #8 Knowledge index generator; #28-#48 Gap analysis backlog
 
 ---

@@ -20,12 +20,15 @@ advice. Only test systems where you have explicit authorization.
 - `docs/PIPELINE.md`
 - `docs/TRIAGE.md`
 - `docs/INTEL.md`
+- `docs/ENVIRONMENT.md`
 - `docs/COMPONENTS.md`
 - `docs/COMPONENT_MANIFEST.md`
 - `docs/REPORTING.md`
+- `docs/NOTIFICATIONS.md`
 - `docs/MODULE_BOUNDARIES.md`
 - `docs/HACK_TYPES.md`
 - `docs/TESTING.md`
+- `docs/RELEASE_NOTES_TEMPLATE.md`
 - `docs/RELEASE_CHECKLIST.md`
 
 ## Repository layout
@@ -73,6 +76,7 @@ docker run --rm bbhai
 ## Notes
 - PDFs are maintained locally and are ignored by git.
 - Milestone status and backlog tracking are aligned with `ROADMAP.md` and GitHub milestones.
+- Roadmap planning now extends through the v0.8 ops documentation milestone.
 - CI runs lint, schema validation, knowledge index checks, and a demo runner plan.
 
 ## Contributing

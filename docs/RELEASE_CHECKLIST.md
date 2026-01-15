@@ -7,6 +7,7 @@ aligned with the docs-first focus of this repo.
 - Update `CHANGELOG.md` with notable changes.
 - Confirm `ROADMAP.md` milestone tracking is current.
 - Verify `README.md` usage examples still match scripts.
+- Draft release notes using `docs/RELEASE_NOTES_TEMPLATE.md`.
 
 ## Quality checks
 - Run `python -m ruff check scripts tests`.

@@ -24,6 +24,8 @@ minimal inputs unless you explicitly allow full data.
 - `input_mode`: `minimal` or `full`
 - `allow_data`: `true` to allow full input to be sent
 
+Environment variables are summarized in `docs/ENVIRONMENT.md`.
+
 ### Example
 ```bash
 python -m scripts.triage_findings --input examples/outputs/findings.json --output output/triage.json --ai-enabled --ai-config examples/triage_ai_config.yaml
