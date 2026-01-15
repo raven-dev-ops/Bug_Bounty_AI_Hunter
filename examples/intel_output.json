@@ -1,0 +1,17 @@
+{
+  "schema_version": "0.1.0",
+  "generated_at": "2026-01-10T12:00:00Z",
+  "provider": "file",
+  "matches": [
+    {
+      "asset": "api.example.com",
+      "provider": "file",
+      "queried_at": "2026-01-10T11:59:00Z",
+      "data": {
+        "source": "stub",
+        "signal": "no-critical-findings"
+      }
+    }
+  ],
+  "notes": ["Stub intel from a local file provider."]
+}

@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ravdevops.com/schemas/component_registry.schema.json",
+  "title": "ComponentRegistry",
+  "type": "object",
+  "description": "Component runtime registry output.",
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "generated_at": { "type": "string" },
+    "components": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/component" }
+    },
+    "notes": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  },
+  "required": ["schema_version", "components"],
+  "additionalProperties": true,
+  "$defs": {
+    "component": {
+      "type": "object",
+      "properties": {
+        "path": { "type": "string" },
+        "manifest": { "type": "object" },
+        "errors": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "enabled": { "type": "boolean" }
+      },
+      "additionalProperties": true
+    }
+  }
+}

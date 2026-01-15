@@ -23,6 +23,19 @@ repo.
    docker compose -f labs/docker-compose.yaml ps
    ```
 
+## Expected outputs
+RAG stub:
+```bash
+curl http://localhost:8000/index.json
+curl http://localhost:8000/context.json
+```
+
+Vector store stub:
+```bash
+curl http://localhost:8001/index.json
+curl http://localhost:8001/vectors.json
+```
+
 ## Teardown
 ```bash
 docker compose -f labs/docker-compose.yaml down

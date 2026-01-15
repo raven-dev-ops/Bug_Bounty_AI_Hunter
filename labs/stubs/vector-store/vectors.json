@@ -1,0 +1,10 @@
+{
+  "collection": "synthetic-collection",
+  "vectors": [
+    {
+      "id": "vec-001",
+      "text": "Synthetic entry for validation",
+      "canary": "CANARY-1234"
+    }
+  ]
+}

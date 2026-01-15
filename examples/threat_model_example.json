@@ -1,0 +1,51 @@
+{
+  "schema_version": "0.1.0",
+  "generated_at": "2026-01-10T12:00:00Z",
+  "target": "Example Program",
+  "assumptions": [
+    "Authorized testing only.",
+    "Synthetic data and canaries used."
+  ],
+  "attack_surfaces": [
+    {
+      "id": "surface-001",
+      "name": "RAG retrieval",
+      "description": "Retrieval service that builds context for prompts.",
+      "assets": ["retrieval-api", "vector-index"],
+      "controls": ["tenant authz", "per-document ACLs"]
+    },
+    {
+      "id": "surface-002",
+      "name": "Prompt logging",
+      "description": "Telemetry pipeline capturing prompts and responses.",
+      "assets": ["log-sink", "analytics-ui"],
+      "controls": ["retention limits", "role-based access"]
+    }
+  ],
+  "threats": [
+    {
+      "id": "threat-001",
+      "title": "Cross-tenant context leakage",
+      "surface": "RAG retrieval",
+      "impact": "Sensitive context exposed to other tenants.",
+      "likelihood": "medium",
+      "severity": "high",
+      "mitigations": ["tenant-aware retrieval", "canary isolation checks"],
+      "notes": "Validate with safe canary strings only."
+    },
+    {
+      "id": "threat-002",
+      "title": "Over-retained prompt logs",
+      "surface": "Prompt logging",
+      "impact": "Long-lived access to sensitive prompts.",
+      "likelihood": "medium",
+      "severity": "medium",
+      "mitigations": ["short retention", "access reviews"]
+    }
+  ],
+  "out_of_scope": ["Social engineering"],
+  "notes": [
+    "Threat model is scoped to AI-specific surfaces.",
+    "Keep descriptions high level."
+  ]
+}

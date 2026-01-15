@@ -32,3 +32,10 @@ All notable changes to this project will be documented here.
 - Refactored scripts into a Python package and updated run commands.
 - Updated roadmap milestone status for completed deliverables.
 - Added GitHub milestones and updated roadmap backlog tracking.
+- Added dataflow map schema, generator script, and example artifact.
+- Added threat model schema, documentation, and example artifact.
+- Added pipeline config and output schemas with matching examples.
+- Added agent tool-use checklist and test case example in the knowledge set.
+- Added checklist regression tests and markdown link checks in CI.
+- Replaced lab placeholders with synthetic service stubs and updated labs docs.
+- Clarified roadmap report generator completion status.

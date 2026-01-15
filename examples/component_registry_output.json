@@ -1,0 +1,17 @@
+{
+  "schema_version": "0.1.0",
+  "generated_at": "2026-01-10T12:00:00Z",
+  "components": [
+    {
+      "path": "components/bbhai-review-rag/component_manifest.yaml",
+      "manifest": {
+        "name": "bbhai-review-rag",
+        "version": "0.1.0",
+        "description": "RAG review module"
+      },
+      "errors": [],
+      "enabled": true
+    }
+  ],
+  "notes": ["Component registry is informational only."]
+}

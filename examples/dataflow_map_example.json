@@ -1,0 +1,51 @@
+{
+  "schema_version": "0.1.0",
+  "generated_at": "2026-01-10T12:00:00Z",
+  "source_profile": "Example Program",
+  "ai_surfaces": {
+    "rag": true,
+    "embeddings": true,
+    "fine_tuning": false,
+    "logging": true,
+    "agents": false
+  },
+  "shadow_stores": [
+    {
+      "id": "store-001",
+      "name": "Vector index",
+      "type": "vector_db",
+      "location": "us-east",
+      "sensitivity": "confidential",
+      "owner": "Search team",
+      "notes": "Synthetic sample only."
+    },
+    {
+      "id": "store-002",
+      "name": "Prompt logs",
+      "type": "logging",
+      "location": "log cluster",
+      "sensitivity": "restricted",
+      "owner": "Observability"
+    }
+  ],
+  "flows": [
+    {
+      "id": "flow-001",
+      "source": "User input",
+      "destination": "Prompt assembly",
+      "data_types": ["user_query"],
+      "notes": "Strip PII on ingest."
+    },
+    {
+      "id": "flow-002",
+      "source": "Prompt assembly",
+      "destination": "LLM API",
+      "data_types": ["prompt", "retrieved_context"],
+      "notes": "Allowlist retrieved context."
+    }
+  ],
+  "notes": [
+    "High-level map for authorized testing only.",
+    "Avoid real user data in artifacts."
+  ]
+}

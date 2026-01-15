@@ -46,10 +46,12 @@ For any target (authorized), produce:
    - Does it use RAG? embeddings? fine-tuning? tool calls? third-party LLM APIs?
    - Where is data stored/copied? (indexes, logs, caches, eval tooling)
    - What permissions/ACL model exists and where it can fail.
+   - Example dataflow map: `examples/dataflow_map_example.json`
 
 2) **Threat Model** (AI-specific)
    - Primary attack surfaces: RAG authz, indirect prompt injection, logging leaks, vector exposure
    - Expected impacts: cross-tenant data disclosure, sensitive context leakage, secrets exposure
+   - See `docs/THREAT_MODEL.md` and `examples/threat_model_example.json`
 
 3) **Test Plan**
    - Safe test cases using canaries and permission boundaries

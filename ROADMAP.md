@@ -149,7 +149,7 @@ Deliverables:
 - [x] RAG review module outputs test cases (ACL, retrieval isolation, context handling)
 - [x] Embeddings review module outputs test cases (vector exposure, export, logs)
 - [x] Logging/telemetry review module outputs test cases (prompt + retrieval logs)
-- [ ] Report generator outputs:
+- [x] Report generator outputs:
   - [x] `report.md`
   - [x] `findings.json`
   - [x] optional "GitHub issue draft" markdown per finding

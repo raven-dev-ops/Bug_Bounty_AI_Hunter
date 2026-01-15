@@ -1,0 +1,6 @@
+{
+  "service": "vector-store",
+  "status": "ok",
+  "message": "Synthetic vector store stub",
+  "canary": "CANARY-1234"
+}

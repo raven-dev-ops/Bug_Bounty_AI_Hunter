@@ -12,6 +12,7 @@ advice. Only test systems where you have explicit authorization.
 - `docs/ROE.md`
 - `docs/PROJECT_MANAGEMENT.md`
 - `docs/TARGET_PROFILE.md`
+- `docs/THREAT_MODEL.md`
 - `docs/KNOWLEDGE_FORMAT.md`
 - `docs/KNOWLEDGE_TAGS.md`
 - `knowledge/INDEX.md`
@@ -47,6 +48,7 @@ python -m pip install -r requirements-dev.txt
 ## Usage
 ```bash
 python -m scripts.target_profile_generate --input examples/target_profile_questionnaire.yaml --output output/target_profile.json
+python -m scripts.dataflow_map --target-profile output/target_profile.json --output output/dataflow_map.json
 python -m scripts.pipeline_orchestrator --config examples/pipeline_config.yaml --mode plan
 python -m scripts.report_bundle --findings examples/outputs/findings.json --target-profile examples/target_profile_minimal.yaml --output-dir output/report_bundle
 python -m scripts.export_issue_drafts --findings examples/outputs/findings.json --output-dir output/issue_drafts

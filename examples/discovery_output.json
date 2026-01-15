@@ -1,0 +1,23 @@
+{
+  "schema_version": "0.1.0",
+  "generated_at": "2026-01-10T12:00:00Z",
+  "source_profile": "Example Program",
+  "assets": [
+    {
+      "type": "domain",
+      "value": "example.com",
+      "source": "scope",
+      "tags": ["seed"]
+    },
+    {
+      "type": "subdomain",
+      "value": "api.example.com",
+      "source": "derived",
+      "tags": ["candidate"]
+    }
+  ],
+  "notes": [
+    "Discovery output is a candidate list only.",
+    "No live checks were performed."
+  ]
+}

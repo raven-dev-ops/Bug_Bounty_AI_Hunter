@@ -1,0 +1,28 @@
+{
+  "schema_version": "0.1.0",
+  "generated_at": "2026-01-10T12:00:00Z",
+  "mode": "plan",
+  "templates": ["rag-authz-basic"],
+  "targets": ["api.example.com"],
+  "tests": [
+    {
+      "schema_version": "0.1.0",
+      "id": "tc-rag-authz-basic-0001",
+      "title": "RAG authz check on api.example.com",
+      "objective": "Verify tenant-bound retrieval access.",
+      "steps": [
+        "Submit a canary query as tenant A.",
+        "Request retrieval results as tenant B."
+      ],
+      "stop_conditions": [
+        "Real user data observed.",
+        "Out-of-scope asset encountered."
+      ],
+      "expected_results": [
+        "Tenant B cannot retrieve tenant A canary content.",
+        "Access controls log the attempted cross-tenant request."
+      ],
+      "safety_notes": "Use canary strings only."
+    }
+  ]
+}

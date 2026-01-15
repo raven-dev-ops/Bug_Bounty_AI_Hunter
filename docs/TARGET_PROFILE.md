@@ -21,6 +21,9 @@ target. Use `schemas/target_profile.schema.json` as the contract.
 Document where prompts, retrieval context, embeddings, logs, or training data
 move. Keep this high level and avoid real user data.
 
+Use `python -m scripts.dataflow_map` to generate a dataflow map from a
+TargetProfile. See `examples/dataflow_map_example.json`.
+
 ## Generator
 Use `python -m scripts.target_profile_generate` to convert a questionnaire into a
 TargetProfile artifact.

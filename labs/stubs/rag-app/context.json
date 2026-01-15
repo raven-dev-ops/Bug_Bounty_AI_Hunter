@@ -1,0 +1,7 @@
+{
+  "document_id": "doc-001",
+  "title": "Synthetic knowledge base entry",
+  "summary": "This is synthetic context for safe validation only.",
+  "tags": ["synthetic", "canary"],
+  "canary": "CANARY-1234"
+}

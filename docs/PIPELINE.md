@@ -23,6 +23,15 @@ Use `examples/pipeline_config.yaml` as a starting point. Each stage defines a
 `name` and a `config` mapping that matches the stage script flags. Use
 underscores in config keys to map to CLI flags with hyphens.
 
+## Artifacts and schemas
+- Pipeline config: `schemas/pipeline_config.schema.json` (`examples/pipeline_config.yaml`)
+- Discovery output: `schemas/discovery_output.schema.json` (`examples/discovery_output.json`)
+- Scan plan output: `schemas/scan_plan.schema.json` (`examples/scan_plan_output.json`)
+- Triage output: `schemas/triage_output.schema.json` (`examples/triage_output.json`)
+- Intel output: `schemas/intel_output.schema.json` (`examples/intel_output.json`)
+- Component registry: `schemas/component_registry.schema.json`
+  (`examples/component_registry_output.json`)
+
 ## Orchestrator
 Use `python -m scripts.pipeline_orchestrator` to plan or run stages.
 

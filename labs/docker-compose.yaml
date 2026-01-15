@@ -1,8 +1,18 @@
 version: "3.8"
 services:
   rag-app:
-    image: alpine:3.19
-    command: ["sh", "-c", "echo 'lab placeholder' && sleep 3600"]
+    image: python:3.11-alpine
+    working_dir: /srv
+    volumes:
+      - ./stubs/rag-app:/srv:ro
+    command: ["python", "-m", "http.server", "8000"]
+    ports:
+      - "8000:8000"
   vector-store:
-    image: alpine:3.19
-    command: ["sh", "-c", "echo 'vector store placeholder' && sleep 3600"]
+    image: python:3.11-alpine
+    working_dir: /srv
+    volumes:
+      - ./stubs/vector-store:/srv:ro
+    command: ["python", "-m", "http.server", "8001"]
+    ports:
+      - "8001:8001"

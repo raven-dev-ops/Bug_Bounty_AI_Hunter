@@ -6,3 +6,11 @@ This folder contains JSON Schema definitions for core data types:
 - `evidence.schema.json`
 - `test_case.schema.json`
 - `component_manifest.schema.json`
+- `dataflow_map.schema.json`
+- `threat_model.schema.json`
+- `pipeline_config.schema.json`
+- `discovery_output.schema.json`
+- `scan_plan.schema.json`
+- `triage_output.schema.json`
+- `intel_output.schema.json`
+- `component_registry.schema.json`

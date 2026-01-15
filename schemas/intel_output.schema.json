@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ravdevops.com/schemas/intel_output.schema.json",
+  "title": "IntelOutput",
+  "type": "object",
+  "description": "External intel enrichment output.",
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "generated_at": { "type": "string" },
+    "provider": { "type": "string" },
+    "matches": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/intel_record" }
+    },
+    "notes": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  },
+  "required": ["schema_version", "matches"],
+  "additionalProperties": true,
+  "$defs": {
+    "intel_record": {
+      "type": "object",
+      "properties": {
+        "asset": { "type": "string" },
+        "provider": { "type": "string" },
+        "query": { "type": "string" },
+        "data": { "type": "object" },
+        "queried_at": { "type": "string" }
+      },
+      "additionalProperties": true
+    }
+  }
+}

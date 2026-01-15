@@ -14,7 +14,16 @@ SCHEMA_CASES = [
     ("schemas/test_case.schema.json", "examples/test_case_rag_minimal.json", False),
     ("schemas/test_case.schema.json", "examples/test_case_logging_minimal.json", False),
     ("schemas/test_case.schema.json", "examples/test_case_embedding_minimal.json", False),
+    ("schemas/test_case.schema.json", "examples/test_case_agents_minimal.json", False),
     ("schemas/component_manifest.schema.json", "examples/component_manifest.yaml", False),
+    ("schemas/dataflow_map.schema.json", "examples/dataflow_map_example.json", False),
+    ("schemas/threat_model.schema.json", "examples/threat_model_example.json", False),
+    ("schemas/pipeline_config.schema.json", "examples/pipeline_config.yaml", False),
+    ("schemas/discovery_output.schema.json", "examples/discovery_output.json", False),
+    ("schemas/scan_plan.schema.json", "examples/scan_plan_output.json", False),
+    ("schemas/triage_output.schema.json", "examples/triage_output.json", False),
+    ("schemas/intel_output.schema.json", "examples/intel_output.json", False),
+    ("schemas/component_registry.schema.json", "examples/component_registry_output.json", False),
 ]
 
 

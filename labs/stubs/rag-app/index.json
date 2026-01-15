@@ -1,0 +1,6 @@
+{
+  "service": "rag-app",
+  "status": "ok",
+  "message": "Synthetic RAG stub",
+  "canary": "CANARY-1234"
+}
