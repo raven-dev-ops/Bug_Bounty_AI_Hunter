@@ -10,3 +10,4 @@ All notable changes to this project will be documented here.
 - Added transcript source notes and initial knowledge cards and checklist.
 - Added hack type catalog derived from transcripts.
 - Added knowledge cards and checklists for transcript-derived hack types.
+- Added gap analysis backlog section to the roadmap.

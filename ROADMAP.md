@@ -235,6 +235,35 @@ Tags:
 
 ---
 
+### Gap Analysis backlog (meta issue #58)
+Priority P1:
+- #38 Add subdomain and asset discovery module
+- #39 Add template-based vulnerability scanning engine
+- #40 Build multi-phase recon pipeline orchestrator
+- #46 Integrate bug bounty platform scope import
+
+Priority P2:
+- #41 Implement AI-assisted triage and prioritization
+- #42 Add notification integrations (Slack/email)
+- #43 Add external intel integrations (Shodan/Censys/etc.)
+- #44 Implement plugin runtime for components
+- #45 Add performance and concurrency controls
+- #47 Add findings tracking database
+- #48 Add PDF export for report bundles
+- #49 Add per-finding report export
+- #50 Add evidence and artifact management
+- #51 Add unit and integration test suite
+- #52 Add security scanning for the codebase
+- #53 Define module boundaries for core code
+- #54 Expand README with install and usage guide
+- #57 Add platform-specific report formatting
+
+Priority P3:
+- #55 Add distribution packaging (Docker and/or package registry)
+- #56 Add export to issue trackers (Jira or generic)
+
+---
+
 ## Definition of "working"
 This project is working when you can:
 - Load a TargetProfile (manual YAML) OR generate it via questionnaire
