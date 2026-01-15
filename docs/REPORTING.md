@@ -42,6 +42,12 @@ Reporting turns findings and evidence into report bundles and platform exports.
 - Evidence entries support `hashes` and `custody` metadata for chain-of-custody.
 - Use `add --hash-artifacts --hash-algorithm sha256` to compute artifact hashes.
 
+## Evidence encryption at rest (optional)
+- Use full-disk encryption (BitLocker, FileVault, LUKS) for evidence storage.
+- Consider encrypted containers (VeraCrypt) for scoped engagements.
+- For per-file encryption, use age or GPG and store keys outside the repo.
+- Document key custody and access restrictions in evidence notes.
+
 ## Notifications
 - Script: `python -m scripts.notify`
 - Example output: `examples/notification_output.json`

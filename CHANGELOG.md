@@ -107,3 +107,4 @@ All notable changes to this project will be documented here.
 - Added export_fields mappings for GitHub and Jira exports.
 - Added reproducibility pack schema and report bundle metadata output.
 - Added evidence hashes and chain-of-custody metadata in evidence schemas and examples.
+- Added encryption-at-rest guidance for evidence handling.
