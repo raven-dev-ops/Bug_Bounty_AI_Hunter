@@ -95,3 +95,4 @@ All notable changes to this project will be documented here.
 - Added ROE acknowledgement gating for pipeline run mode.
 - Added pipeline limits and budget enforcement scaffolding.
 - Added review-required markers to report bundles and issue drafts.
+- Added ruff format check to CI.

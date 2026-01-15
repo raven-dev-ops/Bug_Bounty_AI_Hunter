@@ -21,6 +21,8 @@ jobs:
         run: python -m scripts.validate_schemas
       - name: Lint
         run: python -m ruff check scripts tests
+      - name: Format
+        run: python -m ruff format --check scripts tests
       - name: Check markdown links
         uses: lycheeverse/lychee-action@v1
         with:
