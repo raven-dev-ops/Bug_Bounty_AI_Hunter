@@ -71,3 +71,4 @@ All notable changes to this project will be documented here.
 - Added stub component for registry validation.
 - Updated roadmap tracking for stub component completion.
 - Added distribution notes to README.
+- Updated roadmap tracking for distribution notes completion.
