@@ -227,7 +227,7 @@ Deliverables:
 - [x] Unified `bbhai` CLI entrypoint with subcommands and consistent flags
 - [x] Coverage matrix mapping to OWASP LLM Top 10, MITRE ATLAS, and NIST AI RMF
 - [x] SECURITY scope clarification and operational safety guidance
-- [ ] Artifact schema versioning and migration scaffolding
+- [x] Artifact schema versioning and migration scaffolding
 - [ ] Integration tests and CI quality upgrades
 - [ ] Reporting/evidence enhancements (manifests, hashes, reproducibility)
 - [ ] Documentation site navigation improvements
@@ -243,7 +243,6 @@ Definition of done:
 
 ## Issue tracking (GitHub)
 Open milestone work:
-- v0.9: #71 Migration helper
 - v0.9: #72 Golden-file re-emit checks
 - v0.9: #73 Integration tests for demo runner
 - v0.9: #74 Property-based tests

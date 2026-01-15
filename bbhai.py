@@ -216,6 +216,26 @@ def report_command(args, workspace, output_root):
     _run_module("scripts.export_issue_drafts", issue_args, args.dry_run)
 
 
+def migrate_command(args):
+    module_args = [
+        "--input",
+        args.input,
+        "--from",
+        args.from_version,
+        "--to",
+        args.to_version,
+        "--artifact",
+        args.artifact,
+    ]
+    if args.output:
+        module_args.extend(["--output", args.output])
+    if args.in_place:
+        module_args.append("--in-place")
+    if args.dry_run:
+        module_args.append("--dry-run")
+    _run_module("scripts.migrate", module_args, False)
+
+
 def build_parser():
     common_parser = argparse.ArgumentParser(add_help=False)
     common_parser.add_argument("--workspace", default="output")
@@ -276,6 +296,20 @@ def build_parser():
         choices=["github", "hackerone", "bugcrowd"],
     )
 
+    migrate_parser = subparsers.add_parser(
+        "migrate", help="Migrate artifacts between schema versions.", parents=[common_parser]
+    )
+    migrate_parser.add_argument("--input", required=True)
+    migrate_parser.add_argument("--output")
+    migrate_parser.add_argument("--in-place", action="store_true")
+    migrate_parser.add_argument(
+        "--artifact",
+        default="auto",
+        choices=["auto", "component_manifest"],
+    )
+    migrate_parser.add_argument("--from", dest="from_version", required=True)
+    migrate_parser.add_argument("--to", dest="to_version", required=True)
+
     return parser
 
 
@@ -297,6 +331,8 @@ def main():
         pipeline_command(args, workspace, output_root, "run")
     elif args.command == "report":
         report_command(args, workspace, output_root)
+    elif args.command == "migrate":
+        migrate_command(args)
 
 
 if __name__ == "__main__":
