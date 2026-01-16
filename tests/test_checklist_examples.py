@@ -28,8 +28,12 @@ class TestChecklistExamples(unittest.TestCase):
         for path in EXAMPLE_CASES:
             data = load_data(path)
             self.assertTrue(data.get("steps"), f"{path} missing steps")
-            self.assertTrue(data.get("stop_conditions"), f"{path} missing stop conditions")
-            self.assertTrue(data.get("expected_results"), f"{path} missing expected results")
+            self.assertTrue(
+                data.get("stop_conditions"), f"{path} missing stop conditions"
+            )
+            self.assertTrue(
+                data.get("expected_results"), f"{path} missing expected results"
+            )
             safety_notes = data.get("safety_notes", "")
             self.assertTrue(str(safety_notes).strip(), f"{path} missing safety notes")
 

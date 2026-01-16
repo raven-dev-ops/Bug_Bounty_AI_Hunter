@@ -150,7 +150,9 @@ def main():
     dump_data(manifest_path, manifest)
 
     readme_path = output_dir / "README.md"
-    readme_path.write_text(_render_readme(args.name, args.description), encoding="utf-8")
+    readme_path.write_text(
+        _render_readme(args.name, args.description), encoding="utf-8"
+    )
 
     print(f"Component scaffold created at {output_dir}")
 

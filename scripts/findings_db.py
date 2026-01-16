@@ -55,7 +55,9 @@ def cmd_init(args):
 def cmd_add(args):
     db = _load_db(args.db)
     findings = _load_findings(args.input)
-    existing = {item.get("id"): item for item in db.get("findings", []) if item.get("id")}
+    existing = {
+        item.get("id"): item for item in db.get("findings", []) if item.get("id")
+    }
 
     for finding in findings:
         finding_id = finding.get("id")

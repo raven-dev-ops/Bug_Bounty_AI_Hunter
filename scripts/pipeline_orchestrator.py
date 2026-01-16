@@ -128,9 +128,7 @@ def _validate_roe_ack(path):
     required = ["acknowledged_at", "acknowledged_by", "authorized_target"]
     missing = [field for field in required if not data.get(field)]
     if missing:
-        raise SystemExit(
-            "ROE acknowledgement missing fields: " + ", ".join(missing)
-        )
+        raise SystemExit("ROE acknowledgement missing fields: " + ", ".join(missing))
 
 
 def main():

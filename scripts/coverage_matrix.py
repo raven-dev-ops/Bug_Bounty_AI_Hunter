@@ -45,7 +45,9 @@ def _render_table(entries):
         if issues:
             issue_text = "Issues: " + ", ".join(str(item) for item in issues)
             notes = f"{notes} {issue_text}".strip() if notes else issue_text
-        lines.append(f"| {entry_id} | {name} | {status} | {coverage} | {notes or '-'} |")
+        lines.append(
+            f"| {entry_id} | {name} | {status} | {coverage} | {notes or '-'} |"
+        )
     lines.append("")
     return lines
 

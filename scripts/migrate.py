@@ -11,7 +11,11 @@ MIGRATIONS = {}
 def _detect_artifact(data, path):
     if path:
         name = Path(path).name.lower()
-        if name in ("component_manifest.yaml", "component_manifest.yml", "component_manifest.json"):
+        if name in (
+            "component_manifest.yaml",
+            "component_manifest.yml",
+            "component_manifest.json",
+        ):
             return "component_manifest"
     if isinstance(data, dict):
         required = {"name", "version", "capabilities", "schemas"}
@@ -48,9 +52,7 @@ def _migrate_component_manifest_0_0_0_to_0_1_0(data):
 def migrate_data(data, artifact, from_version, to_version):
     current = _current_version(data)
     if current != from_version:
-        raise SystemExit(
-            f"Input schema_version is {current}. Expected {from_version}."
-        )
+        raise SystemExit(f"Input schema_version is {current}. Expected {from_version}.")
 
     key = (artifact, from_version, to_version)
     handler = MIGRATIONS.get(key)
@@ -66,10 +68,14 @@ def _render_preview(data):
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Migrate artifacts between schema versions.")
+    parser = argparse.ArgumentParser(
+        description="Migrate artifacts between schema versions."
+    )
     parser.add_argument("--input", required=True, help="Artifact JSON/YAML path.")
     parser.add_argument("--output", help="Output JSON/YAML path.")
-    parser.add_argument("--in-place", action="store_true", help="Overwrite the input file.")
+    parser.add_argument(
+        "--in-place", action="store_true", help="Overwrite the input file."
+    )
     parser.add_argument(
         "--artifact",
         default="auto",

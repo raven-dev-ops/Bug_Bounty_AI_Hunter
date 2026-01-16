@@ -80,8 +80,7 @@ def main():
     args = parser.parse_args()
 
     entries = [
-        _component_entry(path)
-        for path in _discover_manifests(args.components_dir)
+        _component_entry(path) for path in _discover_manifests(args.components_dir)
     ]
     entries = sorted(entries, key=lambda item: item.get("name", ""))
 

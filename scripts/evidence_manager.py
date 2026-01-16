@@ -112,7 +112,9 @@ def cmd_init(args):
 def cmd_add(args):
     registry = _load_registry(args.registry)
     items = _load_evidence(args.input)
-    existing = {item.get("id"): item for item in registry.get("evidence", []) if item.get("id")}
+    existing = {
+        item.get("id"): item for item in registry.get("evidence", []) if item.get("id")
+    }
     custody = load_data(args.custody) if args.custody else None
 
     for item in items:

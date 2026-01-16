@@ -9,7 +9,7 @@ class IoUtilsTest(unittest.TestCase):
     def test_load_json(self):
         with tempfile.TemporaryDirectory() as temp_dir:
             path = Path(temp_dir) / "sample.json"
-            path.write_text("{\"name\": \"example\"}", encoding="utf-8")
+            path.write_text('{"name": "example"}', encoding="utf-8")
             data = load_data(path)
             self.assertEqual(data["name"], "example")
 

@@ -105,7 +105,9 @@ def main():
     schema = _load_schema()
 
     if args.manifest:
-        records = [_load_manifest(Path(args.manifest), schema, config, enable_set, disable_set)]
+        records = [
+            _load_manifest(Path(args.manifest), schema, config, enable_set, disable_set)
+        ]
     else:
         records = [
             _load_manifest(path, schema, config, enable_set, disable_set)

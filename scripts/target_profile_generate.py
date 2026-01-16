@@ -72,7 +72,9 @@ def main():
     args = parser.parse_args()
 
     questionnaire = load_data(args.input)
-    profile = build_profile(questionnaire, args.schema_version, args.name, args.profile_id)
+    profile = build_profile(
+        questionnaire, args.schema_version, args.name, args.profile_id
+    )
     dump_data(args.output, profile)
 
 

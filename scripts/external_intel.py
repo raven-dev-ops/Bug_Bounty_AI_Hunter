@@ -156,7 +156,9 @@ def main():
         for asset in targets[: args.max_records]:
             limiter.wait()
             try:
-                records.append(_censys_record(asset, api_id, api_secret, timeout, args.query))
+                records.append(
+                    _censys_record(asset, api_id, api_secret, timeout, args.query)
+                )
             except Exception as exc:
                 notes.append(f"Censys error for {asset}: {exc}")
 

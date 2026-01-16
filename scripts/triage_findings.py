@@ -132,11 +132,7 @@ def _call_openai(prompt, config):
     request.add_header("Authorization", f"Bearer {api_key}")
     with urlopen(request, timeout=config.get("timeout_seconds", 10)) as response:
         data = json.loads(response.read().decode("utf-8"))
-    content = (
-        data.get("choices", [{}])[0]
-        .get("message", {})
-        .get("content", "")
-    )
+    content = data.get("choices", [{}])[0].get("message", {}).get("content", "")
     return _parse_ai_json(content or "")
 
 
@@ -154,7 +150,9 @@ def _ai_triage(item, config):
     raise SystemExit(f"Unsupported AI provider: {provider}")
 
 
-def _load_ai_config(path, provider, model, endpoint, api_key_env, allow_data, input_mode):
+def _load_ai_config(
+    path, provider, model, endpoint, api_key_env, allow_data, input_mode
+):
     config = {}
     if path:
         config = load_data(path)
