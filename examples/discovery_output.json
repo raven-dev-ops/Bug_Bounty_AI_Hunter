@@ -7,13 +7,17 @@
       "type": "domain",
       "value": "example.com",
       "source": "scope",
-      "tags": ["seed"]
+      "tags": [
+        "seed"
+      ]
     },
     {
       "type": "subdomain",
       "value": "api.example.com",
       "source": "derived",
-      "tags": ["candidate"]
+      "tags": [
+        "candidate"
+      ]
     }
   ],
   "notes": [

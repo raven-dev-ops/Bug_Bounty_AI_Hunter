@@ -2,8 +2,12 @@
   "schema_version": "0.1.0",
   "generated_at": "2026-01-10T12:00:00Z",
   "mode": "plan",
-  "templates": ["rag-authz-basic"],
-  "targets": ["api.example.com"],
+  "templates": [
+    "rag-authz-basic"
+  ],
+  "targets": [
+    "api.example.com"
+  ],
   "tests": [
     {
       "schema_version": "0.1.0",

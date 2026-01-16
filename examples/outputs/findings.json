@@ -21,13 +21,23 @@
       "github": {
         "title": "Example finding title",
         "body": "## Summary\nExample finding title\n\n## Severity\nmedium\n\n## Severity Model\nowasp-llm-top-10 2023; category LLM06: Sensitive Information Disclosure; axes data_exposure=medium, integrity=low, autonomy=low, cost_dos=unscored\n\n## Description\nSynthetic description for a sample finding.\n\n## Impact\nSynthetic impact statement.\n\n## Remediation\nSynthetic remediation guidance.\n\n## Evidence\nevidence-001",
-        "labels": ["bug-bounty", "ai-security", "severity/medium", "owasp/llm06"]
+        "labels": [
+          "bug-bounty",
+          "ai-security",
+          "severity/medium",
+          "owasp/llm06"
+        ]
       },
       "jira": {
         "summary": "Example finding title",
         "description": "Synthetic description for a sample finding.\n\nSeverity: medium\nSeverity model: owasp-llm-top-10 2023; category LLM06: Sensitive Information Disclosure; axes data_exposure=medium, integrity=low, autonomy=low, cost_dos=unscored\nImpact: Synthetic impact statement.\nRemediation: Synthetic remediation guidance.\nEvidence: evidence-001",
         "priority": "Medium",
-        "labels": ["bug-bounty", "ai-security", "severity/medium", "owasp/llm06"],
+        "labels": [
+          "bug-bounty",
+          "ai-security",
+          "severity/medium",
+          "owasp/llm06"
+        ],
         "issue_type": "Bug"
       }
     },
@@ -35,7 +45,11 @@
     "impact": "Synthetic impact statement.",
     "remediation": "Synthetic remediation guidance.",
     "review_required": true,
-    "evidence_refs": ["evidence-001"],
-    "references": ["https://example.com"]
+    "evidence_refs": [
+      "evidence-001"
+    ],
+    "references": [
+      "https://example.com"
+    ]
   }
 ]

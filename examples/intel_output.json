@@ -13,5 +13,7 @@
       }
     }
   ],
-  "notes": ["Stub intel from a local file provider."]
+  "notes": [
+    "Stub intel from a local file provider."
+  ]
 }

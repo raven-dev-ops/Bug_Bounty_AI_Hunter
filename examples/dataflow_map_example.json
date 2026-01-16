@@ -33,14 +33,19 @@
       "id": "flow-001",
       "source": "User input",
       "destination": "Prompt assembly",
-      "data_types": ["user_query"],
+      "data_types": [
+        "user_query"
+      ],
       "notes": "Strip PII on ingest."
     },
     {
       "id": "flow-002",
       "source": "Prompt assembly",
       "destination": "LLM API",
-      "data_types": ["prompt", "retrieved_context"],
+      "data_types": [
+        "prompt",
+        "retrieved_context"
+      ],
       "notes": "Allowlist retrieved context."
     }
   ],

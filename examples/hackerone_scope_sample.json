@@ -10,7 +10,10 @@
     "relationships": {
       "structured_scopes": {
         "data": [
-          { "id": "scope-1", "type": "structured_scope" }
+          {
+            "id": "scope-1",
+            "type": "structured_scope"
+          }
         ]
       }
     }

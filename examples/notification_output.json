@@ -4,14 +4,22 @@
   "channel": "file",
   "summary": {
     "count": 2,
-    "sample_titles": ["Example finding title", "Another example"]
+    "sample_titles": [
+      "Example finding title",
+      "Another example"
+    ]
   },
   "payload": {
     "channel": "file",
     "summary": {
       "count": 2,
-      "sample_titles": ["Example finding title", "Another example"]
+      "sample_titles": [
+        "Example finding title",
+        "Another example"
+      ]
     }
   },
-  "notes": ["Synthetic notification payload."]
+  "notes": [
+    "Synthetic notification payload."
+  ]
 }

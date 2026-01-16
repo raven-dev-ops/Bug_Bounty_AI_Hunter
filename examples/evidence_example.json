@@ -3,7 +3,10 @@
   "id": "evidence-001",
   "type": "http",
   "description": "Synthetic request/response pair.",
-  "artifacts": ["evidence/request.txt", "evidence/response.txt"],
+  "artifacts": [
+    "evidence/request.txt",
+    "evidence/response.txt"
+  ],
   "hashes": [
     {
       "path": "evidence/request.txt",
@@ -20,7 +23,9 @@
       "status": "pending"
     }
   ],
-  "timestamps": ["2026-01-14T00:00:00Z"],
+  "timestamps": [
+    "2026-01-14T00:00:00Z"
+  ],
   "source": "synthetic",
   "custody": {
     "collected_at": "2026-01-14T00:00:00Z",

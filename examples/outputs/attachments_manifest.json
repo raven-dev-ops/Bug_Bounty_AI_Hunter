@@ -31,7 +31,9 @@
       "description": "Synthetic request/response pair.",
       "content_type": "application/octet-stream",
       "evidence_id": "evidence-001",
-      "finding_ids": ["finding-001"]
+      "finding_ids": [
+        "finding-001"
+      ]
     },
     {
       "id": "attachment-005",
@@ -40,7 +42,9 @@
       "description": "Synthetic request/response pair.",
       "content_type": "application/octet-stream",
       "evidence_id": "evidence-001",
-      "finding_ids": ["finding-001"]
+      "finding_ids": [
+        "finding-001"
+      ]
     }
   ]
 }

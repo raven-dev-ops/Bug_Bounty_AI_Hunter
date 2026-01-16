@@ -5,13 +5,17 @@
       "asset": "api.example.com",
       "source": "passive-dns",
       "last_seen": "2026-01-10",
-      "tags": ["api"]
+      "tags": [
+        "api"
+      ]
     },
     {
       "asset": "old.example.com",
       "source": "archive",
       "last_seen": "2025-11-01",
-      "tags": ["legacy"]
+      "tags": [
+        "legacy"
+      ]
     }
   ]
 }
