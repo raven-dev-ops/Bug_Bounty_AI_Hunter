@@ -9,6 +9,8 @@ Reporting turns findings and evidence into report bundles and platform exports.
   `attachments_manifest.json`, and `reproducibility_pack.json`
 - Template: `templates/reporting/report_bundle.md`
 - Note: outputs include a review-required marker for human validation.
+- CLI wrapper: `python -m bbhai report` supports `--repro-steps` and
+  `--attachments-manifest`.
 
 ## Attachments manifest
 - Output: `attachments_manifest.json`

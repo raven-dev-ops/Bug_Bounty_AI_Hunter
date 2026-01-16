@@ -61,6 +61,8 @@ For any target (authorized), produce:
 4) **Evidence Pack**
    - Minimal reproduction steps
    - Outputs, request IDs, screenshots
+   - Attachments manifest and reproducibility pack metadata
+   - Evidence hashes and chain-of-custody notes
    - Remediation guidance
 
 ## 4. Component repos (features)
@@ -95,8 +97,9 @@ Each module outputs structured Findings + recommended tests.
 ### 4.5 Reporting + Export
 - `bbhai-reporting`
   - bug bounty report templates
-  - export to Markdown / JSON
+  - export to Markdown / JSON with attachments manifest
   - export to GitHub Issues "drafts" (paste-ready)
+  - reproducibility pack metadata for report bundles
 
 ### 4.6 Labs (safe validation)
 - `bbhai-labs`
@@ -127,7 +130,10 @@ Define at least:
 - `TargetProfile` (what AI features exist, where data flows)
 - `TestCase` (safe steps, stop conditions, expected insecure behavior)
 - `Finding` (title, severity, severity_model, affected surface, evidence links, remediation)
-- `Evidence` (artifacts, timestamps, request IDs, screenshots)
+- `Evidence` (artifacts, timestamps, hashes, custody)
+- `AttachmentsManifest` (bundle file list with roles)
+- `ReproducibilityPack` (environment, steps, evidence hashes)
+- `ReproSteps` (standalone steps list)
 
 ## 7. Done criteria for "Discover, review, all the stuff mentioned"
 The project is "working" when you can:

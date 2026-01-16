@@ -131,6 +131,7 @@ docker run --rm bbhai
 - Roadmap planning now reflects completion through the v0.9 milestone.
 - Evidence registry entries can include hashes and custody metadata (see `docs/REPORTING.md`).
 - Evidence storage can use encryption at rest guidance in `docs/REPORTING.md`.
+- Architecture and outline docs call out attachments manifest and reproducibility pack outputs.
 - Component registry index lives at `data/component_registry_index.json`.
 - Example pipeline config includes reporting and export stages (`examples/pipeline_config.yaml`).
 - CI runs lint and format checks, schema validation, coverage reporting,

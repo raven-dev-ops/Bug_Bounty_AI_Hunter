@@ -15,7 +15,8 @@ operational guidance.
 1. Input: TargetProfile (authorized scope and AI surface map).
 2. Review modules: generate TestCase and draft Finding candidates.
 3. Evidence capture: collect minimal proof and references.
-4. Reporting: assemble report bundles and issue drafts.
+4. Reporting: assemble report bundles, attachments manifest, reproducibility pack,
+   and issue drafts.
 
 ## Boundaries and responsibilities
 - The hub should not contain exploit code or target-specific tooling.

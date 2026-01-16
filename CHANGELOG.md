@@ -118,3 +118,4 @@ All notable changes to this project will be documented here.
 - Updated README roadmap milestone note.
 - Added bbhai version flag and CI packaging smoke test.
 - Normalized dataflow map entries to ensure missing ids are populated.
+- Updated architecture, outline, and reporting docs to reflect report bundle metadata outputs.
