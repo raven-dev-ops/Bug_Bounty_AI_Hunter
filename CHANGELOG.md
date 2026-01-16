@@ -116,3 +116,4 @@ All notable changes to this project will be documented here.
 - Expanded pipeline docs and example config with reporting and export stages.
 - Added reproducibility steps example file and docs reference.
 - Updated README roadmap milestone note.
+- Added bbhai version flag and CI packaging smoke test.

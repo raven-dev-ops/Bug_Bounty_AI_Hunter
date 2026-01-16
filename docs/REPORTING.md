@@ -19,6 +19,7 @@ Reporting turns findings and evidence into report bundles and platform exports.
 - Output: `reproducibility_pack.json`
 - Schema: `schemas/reproducibility_pack.schema.json`
 - Provide steps via `--repro-steps` (JSON/YAML list).
+- Steps schema: `schemas/repro_steps.schema.json`.
 - Example steps file: `examples/repro_steps.json`.
 
 ## Per-finding reports

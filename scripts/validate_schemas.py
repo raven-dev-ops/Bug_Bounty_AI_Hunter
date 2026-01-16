@@ -31,6 +31,7 @@ SCHEMA_CASES = [
     ("schemas/notification_output.schema.json", "examples/notification_output.json", False),
     ("schemas/attachments_manifest.schema.json", "examples/outputs/attachments_manifest.json", False),
     ("schemas/reproducibility_pack.schema.json", "examples/outputs/reproducibility_pack.json", False),
+    ("schemas/repro_steps.schema.json", "examples/repro_steps.json", False),
 ]
 
 

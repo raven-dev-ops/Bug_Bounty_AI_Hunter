@@ -1,4 +1,5 @@
 import argparse
+import importlib.metadata
 import runpy
 import shutil
 import sys
@@ -11,6 +12,38 @@ EXAMPLES_DIR = REPO_ROOT / "examples"
 
 def _format_extension(value):
     return "yaml" if value == "yaml" else "json"
+
+
+def _read_version_from_pyproject():
+    pyproject = REPO_ROOT / "pyproject.toml"
+    if not pyproject.exists():
+        return None
+    section = None
+    for line in pyproject.read_text(encoding="utf-8").splitlines():
+        stripped = line.strip()
+        if not stripped or stripped.startswith("#"):
+            continue
+        if stripped.startswith("[") and stripped.endswith("]"):
+            section = stripped.strip("[]")
+            continue
+        if section == "project" and stripped.startswith("version"):
+            parts = stripped.split("=", 1)
+            if len(parts) != 2:
+                continue
+            value = parts[1].strip().strip('"').strip("'")
+            if value:
+                return value
+    return None
+
+
+def _get_version():
+    version = _read_version_from_pyproject()
+    if version:
+        return version
+    try:
+        return importlib.metadata.version("bbhai")
+    except importlib.metadata.PackageNotFoundError:
+        return "unknown"
 
 
 def _run_module(module, args, dry_run):
@@ -273,6 +306,7 @@ def build_parser():
     parser = argparse.ArgumentParser(
         description="Unified CLI for Bug_Bounty_Hunter_AI workflows."
     )
+    parser.add_argument("--version", action="version", version=_get_version())
     subparsers = parser.add_subparsers(dest="command", required=True)
 
     init_parser = subparsers.add_parser(

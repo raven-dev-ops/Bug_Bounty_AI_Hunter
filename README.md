@@ -98,6 +98,7 @@ python -m bbhai migrate --input components/bbhai-review-sample/component_manifes
 ```bash
 python -m pip install -e .
 bbhai --help
+bbhai --version
 bbhai profile --input examples/target_profile_questionnaire.yaml --output output/target_profile.json
 ```
 
