@@ -18,7 +18,8 @@ def _normalize_stores(stores):
         if not isinstance(store, dict):
             continue
         entry = dict(store)
-        entry.setdefault("id", f"store-{index:03d}")
+        if not entry.get("id"):
+            entry["id"] = f"store-{index:03d}"
         normalized.append(entry)
     return normalized
 
@@ -29,7 +30,8 @@ def _normalize_flows(flows):
         if not isinstance(flow, dict):
             continue
         entry = dict(flow)
-        entry.setdefault("id", f"flow-{index:03d}")
+        if not entry.get("id"):
+            entry["id"] = f"flow-{index:03d}"
         normalized.append(entry)
     return normalized
 

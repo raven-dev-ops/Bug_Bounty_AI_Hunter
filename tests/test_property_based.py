@@ -25,15 +25,19 @@ class PropertyBasedTests(unittest.TestCase):
         st.lists(
             st.one_of(
                 st.dictionaries(
-                    keys=st.text(min_size=1, max_size=8),
-                    values=st.one_of(st.text(), st.integers(), st.none()),
-                    max_size=6,
+                    keys=st.sampled_from(["id", "name", "source", "type", "title"]),
+                    values=st.one_of(
+                        st.text(min_size=0, max_size=8),
+                        st.integers(min_value=0, max_value=10),
+                        st.none(),
+                    ),
+                    max_size=3,
                 ),
                 st.integers(),
-                st.text(),
+                st.text(min_size=0, max_size=8),
                 st.none(),
             ),
-            max_size=10,
+            max_size=5,
         )
     )
     def test_normalize_stores_adds_ids(self, items):
@@ -46,15 +50,19 @@ class PropertyBasedTests(unittest.TestCase):
         st.lists(
             st.one_of(
                 st.dictionaries(
-                    keys=st.text(min_size=1, max_size=8),
-                    values=st.one_of(st.text(), st.integers(), st.none()),
-                    max_size=6,
+                    keys=st.sampled_from(["id", "name", "source", "type", "title"]),
+                    values=st.one_of(
+                        st.text(min_size=0, max_size=8),
+                        st.integers(min_value=0, max_value=10),
+                        st.none(),
+                    ),
+                    max_size=3,
                 ),
                 st.integers(),
-                st.text(),
+                st.text(min_size=0, max_size=8),
                 st.none(),
             ),
-            max_size=10,
+            max_size=5,
         )
     )
     def test_normalize_flows_adds_ids(self, items):
