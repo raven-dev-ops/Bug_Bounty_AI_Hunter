@@ -277,17 +277,17 @@ Closed milestone work:
 
 ### Recommended labels
 Priority:
-- `priority/p0` (critical), `priority/p1`, `priority/p2`, `priority/p3`
+- `prio:P0` (critical), `prio:P1`, `prio:P2`, `prio:P3`
 
 Type:
-- `type/epic`, `type/feature`, `type/docs`, `type/chore`, `type/security`
+- `type:epic`, `type:feature`, `type:docs`, `type:chore`, `type:security`
 
 Status:
 - `status/triage`, `status/ready`, `status/in-progress`, `status/blocked`, `status/needs-review`
 
 Area:
-- `area/core`, `area/knowledge`, `area/discovery`, `area/rag`, `area/embeddings`,
-  `area/logging`, `area/agents`, `area/reporting`, `area/labs`, `area/ci`, `area/docs`
+- `area:core`, `area:knowledge`, `area:discovery`, `area:rag`, `area:embeddings`,
+  `area:logging`, `area:agents`, `area:reporting`, `area:labs`, `area:ci`, `area:docs`
 
 Tags:
 - `tag/bug-bounty`, `tag/ai-security`, `tag/prompt-injection`, `tag/rag`,
@@ -295,49 +295,49 @@ Tags:
 
 ### Starter backlog (GitHub issues #13-#27, milestone v0.1 closed)
 1) Epic: Define architecture + component repo strategy (#13)  
-   Labels: `type/epic priority/p1 area/core status/triage tag/ai-security`
+   Labels: `type:epic prio:P1 area:core status/triage tag/ai-security`
 
 2) Add hub repo structure (`docs/`, `schemas/`, `components/`, `scripts/`) (#14)  
-   Labels: `type/feature priority/p1 area/core status/triage`
+   Labels: `type:feature prio:P1 area:core status/triage`
 
 3) Add label set + issue templates (#15)  
-   Labels: `type/chore priority/p1 area/docs status/triage`
+   Labels: `type:chore prio:P1 area:docs status/triage`
 
 4) Safety / ROE policy and guardrails (project-wide) (#16)  
-   Labels: `type/security priority/p0 area/core status/triage tag/bug-bounty`
+   Labels: `type:security prio:P0 area:core status/triage tag/bug-bounty`
 
 5) Define schemas: TargetProfile, Finding, Evidence, TestCase (#17)  
-   Labels: `type/feature priority/p1 area/core status/triage`
+   Labels: `type:feature prio:P1 area:core status/triage`
 
 6) Knowledge base structure + ingestion rules (#18)  
-   Labels: `type/feature priority/p1 area/knowledge status/triage tag/ai-security`
+   Labels: `type:feature prio:P1 area:knowledge status/triage tag/ai-security`
 
 7) Ingest shadow data / AI models and embeddings transcript into knowledge base (curated, safe cards) (#22)  
-   Labels: `type/docs priority/p2 area/knowledge status/triage tag/rag tag/embeddings tag/logging`
+   Labels: `type:docs prio:P2 area:knowledge status/triage tag/rag tag/embeddings tag/logging`
 
 8) Discovery: questionnaire -> TargetProfile generator (v0) (#19)  
-   Labels: `type/feature priority/p1 area/discovery status/triage`
+   Labels: `type:feature prio:P1 area:discovery status/triage`
 
 9) Review module: RAG checklist (authz + context handling) (#20)  
-   Labels: `type/feature priority/p1 area/rag status/triage tag/rag tag/ai-security`
+   Labels: `type:feature prio:P1 area:rag status/triage tag/rag tag/ai-security`
 
 10) Review module: embeddings/vector exposure checklist (#21)  
-    Labels: `type/feature priority/p1 area/embeddings status/triage tag/embeddings tag/ai-security`
+    Labels: `type:feature prio:P1 area:embeddings status/triage tag/embeddings tag/ai-security`
 
 11) Review module: logging/telemetry shadow-store checklist (#23)  
-    Labels: `type/feature priority/p1 area/logging status/triage tag/logging`
+    Labels: `type:feature prio:P1 area:logging status/triage tag/logging`
 
 12) Reporting: bug bounty report bundle generator (MD + JSON) (#24)  
-    Labels: `type/feature priority/p1 area/reporting status/triage tag/bug-bounty`
+    Labels: `type:feature prio:P1 area:reporting status/triage tag/bug-bounty`
 
 13) Export: paste-ready GitHub issue drafts from Findings (#25)  
-    Labels: `type/feature priority/p2 area/reporting status/triage`
+    Labels: `type:feature prio:P2 area:reporting status/triage`
 
 14) Labs: synthetic RAG + vector store environment for validation (#26)  
-    Labels: `type/feature priority/p2 area/labs status/triage`
+    Labels: `type:feature prio:P2 area:labs status/triage`
 
 15) CI baseline: lint + schema validation (once code exists) (#27)  
-    Labels: `type/chore priority/p2 area/ci status/triage`
+    Labels: `type:chore prio:P2 area:ci status/triage`
 
 ---
 

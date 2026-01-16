@@ -127,6 +127,8 @@ docker run --rm bbhai
 
 ## Notes
 - PDFs are maintained locally and are ignored by git.
+- Issue backlog is tracked in GitHub Issues.
+- Issue labels use `prio:`, `type:`, and `area:` prefixes (see `docs/PROJECT_MANAGEMENT.md`).
 - Milestone status and backlog tracking are aligned with `ROADMAP.md` and GitHub milestones.
 - Roadmap planning now reflects completion through the v0.9 milestone.
 - Evidence registry entries can include hashes and custody metadata (see `docs/REPORTING.md`).

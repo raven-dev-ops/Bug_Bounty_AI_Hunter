@@ -157,25 +157,25 @@ Below is a standardized label set and a starter issue backlog.
 
 Priority
 
-priority/p0 - critical / blocking
+prio:P0 - critical / blocking
 
-priority/p1 - high
+prio:P1 - high
 
-priority/p2 - medium
+prio:P2 - medium
 
-priority/p3 - low
+prio:P3 - low
 
 Type
 
-type/epic
+type:epic
 
-type/feature
+type:feature
 
-type/docs
+type:docs
 
-type/chore
+type:chore
 
-type/security
+type:security
 
 Status
 
@@ -191,27 +191,27 @@ status/needs-review
 
 Area
 
-area/core
+area:core
 
-area/knowledge
+area:knowledge
 
-area/discovery
+area:discovery
 
-area/rag
+area:rag
 
-area/embeddings
+area:embeddings
 
-area/logging
+area:logging
 
-area/agents
+area:agents
 
-area/reporting
+area:reporting
 
-area/labs
+area:labs
 
-area/ci
+area:ci
 
-area/docs
+area:docs
 
 Tags
 
@@ -234,7 +234,7 @@ tag/crypto
 2.2 Issue backlog (paste-ready)
 Issue 1 - Epic: Define architecture + component repo strategy
 
-Labels: type/epic, priority/p1, area/core, status/triage, tag/ai-security
+Labels: type:epic, prio:P1, area:core, status/triage, tag/ai-security
 Body:
 
 Document hub vs component responsibilities.
@@ -250,7 +250,7 @@ docs/COMPONENTS.md exists with linking instructions
 
 Issue 2 - Add hub repo structure (docs/, schemas/, components/, scripts/)
 
-Labels: type/feature, priority/p1, area/core, status/triage
+Labels: type:feature, prio:P1, area:core, status/triage
 Body:
 
 Add directories and placeholder READMEs.
@@ -262,7 +262,7 @@ Directory structure exists and is referenced from README.
 
 Issue 3 - Add label set + issue templates
 
-Labels: type/chore, priority/p1, area/docs, status/triage
+Labels: type:chore, prio:P1, area:docs, status/triage
 Body:
 
 Create .github/ISSUE_TEMPLATE/:
@@ -282,7 +282,7 @@ Labels documented in docs/PROJECT_MANAGEMENT.md
 
 Issue 4 - Safety / ROE policy and guardrails (project-wide)
 
-Labels: type/security, priority/p0, area/core, status/triage, tag/bug-bounty
+Labels: type:security, prio:P0, area:core, status/triage, tag/bug-bounty
 Body:
 
 Add docs/ROE.md with:
@@ -300,7 +300,7 @@ docs/ROE.md exists and is referenced in README and contribution docs.
 
 Issue 5 - Define schemas: TargetProfile, Finding, Evidence, TestCase
 
-Labels: type/feature, priority/p1, area/core, status/triage
+Labels: type:feature, prio:P1, area:core, status/triage
 Body:
 
 Add JSONSchema or Pydantic-first design (then export schema).
@@ -316,7 +316,7 @@ schemas/test_case.schema.json
 
 Issue 6 - Knowledge base component: structure + ingestion rules
 
-Labels: type/feature, priority/p1, area/knowledge, status/triage, tag/ai-security
+Labels: type:feature, prio:P1, area:knowledge, status/triage, tag/ai-security
 Body:
 
 Create knowledge/ layout (cards, checklists, sources).
@@ -330,7 +330,7 @@ sample cards exist
 
 Issue 7 - Ingest "shadow data / AI models & embeddings" transcript into knowledge base
 
-Labels: type/docs, priority/p2, area/knowledge, status/triage, tag/rag, tag/embeddings, tag/logging
+Labels: type:docs, prio:P2, area:knowledge, status/triage, tag/rag, tag/embeddings, tag/logging
 Body:
 
 Add transcript as a curated source note.
@@ -350,7 +350,7 @@ logging/telemetry shadow-store card
 
 Issue 8 - Discovery: questionnaire -> TargetProfile generator (v0)
 
-Labels: type/feature, priority/p1, area/discovery, status/triage
+Labels: type:feature, prio:P1, area:discovery, status/triage
 Body:
 
 Create a YAML questionnaire users fill out (LLM provider, RAG, embeddings, logs, tools).
@@ -364,7 +364,7 @@ generator outputs valid schema
 
 Issue 9 - Review module: RAG security checklist (authz + context handling)
 
-Labels: type/feature, priority/p1, area/rag, status/triage, tag/rag, tag/ai-security
+Labels: type:feature, prio:P1, area:rag, status/triage, tag/rag, tag/ai-security
 Body:
 
 Provide safe test cases for:
@@ -380,7 +380,7 @@ outputs TestCase[] with clear stop conditions
 
 Issue 10 - Review module: Embeddings/vector exposure checklist
 
-Labels: type/feature, priority/p1, area/embeddings, status/triage, tag/embeddings, tag/ai-security
+Labels: type:feature, prio:P1, area:embeddings, status/triage, tag/embeddings, tag/ai-security
 Body:
 
 Checks for:
@@ -398,7 +398,7 @@ outputs TestCase[] + remediation guidance
 
 Issue 11 - Review module: Logging/telemetry shadow-store checklist
 
-Labels: type/feature, priority/p1, area/logging, status/triage, tag/logging
+Labels: type:feature, prio:P1, area:logging, status/triage, tag/logging
 Body:
 
 Checks for:
@@ -414,7 +414,7 @@ outputs TestCase[] + remediation guidance
 
 Issue 12 - Reporting: generate bug bounty report bundle (MD + JSON)
 
-Labels: type/feature, priority/p1, area/reporting, status/triage, tag/bug-bounty
+Labels: type:feature, prio:P1, area:reporting, status/triage, tag/bug-bounty
 Body:
 
 Input: Findings + Evidence
@@ -430,7 +430,7 @@ example output committed under examples/outputs/
 
 Issue 13 - Export: create paste-ready GitHub Issue drafts from Findings
 
-Labels: type/feature, priority/p2, area/reporting, status/triage
+Labels: type:feature, prio:P2, area:reporting, status/triage
 Body:
 
 Generate one markdown file per finding formatted as a GitHub issue body.
@@ -440,7 +440,7 @@ examples/exports/github_issues/<...>.md exists
 
 Issue 14 - Labs: synthetic RAG + vector store environment for validation
 
-Labels: type/feature, priority/p2, area/labs, status/triage
+Labels: type:feature, prio:P2, area:labs, status/triage
 Body:
 
 Provide a local lab that:
@@ -456,7 +456,7 @@ no real data included
 
 Issue 15 - CI baseline (once code exists): lint + schema validation
 
-Labels: type/chore, priority/p2, area/ci, status/triage
+Labels: type:chore, prio:P2, area:ci, status/triage
 Body:
 
 Add GitHub Actions for:
@@ -484,16 +484,16 @@ gh repo set-default "$REPO"
 
 # ---- labels: name|color|description
 labels=(
-  "priority/p0|d73a4a|Critical / blocking"
-  "priority/p1|ff4500|High priority"
-  "priority/p2|fbca04|Medium priority"
-  "priority/p3|cfd3d7|Low priority"
+  "prio:P0|d73a4a|Critical / blocking"
+  "prio:P1|ff4500|High priority"
+  "prio:P2|fbca04|Medium priority"
+  "prio:P3|cfd3d7|Low priority"
 
-  "type/epic|3e4b9e|Epic"
-  "type/feature|a2eeef|Feature"
-  "type/docs|0075ca|Documentation"
-  "type/chore|cfd3d7|Chore/maintenance"
-  "type/security|b60205|Security work"
+  "type:epic|3e4b9e|Epic"
+  "type:feature|a2eeef|Feature"
+  "type:docs|0075ca|Documentation"
+  "type:chore|cfd3d7|Chore/maintenance"
+  "type:security|b60205|Security work"
 
   "status/triage|ededed|Needs triage"
   "status/ready|0e8a16|Ready"
@@ -501,17 +501,17 @@ labels=(
   "status/blocked|b60205|Blocked"
   "status/needs-review|5319e7|Needs review"
 
-  "area/core|1d76db|Core"
-  "area/knowledge|1d76db|Knowledge"
-  "area/discovery|1d76db|Discovery"
-  "area/rag|1d76db|RAG"
-  "area/embeddings|1d76db|Embeddings"
-  "area/logging|1d76db|Logging"
-  "area/agents|1d76db|Agents"
-  "area/reporting|1d76db|Reporting"
-  "area/labs|1d76db|Labs"
-  "area/ci|1d76db|CI"
-  "area/docs|1d76db|Docs"
+  "area:core|1d76db|Core"
+  "area:knowledge|1d76db|Knowledge"
+  "area:discovery|1d76db|Discovery"
+  "area:rag|1d76db|RAG"
+  "area:embeddings|1d76db|Embeddings"
+  "area:logging|1d76db|Logging"
+  "area:agents|1d76db|Agents"
+  "area:reporting|1d76db|Reporting"
+  "area:labs|1d76db|Labs"
+  "area:ci|1d76db|CI"
+  "area:docs|1d76db|Docs"
 
   "tag/bug-bounty|bfdadc|Bug bounty"
   "tag/ai-security|bfdadc|AI security"
@@ -531,12 +531,12 @@ done
 # ---- issues (example: add more blocks as needed)
 gh issue create \
   --title "Epic: Define architecture + component repo strategy" \
-  --label "type/epic,priority/p1,area/core,status/triage,tag/ai-security" \
+  --label "type:epic,prio:P1,area:core,status/triage,tag/ai-security" \
   --body $'## Goal\nDocument hub vs component responsibilities and the plugin interface.\n\n## Acceptance criteria\n- docs/ARCHITECTURE.md exists\n- docs/COMPONENTS.md exists\n'
 
 gh issue create \
   --title "Add hub repo structure (docs/, schemas/, components/, scripts/)" \
-  --label "type/feature,priority/p1,area/core,status/triage" \
+  --label "type:feature,prio:P1,area:core,status/triage" \
   --body $'## Goal\nCreate initial folders and placeholders.\n\n## Acceptance criteria\n- Folder structure exists\n- README links to the new docs\n'
 
 

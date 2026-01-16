@@ -119,3 +119,5 @@ All notable changes to this project will be documented here.
 - Added bbhai version flag and CI packaging smoke test.
 - Normalized dataflow map entries to ensure missing ids are populated.
 - Updated architecture, outline, and reporting docs to reflect report bundle metadata outputs.
+- Moved the GitHub issue backlog into GitHub Issues and removed `github-issues-backlog.md`.
+- Migrated label taxonomy to `prio:`, `type:`, and `area:` prefixes and updated templates and bootstrap script.

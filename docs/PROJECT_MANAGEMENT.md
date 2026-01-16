@@ -2,17 +2,19 @@
 
 ## Labels
 Priority:
-- `priority/p0` - critical / blocking
-- `priority/p1` - high
-- `priority/p2` - medium
-- `priority/p3` - low
+- `prio:P0` - critical / blocking
+- `prio:P1` - high
+- `prio:P2` - medium
+- `prio:P3` - low
 
 Type:
-- `type/epic`
-- `type/feature`
-- `type/docs`
-- `type/chore`
-- `type/security`
+- `type:epic`
+- `type:feature`
+- `type:research`
+- `type:docs`
+- `type:test`
+- `type:chore`
+- `type:security`
 
 Status:
 - `status/triage`
@@ -22,17 +24,37 @@ Status:
 - `status/needs-review`
 
 Area:
-- `area/core`
-- `area/knowledge`
-- `area/discovery`
-- `area/rag`
-- `area/embeddings`
-- `area/logging`
-- `area/agents`
-- `area/reporting`
-- `area/labs`
-- `area/ci`
-- `area/docs`
+- `area:schemas`
+- `area:storage`
+- `area:ingest`
+- `area:parsing`
+- `area:compliance`
+- `area:scoring`
+- `area:pdf`
+- `area:reporting`
+- `area:llm-threat-model`
+- `area:cli`
+- `area:ci`
+- `area:tests`
+- `area:docs`
+- `area:core`
+- `area:knowledge`
+- `area:discovery`
+- `area:rag`
+- `area:embeddings`
+- `area:logging`
+- `area:agents`
+- `area:labs`
+
+Risk:
+- `risk:legal`
+- `risk:tos`
+- `risk:data-privacy`
+- `risk:rate-limit`
+
+Meta:
+- `needs:decision`
+- `good-first-issue`
 
 Tags:
 - `tag/bug-bounty`

@@ -2,7 +2,7 @@
 name: Security finding
 about: Report a security issue in project artifacts (non-sensitive only)
 title: "[Security] "
-labels: ["type/security", "status/triage"]
+labels: ["type:security", "status/triage"]
 assignees: []
 ---
 
