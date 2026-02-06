@@ -23,5 +23,18 @@ nav:
       - Component Contract: COMPONENT_CONTRACT.md
       - Component Manifest: COMPONENT_MANIFEST.md
       - Knowledge Format: KNOWLEDGE_FORMAT.md
+      - Tools: TOOLS.md
+      - Tools Policy: TOOLS_POLICY.md
+      - Safe Defaults: SAFE_DEFAULTS.md
       - Knowledge Tags: KNOWLEDGE_TAGS.md
       - Severity Model: SEVERITY_MODEL.md
+      - Threat Modeling Method: THREAT_MODELING_METHOD.md
+      - Pipeline Guardrails: PIPELINE_GUARDRAILS.md
+      - Scoping Guide: SCOPING_GUIDE.md
+      - Operations: OPERATIONS.md
+      - Redaction Guide: REDACTION_GUIDE.md
+      - Reporting Examples: REPORTING_EXAMPLES.md
+      - Governance and Security: GOVERNANCE_SECURITY.md
+      - Risk Assessment Template: RISK_ASSESSMENT.md
+      - Changelog Policy: CHANGELOG_POLICY.md
+      - Improvement Tasks: IMPROVEMENT_TASKS.md

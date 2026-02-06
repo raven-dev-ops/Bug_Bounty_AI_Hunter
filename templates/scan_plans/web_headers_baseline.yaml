@@ -1,0 +1,18 @@
+id: web-headers-baseline
+name: Web headers baseline
+description: Record HTTP response headers for a target.
+category: web
+target_types:
+  - url
+  - domain
+steps:
+  - "Request {base_url} with a standard client."
+  - "Record response headers in a sanitized capture."
+expected_results:
+  - "Headers captured for documentation."
+stop_conditions:
+  - "Real user data appears."
+  - "Unexpected access obtained."
+tags:
+  - inventory
+  - web

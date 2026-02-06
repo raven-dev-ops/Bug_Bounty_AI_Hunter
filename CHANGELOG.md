@@ -3,6 +3,64 @@
 All notable changes to this project will be documented here.
 
 ## Unreleased
+- Expanded open-source tools guidance and policy docs (`docs/TOOLS.md`, `docs/TOOLS_POLICY.md`).
+- Added safe defaults, pipeline guardrails, scoping, operations, redaction, and governance docs.
+- Added risk assessment template and changelog policy docs.
+- Added reporting examples and an improvement task list doc.
+- Added tool run and risk assessment schemas with example artifacts.
+- Added scan plan templates under `templates/scan_plans/`.
+- Added tool run logging, redaction, knowledge lint, and markdown link scripts.
+- Added agent tool-use cards and an LLM API authorization checklist.
+- Added tooling docs consistency tests and expanded testing guidance.
+- Added program scoring output schema and example for difficulty buckets.
+- Added program scoring script and catalog CLI wrapper.
+- Allowed safe_harbor objects in program registry schema to match parsed outputs.
+- Added summary export script with JSON, CSV, and Markdown outputs and CLI wiring.
+- Added summary export stage to the sample pipeline config.
+- Added catalog ingestion audit log and summary outputs with a schema example.
+- Added JSON audit summaries for catalog runs and throttle sleep counts in the summary.
+- Added catalog guardrails to keep registry outputs out of `output/` and `evidence/`.
+- Added compliance checklist output and template for report bundles.
+- Added registry schema validation at write time and made jsonschema a core dependency.
+- Added provenance metadata capture (HTTP status, git commit, artifact hashes) for catalog sources.
+- Added case study shortlist generation with schema and example output.
+- Added suggested approach generator by bucket with schema and example output.
+- Added AI/LLM relevance classifier output with schema and example.
+- Added provenance quality scoring and freshness output with schema and example.
+- Added scoring calibration dataset and calibration report output with schema.
+- Added ingestion feasibility matrix for public source options.
+- Added report completeness review output with optional AI review script.
+- Added program brief and master catalog markdown renderers with optional PDF export.
+- Added optional PDF golden hash tests and update script.
+- Added a high-quality report markdown example for PDF rendering.
+- Added Pandoc PDF header tweaks and fontconfig config to eliminate TeX warnings.
+- Adjusted master catalog policy URLs to use autolinks for PDF table wrapping.
+- Added program bundle examples for YesWeHack and Huntr.
+- Added dataset connectors for bounty-targets-data, disclose-io, and projectdiscovery.
+- Added fixtures and integration checks for dataset connectors.
+- Documented catalog ingestion URL override environment variables.
+- Added `bbhai catalog build` and a catalog build script for public-only ingestion.
+- Enabled robots.txt checks by default in the catalog fetcher.
+- Added connector parsers for YesWeHack, Intigriti, and Huntr.
+- Added offline HTML fixtures and integration tests for connector parsing.
+- Added unit tests for catalog parsing helpers (rewards, response time, restrictions).
+- Added provenance metadata fields (status, parser version, hashes) to program artifacts.
+- Added program registry seed file and catalog fetcher utilities.
+- Added program registry storage helper with catalog guardrails.
+- Added pinned dependency sets and a pip-audit check in CI.
+- Added program registry diff tool with JSON/Markdown outputs and fixtures.
+- Added LLM threat model doc covering RAG and agent risks.
+- Added case study selection guide for public programs and safe usage.
+- Added release plan doc covering versioning, changelog, and distribution.
+- Added attribution and licensing metadata fields to program schemas and registry outputs.
+- Added industry-standard report templates in `templates/reporting/standard/`.
+- Added evidence log template and redaction guidance.
+- Added milestone and triage guidance to project management docs.
+- Added research and epic GitHub issue templates.
+- Added public-only mode policy doc to clarify cataloging vs testing boundaries.
+- Added Program, Scope, Reward, and Restriction schemas with example fixtures.
+- Added program registry schema, merge tooling, and docs for program identity and deduplication.
+- Added scope asset schema, examples, and normalization helpers with tests for ports and wildcard validation.
 - Added project documentation, governance files, and issue templates.
 - Added planning docs, repo skeleton directories, and knowledge placeholders.
 - Added initial schema stubs for core data types.

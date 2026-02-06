@@ -31,6 +31,9 @@ This index lists knowledge sources, cards, and checklists with status.
 - kb-0018 | Authorization handling gaps in telemetry tools | draft | `knowledge/cards/kb-0018-authorization-handling-gaps.md`
 - kb-0019 | Telemetry gaps and coverage blind spots | draft | `knowledge/cards/kb-0019-telemetry-gaps.md`
 - kb-0020 | Prompt social engineering risk | draft | `knowledge/cards/kb-0020-prompt-social-engineering.md`
+- kb-0021 | Agent tool argument injection risk | draft | `knowledge/cards/kb-0021-agent-tool-argument-injection.md`
+- kb-0022 | Agent tool scope bleed risk | draft | `knowledge/cards/kb-0022-agent-tool-scope-bleed.md`
+- kb-0023 | Agent approval bypass risk | draft | `knowledge/cards/kb-0023-agent-approval-bypass.md`
 
 ## Checklists
 - kb-checklist-0001 | RAG and logging review checklist | draft | `knowledge/checklists/rag-logging-review.md`
@@ -41,3 +44,4 @@ This index lists knowledge sources, cards, and checklists with status.
 - kb-checklist-0006 | Human-in-the-loop prompt review checklist | draft | `knowledge/checklists/human-in-loop-review.md`
 - kb-checklist-0007 | Embeddings and vector exposure review checklist | draft | `knowledge/checklists/embeddings-review.md`
 - kb-checklist-0008 | Agents and tool-use review checklist | draft | `knowledge/checklists/agents-review.md`
+- kb-checklist-0009 | LLM API authorization review checklist | draft | `knowledge/checklists/llm-api-authz-review.md`

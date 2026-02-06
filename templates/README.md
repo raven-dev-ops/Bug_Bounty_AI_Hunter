@@ -4,8 +4,12 @@ Templates define scan plans and reporting formats. Avoid exploit payloads and
 keep steps high level.
 
 ## Subfolders
-- `reporting/` - report bundle and per-finding templates
+- `reporting/` - report bundle, compliance checklist, program briefs, catalog, and per-finding templates
+  - `reporting/standard/` - industry-standard Markdown report pack
+  - `reporting/pandoc_header.tex` - PDF line-breaking tweaks for Pandoc exports
+  - `reporting/fontconfig.conf` - fontconfig config for PDF engine font discovery
 - `platforms/` - platform-specific issue or report formats
+- `scan_plans/` - safe scan plan templates for `scripts.scan_templates`
 
 ## Fields
 - `id`

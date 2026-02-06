@@ -1,0 +1,18 @@
+id: status-page-check
+name: Status page check
+description: Locate a public status page reference.
+category: web
+target_types:
+  - url
+  - domain
+steps:
+  - "Check {base_url} for a status page link."
+  - "Record the status page URL if present."
+expected_results:
+  - "Status page URL recorded or confirmed missing."
+stop_conditions:
+  - "Real user data appears."
+  - "Unexpected access obtained."
+tags:
+  - inventory
+  - web

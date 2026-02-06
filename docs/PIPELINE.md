@@ -3,6 +3,7 @@
 The hub provides a simple pipeline orchestrator for discovery, scan planning,
 triage, intel enrichment, and notifications. Scripts are planning oriented and
 avoid live exploitation.
+See `docs/PIPELINE_GUARDRAILS.md` and `docs/SAFE_DEFAULTS.md` for safety gates.
 
 ## Stages
 - Scope import: `python -m scripts.import_scope`
@@ -16,6 +17,7 @@ avoid live exploitation.
 - Issue drafts: `python -m scripts.export_issue_drafts`
 - Finding reports: `python -m scripts.export_finding_reports`
 - Jira export: `python -m scripts.export_jira`
+- Summary export: `python -m scripts.export_summary`
 - PDF export: `python -m scripts.export_pdf`
 - Notifications: `python -m scripts.notify`
 - Component registry: `python -m scripts.component_runtime`
@@ -33,6 +35,7 @@ Environment variables are summarized in `docs/ENVIRONMENT.md`.
 Use `examples/pipeline_config.yaml` as a starting point. Each stage defines a
 `name` and a `config` mapping that matches the stage script flags. Use
 underscores in config keys to map to CLI flags with hyphens.
+Scan templates live under `templates/scan_plans/`.
 
 ### Limits and budgets
 Top-level `limits` can enforce guardrails across stages:
@@ -71,6 +74,7 @@ python -m scripts.pipeline_orchestrator --config examples/pipeline_config.yaml -
 
 Run mode requires a ROE acknowledgement file (`ROE_ACK.yaml`) or the
 `--ack-authorization` flag.
+Consider completing `docs/RISK_ASSESSMENT.md` before run mode.
 
 ## Demo runner
 Use `python -m scripts.demo_runner` to run the example pipeline with outputs

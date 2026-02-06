@@ -1,0 +1,69 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ravdevops.com/schemas/tool_run.schema.json",
+  "title": "ToolRun",
+  "type": "object",
+  "description": "Metadata for a single tool execution.",
+  "properties": {
+    "schema_version": { "type": "string" },
+    "id": { "type": "string" },
+    "tool": { "type": "string" },
+    "version": { "type": "string" },
+    "mode": {
+      "type": "string",
+      "enum": ["passive", "active", "lab"]
+    },
+    "scope_reference": { "type": "string" },
+    "target": { "type": "string" },
+    "started_at": { "type": "string" },
+    "ended_at": { "type": "string" },
+    "command": { "type": "string" },
+    "outputs": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "hashes": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/hash_entry" }
+    },
+    "approvals": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/approval" }
+    },
+    "constraints": { "type": "object" },
+    "environment": { "type": "object" },
+    "redactions": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "notes": { "type": "string" }
+  },
+  "required": ["schema_version", "id", "tool", "mode"],
+  "additionalProperties": true,
+  "$defs": {
+    "hash_entry": {
+      "type": "object",
+      "properties": {
+        "path": { "type": "string" },
+        "algorithm": { "type": "string" },
+        "hash": { "type": "string" },
+        "computed_at": { "type": "string" },
+        "size_bytes": { "type": "integer" },
+        "status": { "type": "string" },
+        "notes": { "type": "string" }
+      },
+      "required": ["path"],
+      "additionalProperties": true
+    },
+    "approval": {
+      "type": "object",
+      "properties": {
+        "approver": { "type": "string" },
+        "approved_at": { "type": "string" },
+        "notes": { "type": "string" }
+      },
+      "required": ["approver", "approved_at"],
+      "additionalProperties": true
+    }
+  }
+}

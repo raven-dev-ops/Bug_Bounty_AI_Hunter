@@ -21,6 +21,10 @@
       "type": "array",
       "items": { "type": "string" }
     },
+    "tool_runs": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/tool_run" }
+    },
     "source": { "type": "string" },
     "custody": { "$ref": "#/$defs/custody" }
   },
@@ -64,6 +68,31 @@
         "notes": { "type": "string" }
       },
       "required": ["timestamp", "action"],
+      "additionalProperties": true
+    },
+    "tool_run": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "tool": { "type": "string" },
+        "version": { "type": "string" },
+        "mode": { "type": "string" },
+        "scope_reference": { "type": "string" },
+        "target": { "type": "string" },
+        "started_at": { "type": "string" },
+        "ended_at": { "type": "string" },
+        "command": { "type": "string" },
+        "outputs": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "hashes": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/hash_entry" }
+        },
+        "notes": { "type": "string" }
+      },
+      "required": ["id", "tool", "mode"],
       "additionalProperties": true
     }
   }

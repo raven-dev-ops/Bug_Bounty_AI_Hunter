@@ -1,0 +1,18 @@
+id: robots-disclosure-check
+name: Robots.txt disclosure check
+description: Record robots.txt for awareness of disallowed paths.
+category: web
+target_types:
+  - url
+  - domain
+steps:
+  - "Request {base_url}/robots.txt."
+  - "Record the response if present."
+expected_results:
+  - "robots.txt captured or confirmed missing."
+stop_conditions:
+  - "Real user data appears."
+  - "Unexpected access obtained."
+tags:
+  - inventory
+  - web

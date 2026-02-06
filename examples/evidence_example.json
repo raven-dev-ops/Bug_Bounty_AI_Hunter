@@ -26,6 +26,17 @@
   "timestamps": [
     "2026-01-14T00:00:00Z"
   ],
+  "tool_runs": [
+    {
+      "id": "tool-run-001",
+      "tool": "Nmap",
+      "mode": "passive",
+      "outputs": [
+        "evidence/nmap_sanitized.txt"
+      ],
+      "notes": "Passive inventory only."
+    }
+  ],
   "source": "synthetic",
   "custody": {
     "collected_at": "2026-01-14T00:00:00Z",

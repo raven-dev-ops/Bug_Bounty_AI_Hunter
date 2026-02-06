@@ -1,0 +1,29 @@
+{
+  "schema_version": "0.1.0",
+  "id": "tool-run-001",
+  "tool": "Nmap",
+  "version": "7.x",
+  "mode": "passive",
+  "scope_reference": "https://example.com/policy",
+  "target": "example.com",
+  "started_at": "2026-02-05T00:00:00Z",
+  "ended_at": "2026-02-05T00:02:00Z",
+  "command": "nmap -sV example.com",
+  "outputs": ["evidence/nmap_sanitized.txt"],
+  "hashes": [
+    {
+      "path": "evidence/nmap_sanitized.txt",
+      "algorithm": "sha256",
+      "hash": "<redacted>"
+    }
+  ],
+  "approvals": [
+    {
+      "approver": "program-owner",
+      "approved_at": "2026-02-05T00:00:00Z",
+      "notes": "Written authorization received."
+    }
+  ],
+  "redactions": ["Replaced hostnames and tokens with <redacted>."],
+  "notes": "Passive inventory only. No aggressive flags used."
+}
