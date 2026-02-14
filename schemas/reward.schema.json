@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ravdevops.com/schemas/reward.schema.json",
+  "title": "Reward",
+  "type": "object",
+  "description": "Reward range metadata for a program.",
+  "properties": {
+    "currency": { "type": "string" },
+    "min": { "type": "number", "minimum": 0 },
+    "max": { "type": "number", "minimum": 0 },
+    "summary": { "type": "string" },
+    "notes": { "type": "string" }
+  },
+  "additionalProperties": true
+}

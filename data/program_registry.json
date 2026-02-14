@@ -1,0 +1,880 @@
+{
+  "schema_version": "0.1.0",
+  "created_at": "2026-01-17T23:14:05.689484+00:00",
+  "updated_at": "2026-01-17T23:14:05.693934+00:00",
+  "programs": [
+    {
+      "id": "program:yeswehack-acme",
+      "name": "Acme Corp",
+      "platform": "yeswehack",
+      "handle": "acme",
+      "policy_url": "https://yeswehack.com/programs/acme",
+      "rewards": {
+        "summary": "USD 500 - 1500",
+        "currency": "USD",
+        "min": 500.0,
+        "max": 1500.0
+      },
+      "safe_harbor": {
+        "present": true,
+        "notes": "Safe harbor applies within scope."
+      },
+      "scope": {
+        "in_scope": [
+          {
+            "type": "domain",
+            "value": "acme.com"
+          },
+          {
+            "type": "domain",
+            "value": "api.acme.com",
+            "ports": [
+              {
+                "start": 443,
+                "end": 443
+              }
+            ]
+          }
+        ],
+        "out_of_scope": [
+          {
+            "type": "domain",
+            "value": "internal.acme.com"
+          }
+        ],
+        "restrictions": [
+          "No denial of service",
+          "No social engineering"
+        ]
+      },
+      "restrictions": [
+        "No denial of service",
+        "No social engineering"
+      ],
+      "identity_keys": [
+        "name:acme corp",
+        "platform:yeswehack:acme",
+        "url:https://yeswehack.com/programs/acme"
+      ],
+      "sources": [
+        {
+          "source": "yeswehack",
+          "source_id": "yeswehack:acme",
+          "platform": "yeswehack",
+          "handle": "acme",
+          "name": "Acme Corp",
+          "policy_url": "https://yeswehack.com/programs/acme",
+          "rewards": {
+            "summary": "USD 500 - 1500",
+            "currency": "USD",
+            "min": 500.0,
+            "max": 1500.0
+          },
+          "parser_version": "0.1.0",
+          "scope": {
+            "in_scope": [
+              {
+                "type": "domain",
+                "value": "acme.com"
+              },
+              {
+                "type": "domain",
+                "value": "api.acme.com",
+                "ports": [
+                  {
+                    "start": 443,
+                    "end": 443
+                  }
+                ]
+              }
+            ],
+            "out_of_scope": [
+              {
+                "type": "domain",
+                "value": "internal.acme.com"
+              }
+            ],
+            "restrictions": [
+              "No denial of service",
+              "No social engineering"
+            ]
+          },
+          "restrictions": [
+            "No denial of service",
+            "No social engineering"
+          ],
+          "safe_harbor": {
+            "present": true,
+            "notes": "Safe harbor applies within scope."
+          },
+          "fetched_at": "2026-01-17T23:14:05.689484+00:00",
+          "url": "https://yeswehack.com/programs/acme"
+        }
+      ]
+    },
+    {
+      "id": "program:hackerone-acme-rewards",
+      "name": "Acme Rewards",
+      "platform": "hackerone",
+      "handle": "acme-rewards",
+      "policy_url": "https://hackerone.com/acme-rewards",
+      "rewards": {
+        "summary": "USD 100 - 500",
+        "currency": "USD",
+        "min": 100.0,
+        "max": 500.0
+      },
+      "scope": {
+        "in_scope": [
+          {
+            "type": "domain",
+            "value": "acme.example"
+          },
+          {
+            "type": "domain",
+            "value": "api.acme.example",
+            "ports": [
+              {
+                "start": 443,
+                "end": 443
+              }
+            ]
+          }
+        ],
+        "out_of_scope": [
+          {
+            "type": "domain",
+            "value": "internal.acme.example"
+          }
+        ],
+        "restrictions": [
+          "No automated scanning"
+        ]
+      },
+      "restrictions": [
+        "No automated scanning"
+      ],
+      "identity_keys": [
+        "name:acme rewards",
+        "platform:hackerone:acme-rewards",
+        "url:https://hackerone.com/acme-rewards"
+      ],
+      "sources": [
+        {
+          "source": "bounty-targets-data",
+          "source_id": "hackerone:acme-rewards",
+          "platform": "hackerone",
+          "handle": "acme-rewards",
+          "name": "Acme Rewards",
+          "policy_url": "https://hackerone.com/acme-rewards",
+          "rewards": {
+            "summary": "USD 100 - 500",
+            "currency": "USD",
+            "min": 100.0,
+            "max": 500.0
+          },
+          "parser_version": "0.1.0",
+          "scope": {
+            "in_scope": [
+              {
+                "type": "domain",
+                "value": "acme.example"
+              },
+              {
+                "type": "domain",
+                "value": "api.acme.example",
+                "ports": [
+                  {
+                    "start": 443,
+                    "end": 443
+                  }
+                ]
+              }
+            ],
+            "out_of_scope": [
+              {
+                "type": "domain",
+                "value": "internal.acme.example"
+              }
+            ],
+            "restrictions": [
+              "No automated scanning"
+            ]
+          },
+          "restrictions": [
+            "No automated scanning"
+          ],
+          "fetched_at": "2026-01-17T23:14:05.689484+00:00",
+          "url": "https://hackerone.com/acme-rewards"
+        }
+      ]
+    },
+    {
+      "id": "program:https-beacon-example-security",
+      "name": "Beacon Labs",
+      "handle": "beacon",
+      "policy_url": "https://beacon.example/security",
+      "safe_harbor": {
+        "present": true,
+        "notes": "Safe harbor applies."
+      },
+      "scope": {
+        "in_scope": [
+          {
+            "type": "domain",
+            "value": "beacon.example"
+          }
+        ],
+        "out_of_scope": [],
+        "restrictions": [
+          "No phishing",
+          "No social engineering"
+        ]
+      },
+      "restrictions": [
+        "No phishing",
+        "No social engineering"
+      ],
+      "identity_keys": [
+        "name:beacon labs",
+        "url:https://beacon.example/security"
+      ],
+      "sources": [
+        {
+          "source": "disclose-io",
+          "source_id": "disclose-io:beacon",
+          "handle": "beacon",
+          "name": "Beacon Labs",
+          "policy_url": "https://beacon.example/security",
+          "parser_version": "0.1.0",
+          "scope": {
+            "in_scope": [
+              {
+                "type": "domain",
+                "value": "beacon.example"
+              }
+            ],
+            "out_of_scope": [],
+            "restrictions": [
+              "No phishing",
+              "No social engineering"
+            ]
+          },
+          "restrictions": [
+            "No phishing",
+            "No social engineering"
+          ],
+          "safe_harbor": {
+            "present": true,
+            "notes": "Safe harbor applies."
+          },
+          "fetched_at": "2026-01-17T23:14:05.689484+00:00",
+          "url": "https://beacon.example/security"
+        }
+      ]
+    },
+    {
+      "id": "program:huntr-datascribe",
+      "name": "DataScribe",
+      "platform": "huntr",
+      "handle": "datascribe",
+      "policy_url": "https://huntr.com/programs/datascribe",
+      "rewards": {
+        "summary": "Up to $500",
+        "currency": "USD",
+        "min": 0,
+        "max": 500.0
+      },
+      "safe_harbor": {
+        "present": false,
+        "notes": "No safe harbor is provided."
+      },
+      "scope": {
+        "in_scope": [
+          {
+            "type": "domain",
+            "value": "datascribe.example"
+          }
+        ],
+        "out_of_scope": [
+          {
+            "type": "domain",
+            "value": "internal.datascribe.example"
+          }
+        ],
+        "restrictions": [
+          "No automated scanning"
+        ]
+      },
+      "restrictions": [
+        "No automated scanning"
+      ],
+      "identity_keys": [
+        "name:datascribe",
+        "platform:huntr:datascribe",
+        "url:https://huntr.com/programs/datascribe"
+      ],
+      "sources": [
+        {
+          "source": "huntr",
+          "source_id": "huntr:datascribe",
+          "platform": "huntr",
+          "handle": "datascribe",
+          "name": "DataScribe",
+          "policy_url": "https://huntr.com/programs/datascribe",
+          "rewards": {
+            "summary": "Up to $500",
+            "currency": "USD",
+            "min": 0,
+            "max": 500.0
+          },
+          "parser_version": "0.1.0",
+          "scope": {
+            "in_scope": [
+              {
+                "type": "domain",
+                "value": "datascribe.example"
+              }
+            ],
+            "out_of_scope": [
+              {
+                "type": "domain",
+                "value": "internal.datascribe.example"
+              }
+            ],
+            "restrictions": [
+              "No automated scanning"
+            ]
+          },
+          "restrictions": [
+            "No automated scanning"
+          ],
+          "safe_harbor": {
+            "present": false,
+            "notes": "No safe harbor is provided."
+          },
+          "fetched_at": "2026-01-17T23:14:05.689484+00:00",
+          "url": "https://huntr.com/programs/datascribe"
+        }
+      ]
+    },
+    {
+      "id": "program:intigriti-nova",
+      "name": "Nova Cloud",
+      "platform": "intigriti",
+      "handle": "nova",
+      "policy_url": "https://intigriti.com/programs/nova",
+      "rewards": {
+        "summary": "EUR 250 - 2000",
+        "currency": "EUR",
+        "min": 250.0,
+        "max": 2000.0
+      },
+      "safe_harbor": {
+        "present": true,
+        "notes": "Authorized testing allowed."
+      },
+      "scope": {
+        "in_scope": [
+          {
+            "type": "domain",
+            "value": "nova.example"
+          },
+          {
+            "type": "domain",
+            "value": "api.nova.example",
+            "ports": [
+              {
+                "start": 8443,
+                "end": 8443
+              }
+            ]
+          }
+        ],
+        "out_of_scope": [
+          {
+            "type": "domain",
+            "value": "admin.nova.example"
+          }
+        ],
+        "restrictions": [
+          "No automated scanning",
+          "No fuzzing"
+        ]
+      },
+      "restrictions": [
+        "No automated scanning",
+        "No fuzzing"
+      ],
+      "identity_keys": [
+        "name:nova cloud",
+        "platform:intigriti:nova",
+        "url:https://intigriti.com/programs/nova"
+      ],
+      "sources": [
+        {
+          "source": "intigriti",
+          "source_id": "intigriti:nova",
+          "platform": "intigriti",
+          "handle": "nova",
+          "name": "Nova Cloud",
+          "policy_url": "https://intigriti.com/programs/nova",
+          "rewards": {
+            "summary": "EUR 250 - 2000",
+            "currency": "EUR",
+            "min": 250.0,
+            "max": 2000.0
+          },
+          "parser_version": "0.1.0",
+          "scope": {
+            "in_scope": [
+              {
+                "type": "domain",
+                "value": "nova.example"
+              },
+              {
+                "type": "domain",
+                "value": "api.nova.example",
+                "ports": [
+                  {
+                    "start": 8443,
+                    "end": 8443
+                  }
+                ]
+              }
+            ],
+            "out_of_scope": [
+              {
+                "type": "domain",
+                "value": "admin.nova.example"
+              }
+            ],
+            "restrictions": [
+              "No automated scanning",
+              "No fuzzing"
+            ]
+          },
+          "restrictions": [
+            "No automated scanning",
+            "No fuzzing"
+          ],
+          "safe_harbor": {
+            "present": true,
+            "notes": "Authorized testing allowed."
+          },
+          "fetched_at": "2026-01-17T23:14:05.689484+00:00",
+          "url": "https://intigriti.com/programs/nova"
+        }
+      ]
+    },
+    {
+      "id": "program:huntr-openwidget",
+      "name": "OpenWidget",
+      "platform": "huntr",
+      "handle": "openwidget",
+      "policy_url": "https://huntr.com/programs/openwidget",
+      "rewards": {
+        "summary": "USD 100 - 1000",
+        "currency": "USD",
+        "min": 100.0,
+        "max": 1000.0
+      },
+      "safe_harbor": {
+        "present": true,
+        "notes": "Safe harbor applies within scope."
+      },
+      "scope": {
+        "in_scope": [
+          {
+            "type": "domain",
+            "value": "openwidget.example"
+          },
+          {
+            "type": "domain",
+            "value": "api.openwidget.example",
+            "ports": [
+              {
+                "start": 443,
+                "end": 443
+              }
+            ]
+          }
+        ],
+        "out_of_scope": [
+          {
+            "type": "domain",
+            "value": "staging.openwidget.example"
+          }
+        ],
+        "restrictions": [
+          "No denial of service"
+        ]
+      },
+      "restrictions": [
+        "No denial of service"
+      ],
+      "identity_keys": [
+        "name:openwidget",
+        "platform:huntr:openwidget",
+        "url:https://huntr.com/programs/openwidget"
+      ],
+      "sources": [
+        {
+          "source": "huntr",
+          "source_id": "huntr:openwidget",
+          "platform": "huntr",
+          "handle": "openwidget",
+          "name": "OpenWidget",
+          "policy_url": "https://huntr.com/programs/openwidget",
+          "rewards": {
+            "summary": "USD 100 - 1000",
+            "currency": "USD",
+            "min": 100.0,
+            "max": 1000.0
+          },
+          "parser_version": "0.1.0",
+          "scope": {
+            "in_scope": [
+              {
+                "type": "domain",
+                "value": "openwidget.example"
+              },
+              {
+                "type": "domain",
+                "value": "api.openwidget.example",
+                "ports": [
+                  {
+                    "start": 443,
+                    "end": 443
+                  }
+                ]
+              }
+            ],
+            "out_of_scope": [
+              {
+                "type": "domain",
+                "value": "staging.openwidget.example"
+              }
+            ],
+            "restrictions": [
+              "No denial of service"
+            ]
+          },
+          "restrictions": [
+            "No denial of service"
+          ],
+          "safe_harbor": {
+            "present": true,
+            "notes": "Safe harbor applies within scope."
+          },
+          "fetched_at": "2026-01-17T23:14:05.689484+00:00",
+          "url": "https://huntr.com/programs/openwidget"
+        }
+      ]
+    },
+    {
+      "id": "program:self-hosted-orbit-discovery",
+      "name": "Orbit Discovery",
+      "platform": "self-hosted",
+      "handle": "orbit-discovery",
+      "policy_url": "https://orbit.example/security",
+      "rewards": {
+        "summary": "Up to $1000",
+        "currency": "USD",
+        "min": 0,
+        "max": 1000.0
+      },
+      "scope": {
+        "in_scope": [
+          {
+            "type": "domain",
+            "value": "orbit.example"
+          },
+          {
+            "type": "domain",
+            "value": "api.orbit.example",
+            "ports": [
+              {
+                "start": 443,
+                "end": 443
+              }
+            ]
+          }
+        ],
+        "out_of_scope": []
+      },
+      "identity_keys": [
+        "name:orbit discovery",
+        "platform:self-hosted:orbit-discovery",
+        "url:https://orbit.example/security"
+      ],
+      "sources": [
+        {
+          "source": "projectdiscovery",
+          "source_id": "self-hosted:orbit-discovery",
+          "platform": "self-hosted",
+          "handle": "orbit-discovery",
+          "name": "Orbit Discovery",
+          "policy_url": "https://orbit.example/security",
+          "rewards": {
+            "summary": "Up to $1000",
+            "currency": "USD",
+            "min": 0,
+            "max": 1000.0
+          },
+          "parser_version": "0.1.0",
+          "scope": {
+            "in_scope": [
+              {
+                "type": "domain",
+                "value": "orbit.example"
+              },
+              {
+                "type": "domain",
+                "value": "api.orbit.example",
+                "ports": [
+                  {
+                    "start": 443,
+                    "end": 443
+                  }
+                ]
+              }
+            ],
+            "out_of_scope": []
+          },
+          "fetched_at": "2026-01-17T23:14:05.689484+00:00",
+          "url": "https://orbit.example/security"
+        }
+      ]
+    },
+    {
+      "id": "program:intigriti-orbit",
+      "name": "Orbit Systems",
+      "platform": "intigriti",
+      "handle": "orbit",
+      "policy_url": "https://intigriti.com/programs/orbit",
+      "rewards": {
+        "summary": "No bounty"
+      },
+      "safe_harbor": {
+        "present": true,
+        "notes": "Safe harbor applies."
+      },
+      "scope": {
+        "in_scope": [
+          {
+            "type": "domain",
+            "value": "orbit.example"
+          }
+        ],
+        "out_of_scope": [
+          {
+            "type": "domain",
+            "value": "internal.orbit.example"
+          }
+        ],
+        "restrictions": [
+          "Do not test production"
+        ]
+      },
+      "restrictions": [
+        "Do not test production"
+      ],
+      "identity_keys": [
+        "name:orbit systems",
+        "platform:intigriti:orbit",
+        "url:https://intigriti.com/programs/orbit"
+      ],
+      "sources": [
+        {
+          "source": "intigriti",
+          "source_id": "intigriti:orbit",
+          "platform": "intigriti",
+          "handle": "orbit",
+          "name": "Orbit Systems",
+          "policy_url": "https://intigriti.com/programs/orbit",
+          "rewards": {
+            "summary": "No bounty"
+          },
+          "parser_version": "0.1.0",
+          "scope": {
+            "in_scope": [
+              {
+                "type": "domain",
+                "value": "orbit.example"
+              }
+            ],
+            "out_of_scope": [
+              {
+                "type": "domain",
+                "value": "internal.orbit.example"
+              }
+            ],
+            "restrictions": [
+              "Do not test production"
+            ]
+          },
+          "restrictions": [
+            "Do not test production"
+          ],
+          "safe_harbor": {
+            "present": true,
+            "notes": "Safe harbor applies."
+          },
+          "fetched_at": "2026-01-17T23:14:05.689484+00:00",
+          "url": "https://intigriti.com/programs/orbit"
+        }
+      ]
+    },
+    {
+      "id": "program:yeswehack-zenith",
+      "name": "Zenith Labs",
+      "platform": "yeswehack",
+      "handle": "zenith",
+      "policy_url": "https://yeswehack.com/programs/zenith",
+      "rewards": {
+        "summary": "Up to $3000",
+        "currency": "USD",
+        "min": 0,
+        "max": 3000.0
+      },
+      "safe_harbor": {
+        "present": false,
+        "notes": "No safe harbor is provided."
+      },
+      "scope": {
+        "in_scope": [
+          {
+            "type": "domain",
+            "value": "zenith.example"
+          }
+        ],
+        "out_of_scope": [
+          {
+            "type": "domain",
+            "value": "admin.zenith.example"
+          }
+        ],
+        "restrictions": [
+          "No automated scanning"
+        ]
+      },
+      "restrictions": [
+        "No automated scanning"
+      ],
+      "identity_keys": [
+        "name:zenith labs",
+        "platform:yeswehack:zenith",
+        "url:https://yeswehack.com/programs/zenith"
+      ],
+      "sources": [
+        {
+          "source": "yeswehack",
+          "source_id": "yeswehack:zenith",
+          "platform": "yeswehack",
+          "handle": "zenith",
+          "name": "Zenith Labs",
+          "policy_url": "https://yeswehack.com/programs/zenith",
+          "rewards": {
+            "summary": "Up to $3000",
+            "currency": "USD",
+            "min": 0,
+            "max": 3000.0
+          },
+          "parser_version": "0.1.0",
+          "scope": {
+            "in_scope": [
+              {
+                "type": "domain",
+                "value": "zenith.example"
+              }
+            ],
+            "out_of_scope": [
+              {
+                "type": "domain",
+                "value": "admin.zenith.example"
+              }
+            ],
+            "restrictions": [
+              "No automated scanning"
+            ]
+          },
+          "restrictions": [
+            "No automated scanning"
+          ],
+          "safe_harbor": {
+            "present": false,
+            "notes": "No safe harbor is provided."
+          },
+          "fetched_at": "2026-01-17T23:14:05.689484+00:00",
+          "url": "https://yeswehack.com/programs/zenith"
+        }
+      ]
+    },
+    {
+      "id": "program:bugcrowd-zenith-public",
+      "name": "Zenith Public",
+      "platform": "bugcrowd",
+      "handle": "zenith-public",
+      "policy_url": "https://bugcrowd.com/zenith-public",
+      "rewards": {
+        "summary": "Up to $2000",
+        "currency": "USD",
+        "min": 0,
+        "max": 2000.0
+      },
+      "scope": {
+        "in_scope": [
+          {
+            "type": "domain",
+            "value": "zenith.example"
+          }
+        ],
+        "out_of_scope": [
+          {
+            "type": "domain",
+            "value": "admin.zenith.example"
+          }
+        ]
+      },
+      "identity_keys": [
+        "name:zenith public",
+        "platform:bugcrowd:zenith-public",
+        "url:https://bugcrowd.com/zenith-public"
+      ],
+      "sources": [
+        {
+          "source": "bounty-targets-data",
+          "source_id": "bugcrowd:zenith-public",
+          "platform": "bugcrowd",
+          "handle": "zenith-public",
+          "name": "Zenith Public",
+          "policy_url": "https://bugcrowd.com/zenith-public",
+          "rewards": {
+            "summary": "Up to $2000",
+            "currency": "USD",
+            "min": 0,
+            "max": 2000.0
+          },
+          "parser_version": "0.1.0",
+          "scope": {
+            "in_scope": [
+              {
+                "type": "domain",
+                "value": "zenith.example"
+              }
+            ],
+            "out_of_scope": [
+              {
+                "type": "domain",
+                "value": "admin.zenith.example"
+              }
+            ]
+          },
+          "fetched_at": "2026-01-17T23:14:05.689484+00:00",
+          "url": "https://bugcrowd.com/zenith-public"
+        }
+      ]
+    }
+  ]
+}

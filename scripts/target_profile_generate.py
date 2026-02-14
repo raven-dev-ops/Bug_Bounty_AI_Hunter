@@ -1,6 +1,7 @@
 import argparse
 
 from .lib.io_utils import dump_data, load_data
+from .lib.scope_utils import asset_key, normalize_scope_assets
 
 
 def _list(value):
@@ -15,6 +16,16 @@ def build_profile(questionnaire, schema_version, name, profile_id):
     program = questionnaire.get("program", {}) or {}
     scope = questionnaire.get("scope", {}) or {}
     assets = questionnaire.get("assets", []) or []
+
+    scope_errors = []
+    in_scope, errors = normalize_scope_assets(scope.get("in_scope"))
+    scope_errors.extend(errors)
+    out_scope, errors = normalize_scope_assets(scope.get("out_of_scope"))
+    scope_errors.extend(errors)
+    scope["in_scope"] = in_scope
+    scope["out_of_scope"] = out_scope
+    assets, errors = normalize_scope_assets(assets)
+    scope_errors.extend(errors)
 
     profile = {
         "schema_version": schema_version,
@@ -39,23 +50,30 @@ def build_profile(questionnaire, schema_version, name, profile_id):
         seeds = []
         seen = set()
         for asset in _list(scope.get("in_scope")):
-            asset_type = asset.get("type")
-            asset_value = asset.get("value")
-            if not asset_type or not asset_value:
+            if not isinstance(asset, dict):
                 continue
-            key = (asset_type, asset_value)
+            key = asset_key(asset)
+            if not key:
+                continue
             if key in seen:
                 continue
             seen.add(key)
-            seeds.append(
-                {
-                    "type": asset_type,
-                    "value": asset_value,
-                    "source": "scope",
-                    "tags": ["seed"],
-                }
-            )
+            entry = {
+                "type": asset.get("type"),
+                "value": asset.get("value"),
+                "source": "scope",
+                "tags": ["seed"],
+            }
+            if asset.get("ports"):
+                entry["ports"] = asset.get("ports")
+            if asset.get("notes"):
+                entry["notes"] = asset.get("notes")
+            seeds.append(entry)
         profile["assets"] = seeds
+
+    if scope_errors:
+        message = "Scope asset normalization errors:\n" + "\n".join(scope_errors)
+        raise SystemExit(message)
 
     return profile
 

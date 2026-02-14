@@ -1,0 +1,42 @@
+{
+  "schema_version": "0.1.0",
+  "generated_at": "2026-01-17T19:15:00Z",
+  "programs": [
+    {
+      "program_id": "program:hackerone-example",
+      "name": "Example Program",
+      "platform": "hackerone",
+      "handle": "example",
+      "policy_url": "https://hackerone.com/example",
+      "bucket": "Easy",
+      "score": 28.5,
+      "approach": {
+        "summary": "Low friction entry with clear scope and manageable limits.",
+        "steps": [
+          "Confirm scope and ROE before any action.",
+          "Draft a canary-first test plan for high-impact surfaces.",
+          "Review restrictions and plan manual validation only.",
+          "Review 2 restriction(s) before planning."
+        ]
+      }
+    },
+    {
+      "program_id": "program:bugcrowd-other-program",
+      "name": "Other Program",
+      "platform": "bugcrowd",
+      "handle": "other-program",
+      "policy_url": "https://bugcrowd.com/other",
+      "bucket": "Medium",
+      "score": 42.0,
+      "approach": {
+        "summary": "Moderate scope or restrictions; requires careful planning.",
+        "steps": [
+          "Confirm scope boundaries and safe harbor wording.",
+          "Prioritize manual review of access controls and data flows.",
+          "Plan for tighter evidence capture and approval checks.",
+          "Review 1 restriction(s) before planning."
+        ]
+      }
+    }
+  ]
+}

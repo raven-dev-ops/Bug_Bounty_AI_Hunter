@@ -10,6 +10,7 @@ from .lib.template_utils import load_template, render_template
 
 
 REVIEW_REQUIRED_NOTE = "This output is generated; verify details before submission."
+COMPLIANCE_TEMPLATE = "templates/reporting/compliance_checklist.md"
 
 
 def _list(value):
@@ -118,13 +119,20 @@ def _attachments_manifest(findings, evidence, output_dir):
         },
         {
             "id": "attachment-002",
+            "path": "compliance_checklist.md",
+            "role": "compliance_checklist",
+            "description": "Compliance checklist for scope and ROE.",
+            "content_type": "text/markdown",
+        },
+        {
+            "id": "attachment-003",
             "path": "findings.json",
             "role": "findings",
             "description": "Structured findings output.",
             "content_type": "application/json",
         },
         {
-            "id": "attachment-003",
+            "id": "attachment-004",
             "path": "reproducibility_pack.json",
             "role": "reproducibility",
             "description": "Reproducibility metadata pack.",
@@ -265,6 +273,10 @@ def main():
         "reproducibility_pack": "reproducibility_pack.json",
     }
 
+    compliance_template = load_template(COMPLIANCE_TEMPLATE)
+    compliance_body = render_template(compliance_template, context)
+    context["compliance_checklist"] = compliance_body
+
     template_text = load_template(args.template)
     report_body = render_template(template_text, context)
 
@@ -272,6 +284,9 @@ def main():
     output_dir.mkdir(parents=True, exist_ok=True)
     report_path = output_dir / "report.md"
     report_path.write_text(report_body + "\n", encoding="utf-8")
+
+    compliance_path = output_dir / "compliance_checklist.md"
+    compliance_path.write_text(compliance_body + "\n", encoding="utf-8")
 
     dump_data(output_dir / "findings.json", findings)
     manifest = _attachments_manifest(findings, evidence, output_dir)

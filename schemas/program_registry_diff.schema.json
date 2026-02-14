@@ -1,0 +1,86 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ravdevops.com/schemas/program_registry_diff.schema.json",
+  "title": "ProgramRegistryDiff",
+  "type": "object",
+  "description": "Change log between two program registry snapshots.",
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "generated_at": { "type": "string" },
+    "before": { "$ref": "#/$defs/snapshot" },
+    "after": { "$ref": "#/$defs/snapshot" },
+    "summary": { "$ref": "#/$defs/summary" },
+    "added": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/program_ref" }
+    },
+    "removed": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/program_ref" }
+    },
+    "changed": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/program_change" }
+    }
+  },
+  "required": ["schema_version", "added", "removed", "changed"],
+  "additionalProperties": true,
+  "$defs": {
+    "snapshot": {
+      "type": "object",
+      "properties": {
+        "source": { "type": "string" },
+        "program_count": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": true
+    },
+    "summary": {
+      "type": "object",
+      "properties": {
+        "added": { "type": "integer", "minimum": 0 },
+        "removed": { "type": "integer", "minimum": 0 },
+        "changed": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": true
+    },
+    "program_ref": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" }
+      },
+      "required": ["id"],
+      "additionalProperties": true
+    },
+    "field_change": {
+      "type": "object",
+      "properties": {
+        "field": { "type": "string" },
+        "before": {},
+        "after": {}
+      },
+      "required": ["field"],
+      "additionalProperties": true
+    },
+    "program_change": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "fields": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/field_change" }
+        },
+        "highlighted_fields": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      },
+      "required": ["id", "fields"],
+      "additionalProperties": true
+    }
+  }
+}

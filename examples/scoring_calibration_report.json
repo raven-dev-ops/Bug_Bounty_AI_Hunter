@@ -1,0 +1,11 @@
+{
+  "schema_version": "0.1.0",
+  "generated_at": "2026-01-17T19:35:00Z",
+  "summary": {
+    "total_labels": 2,
+    "matched": 2,
+    "missing": 0,
+    "accuracy": 1.0
+  },
+  "mismatches": []
+}

@@ -71,6 +71,10 @@ stages:
     config:
       findings: output/report_bundle/findings.json
       output: output/jira_issues.csv
+  - name: summary_export
+    config:
+      findings: output/report_bundle/findings.json
+      output_dir: output/summary
   - name: pdf_export
     config:
       input: output/report_bundle/report.md

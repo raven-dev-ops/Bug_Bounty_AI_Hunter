@@ -69,6 +69,17 @@ Tags:
 ## Issue templates
 Issue templates live in `.github/ISSUE_TEMPLATE/`.
 
+## Milestones
+Use milestone names that match `ROADMAP.md` (v0.x or M0/M1).
+Keep one active milestone per release slice plus a `Backlog` milestone.
+
+## Triage rules
+1) Assign `type:*`, `area:*`, and `prio:*` labels.
+2) Add `status/triage` until scope and acceptance criteria are confirmed.
+3) Apply `risk:*` labels for legal, ToS, or data privacy concerns.
+4) Move to `status/ready` once requirements are clear and tests are defined.
+5) Track release work with the matching milestone from `ROADMAP.md`.
+
 ## Bootstrapping labels and issues
 If you want to create labels and the starter backlog via GitHub CLI, use:
 - `scripts/bootstrap_issues.sh`

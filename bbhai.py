@@ -285,6 +285,74 @@ def migrate_command(args):
     _run_module("scripts.migrate", module_args, False)
 
 
+def catalog_build_command(args):
+    module_args = []
+    if args.connectors:
+        module_args.extend(["--connectors", args.connectors])
+    if args.output:
+        module_args.extend(["--output", args.output])
+    if args.fixtures_dir:
+        module_args.extend(["--fixtures-dir", args.fixtures_dir])
+    if args.cache_dir:
+        module_args.extend(["--cache-dir", args.cache_dir])
+    if args.public_only:
+        module_args.append("--public-only")
+    if args.allow_domain:
+        for domain in args.allow_domain:
+            module_args.extend(["--allow-domain", domain])
+    if args.ignore_robots:
+        module_args.append("--ignore-robots")
+    if args.user_agent:
+        module_args.extend(["--user-agent", args.user_agent])
+    if args.timeout_seconds is not None:
+        module_args.extend(["--timeout-seconds", str(args.timeout_seconds)])
+    if args.max_retries is not None:
+        module_args.extend(["--max-retries", str(args.max_retries)])
+    if args.backoff_seconds is not None:
+        module_args.extend(["--backoff-seconds", str(args.backoff_seconds)])
+    if args.min_delay_seconds is not None:
+        module_args.extend(["--min-delay-seconds", str(args.min_delay_seconds)])
+    if args.max_requests_per_domain is not None:
+        module_args.extend(
+            ["--max-requests-per-domain", str(args.max_requests_per_domain)]
+        )
+    if args.max_bytes_per_domain is not None:
+        module_args.extend(["--max-bytes-per-domain", str(args.max_bytes_per_domain)])
+    if args.audit_log:
+        module_args.extend(["--audit-log", args.audit_log])
+    if args.audit_summary:
+        module_args.extend(["--audit-summary", args.audit_summary])
+    if args.audit_summary_json:
+        module_args.extend(["--audit-summary-json", args.audit_summary_json])
+    _run_module("scripts.catalog_build", module_args, args.dry_run)
+
+
+def catalog_score_command(args):
+    module_args = []
+    if args.input:
+        module_args.extend(["--input", args.input])
+    if args.output:
+        module_args.extend(["--output", args.output])
+    if args.config:
+        module_args.extend(["--config", args.config])
+    if args.public_only:
+        module_args.append("--public-only")
+    _run_module("scripts.program_scoring", module_args, args.dry_run)
+
+
+def export_summary_command(args):
+    module_args = ["--findings", args.findings]
+    if args.output_dir:
+        module_args.extend(["--output-dir", args.output_dir])
+    if args.output_json:
+        module_args.extend(["--output-json", args.output_json])
+    if args.output_csv:
+        module_args.extend(["--output-csv", args.output_csv])
+    if args.output_md:
+        module_args.extend(["--output-md", args.output_md])
+    _run_module("scripts.export_summary", module_args, args.dry_run)
+
+
 def build_parser():
     common_parser = argparse.ArgumentParser(add_help=False)
     common_parser.add_argument("--workspace", default="output")
@@ -371,6 +439,56 @@ def build_parser():
     migrate_parser.add_argument("--from", dest="from_version", required=True)
     migrate_parser.add_argument("--to", dest="to_version", required=True)
 
+    catalog_parser = subparsers.add_parser("catalog", help="Catalog ingestion tools.")
+    catalog_subparsers = catalog_parser.add_subparsers(
+        dest="catalog_command", required=True
+    )
+    catalog_build_parser = catalog_subparsers.add_parser(
+        "build",
+        help="Build the public program registry.",
+        parents=[common_parser],
+    )
+    catalog_build_parser.add_argument("--connectors")
+    catalog_build_parser.add_argument("--output")
+    catalog_build_parser.add_argument("--fixtures-dir")
+    catalog_build_parser.add_argument("--cache-dir")
+    catalog_build_parser.add_argument("--public-only", action="store_true")
+    catalog_build_parser.add_argument("--allow-domain", action="append")
+    catalog_build_parser.add_argument("--ignore-robots", action="store_true")
+    catalog_build_parser.add_argument("--user-agent")
+    catalog_build_parser.add_argument("--timeout-seconds", type=int)
+    catalog_build_parser.add_argument("--max-retries", type=int)
+    catalog_build_parser.add_argument("--backoff-seconds", type=float)
+    catalog_build_parser.add_argument("--min-delay-seconds", type=float)
+    catalog_build_parser.add_argument("--max-requests-per-domain", type=int)
+    catalog_build_parser.add_argument("--max-bytes-per-domain", type=int)
+    catalog_build_parser.add_argument("--audit-log")
+    catalog_build_parser.add_argument("--audit-summary")
+    catalog_build_parser.add_argument("--audit-summary-json")
+
+    catalog_score_parser = catalog_subparsers.add_parser(
+        "score",
+        help="Score programs and assign difficulty buckets.",
+        parents=[common_parser],
+    )
+    catalog_score_parser.add_argument("--input")
+    catalog_score_parser.add_argument("--output")
+    catalog_score_parser.add_argument("--public-only", action="store_true")
+
+    export_parser = subparsers.add_parser("export", help="Export outputs.")
+    export_subparsers = export_parser.add_subparsers(
+        dest="export_command", required=True
+    )
+    summary_parser = export_subparsers.add_parser(
+        "summary",
+        help="Export JSON, CSV, and Markdown summaries.",
+        parents=[common_parser],
+    )
+    summary_parser.add_argument("--findings", required=True)
+    summary_parser.add_argument("--output-json")
+    summary_parser.add_argument("--output-csv")
+    summary_parser.add_argument("--output-md")
+
     return parser
 
 
@@ -394,6 +512,14 @@ def main():
         report_command(args, workspace, output_root)
     elif args.command == "migrate":
         migrate_command(args)
+    elif args.command == "catalog":
+        if args.catalog_command == "build":
+            catalog_build_command(args)
+        elif args.catalog_command == "score":
+            catalog_score_command(args)
+    elif args.command == "export":
+        if args.export_command == "summary":
+            export_summary_command(args)
 
 
 if __name__ == "__main__":

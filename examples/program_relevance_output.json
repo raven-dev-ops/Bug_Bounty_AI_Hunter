@@ -1,0 +1,38 @@
+{
+  "schema_version": "0.1.0",
+  "generated_at": "2026-01-17T19:20:00Z",
+  "programs": [
+    {
+      "program_id": "program:hackerone-example",
+      "name": "Example Program",
+      "platform": "hackerone",
+      "handle": "example",
+      "policy_url": "https://hackerone.com/example",
+      "relevance_score": 0.0,
+      "relevance": "none",
+      "keywords": [],
+      "signals": {
+        "text_length": 58,
+        "match_count": 0
+      }
+    },
+    {
+      "program_id": "program:bugcrowd-ai-assistant",
+      "name": "AI Assistant",
+      "platform": "bugcrowd",
+      "handle": "ai-assistant",
+      "policy_url": "https://bugcrowd.com/ai-assistant",
+      "relevance_score": 0.6,
+      "relevance": "high",
+      "keywords": [
+        "ai",
+        "assistant",
+        "model"
+      ],
+      "signals": {
+        "text_length": 92,
+        "match_count": 3
+      }
+    }
+  ]
+}

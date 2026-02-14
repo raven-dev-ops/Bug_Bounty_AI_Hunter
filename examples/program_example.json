@@ -1,0 +1,93 @@
+{
+  "schema_version": "0.1.0",
+  "id": "program:hackerone-example",
+  "platform": "hackerone",
+  "handle": "example",
+  "name": "Example Program",
+  "canonical_url": "https://hackerone.com/example",
+  "program_type": "bug_bounty",
+  "rewards": {
+    "currency": "USD",
+    "min": 100,
+    "max": 5000,
+    "summary": "$100-$5,000"
+  },
+  "scope": {
+    "counts": {
+      "in_scope": 2,
+      "out_of_scope": 1
+    },
+    "in_scope": [
+      {
+        "type": "domain",
+        "value": "example.com"
+      },
+      {
+        "type": "domain",
+        "value": "api.example.com",
+        "ports": [
+          {
+            "start": 443,
+            "end": 443
+          }
+        ]
+      }
+    ],
+    "out_of_scope": [
+      {
+        "type": "wildcard",
+        "value": "*.internal.example.com"
+      }
+    ],
+    "restrictions": [
+      "No denial of service.",
+      {
+        "text": "No social engineering.",
+        "category": "legal"
+      }
+    ],
+    "notes": "Synthetic scope snapshot."
+  },
+  "restrictions": [
+    "No denial of service.",
+    "No social engineering."
+  ],
+  "attribution": [
+    {
+      "source": "hackerone",
+      "text": "Program data from HackerOne public listing.",
+      "terms_url": "https://hackerone.com/example/terms",
+      "license": "Public listing terms",
+      "reuse_constraints": "Attribution required for reuse."
+    }
+  ],
+  "safe_harbor": {
+    "present": true,
+    "notes": "Safe harbor applies within scope."
+  },
+  "response_time": {
+    "first_response_hours": 24,
+    "resolution_time_hours": 168,
+    "notes": "Synthetic response timing."
+  },
+  "updated_at": "2026-01-16T00:00:00Z",
+  "provenance": [
+    {
+      "source": "hackerone",
+      "source_id": "hackerone:example",
+      "url": "https://hackerone.com/example",
+      "terms_url": "https://hackerone.com/example/terms",
+      "license": "Public listing terms",
+      "attribution": "Program data from HackerOne public listing.",
+      "reuse_constraints": "Attribution required for reuse.",
+      "http_status": 200,
+      "fetched_at": "2026-01-16T00:00:00Z",
+      "parser_version": "0.1.0",
+      "git_commit": "abc1234",
+      "artifact_path": "cache/hackerone/example.html",
+      "artifact_hash": "d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2",
+      "hash_algorithm": "sha256"
+    }
+  ],
+  "notes": "Synthetic example program record."
+}

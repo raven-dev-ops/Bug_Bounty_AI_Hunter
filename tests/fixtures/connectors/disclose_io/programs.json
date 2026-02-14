@@ -1,0 +1,18 @@
+[
+  {
+    "vendor": "Beacon Labs",
+    "handle": "beacon",
+    "policy_url": "https://beacon.example/security",
+    "safe_harbor": "Safe harbor applies.",
+    "response_time": "First response 7 days.",
+    "restrictions": [
+      "No phishing",
+      "No social engineering"
+    ],
+    "scope": {
+      "in_scope": [
+        "beacon.example"
+      ]
+    }
+  }
+]

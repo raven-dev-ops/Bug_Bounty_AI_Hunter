@@ -1,0 +1,32 @@
+[
+  {
+    "type": "domain",
+    "value": "example.com",
+    "notes": "Primary domain."
+  },
+  {
+    "type": "wildcard",
+    "value": "*.example.com",
+    "notes": "Wildcard entry."
+  },
+  {
+    "type": "cidr",
+    "value": "10.0.0.0/24",
+    "notes": "Network range."
+  },
+  {
+    "type": "domain",
+    "value": "api.example.com",
+    "ports": [
+      {
+        "start": 443,
+        "end": 443
+      },
+      {
+        "start": 8000,
+        "end": 8080
+      }
+    ],
+    "notes": "HTTPS and API port range."
+  }
+]

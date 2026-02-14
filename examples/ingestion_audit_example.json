@@ -1,0 +1,65 @@
+{
+  "schema_version": "0.1.0",
+  "run_id": "ingestion-20260117T120000Z",
+  "status": "partial",
+  "started_at": "2026-01-17T12:00:00Z",
+  "finished_at": "2026-01-17T12:01:00Z",
+  "public_only": true,
+  "robots_mode": true,
+  "allow_domains": [
+    "yeswehack.com",
+    "raw.githubusercontent.com"
+  ],
+  "connectors": [
+    {
+      "name": "yeswehack",
+      "listed": 2,
+      "enriched": 2,
+      "errors": []
+    },
+    {
+      "name": "bounty-targets-data",
+      "listed": 2,
+      "enriched": 2,
+      "errors": []
+    },
+    {
+      "name": "projectdiscovery",
+      "listed": 1,
+      "enriched": 1,
+      "errors": [
+        "Program detail fetch failed."
+      ]
+    }
+  ],
+  "sources_total": 5,
+  "outputs": {
+    "registry_path": "data/program_registry.json",
+    "registry_written": true,
+    "registry_programs": 4,
+    "audit_log_path": "data/ingestion_audit/ingestion-20260117T120000Z.json",
+    "audit_summary_path": "data/ingestion_audit/ingestion-20260117T120000Z.md",
+    "audit_summary_json_path": "data/ingestion_audit/ingestion-20260117T120000Z.summary.json"
+  },
+  "cache_dir": "data/catalog_cache",
+  "fixtures_dir": "tests/fixtures/connectors",
+  "metrics": {
+    "requests": 3,
+    "cache_hits": 1,
+    "cache_misses": 2,
+    "failures": 0,
+    "retries": 0,
+    "throttle_sleeps": 1,
+    "domains": {
+      "yeswehack.com": {
+        "requests": 2,
+        "cache_hits": 0,
+        "failures": 0,
+        "retries": 0,
+        "total_time_ms": 420,
+        "bytes": 12345
+      }
+    }
+  },
+  "errors": []
+}

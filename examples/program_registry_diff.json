@@ -1,0 +1,97 @@
+{
+  "schema_version": "0.1.0",
+  "generated_at": "2026-01-17T06:09:07.621476+00:00",
+  "before": {
+    "source": "examples/program_registry_before.json",
+    "program_count": 2
+  },
+  "after": {
+    "source": "examples/program_registry_after.json",
+    "program_count": 2
+  },
+  "summary": {
+    "added": 1,
+    "removed": 1,
+    "changed": 1
+  },
+  "added": [
+    {
+      "id": "program:bugcrowd-other-program",
+      "name": "Other Program"
+    }
+  ],
+  "removed": [
+    {
+      "id": "program:legacy-program",
+      "name": "Legacy Program"
+    }
+  ],
+  "changed": [
+    {
+      "id": "program:hackerone-example",
+      "name": "Example Program",
+      "fields": [
+        {
+          "field": "rewards",
+          "before": {
+            "currency": "USD",
+            "min": 100,
+            "max": 5000
+          },
+          "after": {
+            "currency": "USD",
+            "min": 100,
+            "max": 10000
+          }
+        },
+        {
+          "field": "scope",
+          "before": {
+            "in_scope": [
+              {
+                "type": "domain",
+                "value": "example.com"
+              }
+            ],
+            "restrictions": [
+              "No denial of service."
+            ]
+          },
+          "after": {
+            "in_scope": [
+              {
+                "type": "domain",
+                "value": "example.com"
+              }
+            ],
+            "out_of_scope": [
+              {
+                "type": "domain",
+                "value": "internal.example.com"
+              }
+            ],
+            "restrictions": [
+              "No denial of service.",
+              "No social engineering."
+            ]
+          }
+        },
+        {
+          "field": "restrictions",
+          "before": [
+            "No denial of service."
+          ],
+          "after": [
+            "No denial of service.",
+            "No social engineering."
+          ]
+        }
+      ],
+      "highlighted_fields": [
+        "restrictions",
+        "rewards",
+        "scope"
+      ]
+    }
+  ]
+}

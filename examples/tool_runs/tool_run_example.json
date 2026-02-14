@@ -9,7 +9,9 @@
   "started_at": "2026-02-05T00:00:00Z",
   "ended_at": "2026-02-05T00:02:00Z",
   "command": "nmap -sV example.com",
-  "outputs": ["evidence/nmap_sanitized.txt"],
+  "outputs": [
+    "evidence/nmap_sanitized.txt"
+  ],
   "hashes": [
     {
       "path": "evidence/nmap_sanitized.txt",
@@ -24,6 +26,8 @@
       "notes": "Written authorization received."
     }
   ],
-  "redactions": ["Replaced hostnames and tokens with <redacted>."],
+  "redactions": [
+    "Replaced hostnames and tokens with <redacted>."
+  ],
   "notes": "Passive inventory only. No aggressive flags used."
 }

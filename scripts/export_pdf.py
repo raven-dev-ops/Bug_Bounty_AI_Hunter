@@ -1,14 +1,29 @@
 import argparse
+import os
 import shutil
 import subprocess
 from pathlib import Path
 
+REPO_ROOT = Path(__file__).resolve().parents[1]
+PANDOC_HEADER = REPO_ROOT / "templates" / "reporting" / "pandoc_header.tex"
+FONTCONFIG_FILE = REPO_ROOT / "templates" / "reporting" / "fontconfig.conf"
 
-def _run_pandoc(input_path, output_path):
+
+def _run_pandoc(input_path, output_path, pdf_engine=None):
     pandoc = shutil.which("pandoc")
     if not pandoc:
         raise SystemExit("pandoc is required for PDF export.")
-    subprocess.run([pandoc, input_path, "-o", output_path], check=True)
+    command = [pandoc, input_path, "-o", output_path]
+    if PANDOC_HEADER.exists():
+        command.extend(["--include-in-header", str(PANDOC_HEADER)])
+    if pdf_engine:
+        if shutil.which(pdf_engine) is None:
+            raise SystemExit(f"{pdf_engine} is required for PDF export.")
+        command.extend(["--pdf-engine", pdf_engine])
+    env = os.environ.copy()
+    if FONTCONFIG_FILE.exists():
+        env.setdefault("FONTCONFIG_FILE", str(FONTCONFIG_FILE))
+    subprocess.run(command, check=True, env=env)
 
 
 def _run_wkhtmltopdf(input_path, output_path):
@@ -34,7 +49,8 @@ def main():
     output_path.parent.mkdir(parents=True, exist_ok=True)
 
     if args.engine == "pandoc":
-        _run_pandoc(str(input_path), str(output_path))
+        pandoc_pdf_engine = os.environ.get("BBHAI_PANDOC_PDF_ENGINE")
+        _run_pandoc(str(input_path), str(output_path), pandoc_pdf_engine)
     else:
         _run_wkhtmltopdf(str(input_path), str(output_path))
 

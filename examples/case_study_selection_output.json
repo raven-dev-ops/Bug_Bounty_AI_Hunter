@@ -1,0 +1,77 @@
+{
+  "schema_version": "0.1.0",
+  "generated_at": "2026-01-17T19:10:00Z",
+  "criteria": {
+    "buckets": [
+      "Easy",
+      "Medium"
+    ],
+    "max_results": 2
+  },
+  "shortlist": [
+    {
+      "program_id": "program:hackerone-example",
+      "name": "Example Program",
+      "platform": "hackerone",
+      "handle": "example",
+      "policy_url": "https://hackerone.com/example",
+      "bucket": "Easy",
+      "score": 28.5,
+      "reasons": [
+        "Bucket Easy (score 28.5).",
+        "Safe harbor present.",
+        "Restrictions count: 2.",
+        "Response time: 48.0 hours.",
+        "In-scope assets: 1.",
+        "Reward max: 10000.",
+        "Restriction highlights: No denial of service; No social engineering."
+      ],
+      "signals": {
+        "response_time_hours": 48.0,
+        "response_score": 0.3,
+        "scope_units": 1.0,
+        "scope_in_count": 1,
+        "scope_score": 0.03,
+        "restrictions_count": 2,
+        "automation_restricted": false,
+        "application_required": false,
+        "restriction_score": 0.33,
+        "reward_max": 10000,
+        "reward_score": 1.0,
+        "safe_harbor_present": true,
+        "feasibility": "allowed"
+      }
+    },
+    {
+      "program_id": "program:bugcrowd-other-program",
+      "name": "Other Program",
+      "platform": "bugcrowd",
+      "handle": "other-program",
+      "policy_url": "https://bugcrowd.com/other",
+      "bucket": "Medium",
+      "score": 42.0,
+      "reasons": [
+        "Bucket Medium (score 42.0).",
+        "Safe harbor present.",
+        "Restrictions count: 1.",
+        "In-scope assets: 1.",
+        "Restriction highlights: No automated fuzzing."
+      ],
+      "signals": {
+        "response_time_hours": null,
+        "response_score": null,
+        "scope_units": 1.0,
+        "scope_in_count": 1,
+        "scope_score": 0.03,
+        "restrictions_count": 1,
+        "automation_restricted": true,
+        "application_required": false,
+        "restriction_score": 0.37,
+        "reward_max": null,
+        "reward_score": null,
+        "safe_harbor_present": true,
+        "feasibility": "allowed"
+      }
+    }
+  ]
+}

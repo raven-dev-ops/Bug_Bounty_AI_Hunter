@@ -1,0 +1,51 @@
+{
+  "schema_version": "0.1.0",
+  "id": "program:huntr-openwidget",
+  "name": "OpenWidget",
+  "platform": "huntr",
+  "handle": "openwidget",
+  "policy_url": "https://huntr.com/programs/openwidget",
+  "rewards": {
+    "currency": "USD",
+    "min": 100,
+    "max": 1000,
+    "summary": "USD 100 - 1000"
+  },
+  "response_time": {
+    "first_response_hours": 48,
+    "resolution_time_hours": 336
+  },
+  "safe_harbor": {
+    "present": true,
+    "notes": "Safe harbor applies within scope."
+  },
+  "scope": {
+    "in_scope": [
+      {
+        "type": "domain",
+        "value": "openwidget.example"
+      },
+      {
+        "type": "domain",
+        "value": "api.openwidget.example"
+      }
+    ],
+    "out_of_scope": [
+      {
+        "type": "domain",
+        "value": "staging.openwidget.example"
+      }
+    ]
+  },
+  "restrictions": [
+    "No denial of service"
+  ],
+  "sources": [
+    {
+      "source": "huntr",
+      "http_status": 200,
+      "parser_version": "0.1.0",
+      "fetched_at": "2026-01-17T00:00:00Z"
+    }
+  ]
+}

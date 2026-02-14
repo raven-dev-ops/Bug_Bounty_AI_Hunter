@@ -1,0 +1,52 @@
+{
+  "schema_version": "0.1.0",
+  "id": "program:yeswehack-acme",
+  "name": "Acme Corp",
+  "platform": "yeswehack",
+  "handle": "acme",
+  "policy_url": "https://yeswehack.com/programs/acme",
+  "rewards": {
+    "currency": "USD",
+    "min": 500,
+    "max": 1500,
+    "summary": "USD 500 - 1500"
+  },
+  "response_time": {
+    "first_response_hours": 48,
+    "resolution_time_hours": 240
+  },
+  "safe_harbor": {
+    "present": true,
+    "notes": "Safe harbor applies within scope."
+  },
+  "scope": {
+    "in_scope": [
+      {
+        "type": "domain",
+        "value": "acme.com"
+      },
+      {
+        "type": "domain",
+        "value": "api.acme.com"
+      }
+    ],
+    "out_of_scope": [
+      {
+        "type": "domain",
+        "value": "internal.acme.com"
+      }
+    ]
+  },
+  "restrictions": [
+    "No social engineering",
+    "No denial of service"
+  ],
+  "sources": [
+    {
+      "source": "yeswehack",
+      "http_status": 200,
+      "parser_version": "0.1.0",
+      "fetched_at": "2026-01-17T00:00:00Z"
+    }
+  ]
+}

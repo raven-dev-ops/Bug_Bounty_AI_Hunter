@@ -1,0 +1,32 @@
+{
+  "schema_version": "0.1.0",
+  "summary": {
+    "generated_at": "2026-01-17T22:04:07.705528+00:00",
+    "total": 1,
+    "by_severity": {
+      "medium": 1
+    },
+    "review_required": 1,
+    "with_evidence": 1,
+    "evidence_refs_total": 1
+  },
+  "findings": [
+    {
+      "id": "finding-001",
+      "title": "Example finding title",
+      "severity": "medium",
+      "category": "LLM06: Sensitive Information Disclosure",
+      "review_required": true,
+      "evidence_count": 1,
+      "evidence_refs": [
+        "evidence-001"
+      ],
+      "labels": [
+        "bug-bounty",
+        "ai-security",
+        "severity/medium",
+        "owasp/llm06"
+      ]
+    }
+  ]
+}

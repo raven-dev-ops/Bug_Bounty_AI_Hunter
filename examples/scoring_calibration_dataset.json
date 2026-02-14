@@ -1,0 +1,16 @@
+{
+  "schema_version": "0.1.0",
+  "generated_at": "2026-01-17T19:30:00Z",
+  "labels": [
+    {
+      "program_id": "program:hackerone-example",
+      "expected_bucket": "Easy",
+      "rationale": "Clear scope, safe harbor present, manageable restrictions."
+    },
+    {
+      "program_id": "program:bugcrowd-other-program",
+      "expected_bucket": "Medium",
+      "rationale": "Some restrictions and limited reward data."
+    }
+  ]
+}

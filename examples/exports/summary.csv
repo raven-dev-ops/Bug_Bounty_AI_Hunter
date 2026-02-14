@@ -1,0 +1,2 @@
+id,title,severity,category,review_required,evidence_count,evidence_refs,labels
+finding-001,Example finding title,medium,LLM06: Sensitive Information Disclosure,True,1,evidence-001,"bug-bounty, ai-security, severity/medium, owasp/llm06"

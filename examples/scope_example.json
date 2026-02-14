@@ -1,0 +1,36 @@
+{
+  "counts": {
+    "in_scope": 2,
+    "out_of_scope": 1
+  },
+  "in_scope": [
+    {
+      "type": "domain",
+      "value": "example.com"
+    },
+    {
+      "type": "domain",
+      "value": "api.example.com",
+      "ports": [
+        {
+          "start": 443,
+          "end": 443
+        }
+      ]
+    }
+  ],
+  "out_of_scope": [
+    {
+      "type": "wildcard",
+      "value": "*.internal.example.com"
+    }
+  ],
+  "restrictions": [
+    "No denial of service.",
+    {
+      "text": "No social engineering.",
+      "category": "legal"
+    }
+  ],
+  "notes": "Synthetic scope snapshot."
+}

@@ -1,0 +1,201 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ravdevops.com/schemas/program_registry.schema.json",
+  "title": "ProgramRegistry",
+  "type": "object",
+  "description": "Registry of program records merged across sources.",
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "created_at": { "type": "string" },
+    "updated_at": { "type": "string" },
+    "programs": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/program" }
+    }
+  },
+  "required": ["schema_version", "programs"],
+  "additionalProperties": true,
+  "$defs": {
+    "scope": {
+      "type": "object",
+      "properties": {
+        "in_scope": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/scope_asset" }
+        },
+        "out_of_scope": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/scope_asset" }
+        },
+        "restrictions": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "notes": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "scope_asset": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "type": { "type": "string" },
+        "value": { "type": "string" },
+        "ports": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/port_range" }
+        },
+        "source": { "type": "string" },
+        "tags": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "notes": { "type": "string" }
+      },
+      "required": ["type", "value"],
+      "additionalProperties": true
+    },
+    "port_range": {
+      "type": "object",
+      "properties": {
+        "start": { "type": "integer", "minimum": 1, "maximum": 65535 },
+        "end": { "type": "integer", "minimum": 1, "maximum": 65535 }
+      },
+      "required": ["start", "end"],
+      "additionalProperties": false
+    },
+    "safe_harbor": {
+      "type": "object",
+      "properties": {
+        "present": { "type": "boolean" },
+        "notes": { "type": "string" },
+        "url": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "rewards": {
+      "type": "object",
+      "properties": {
+        "currency": { "type": "string" },
+        "min": { "type": "number" },
+        "max": { "type": "number" },
+        "summary": { "type": "string" },
+        "notes": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "attribution": {
+      "type": "object",
+      "properties": {
+        "source": { "type": "string" },
+        "text": { "type": "string" },
+        "terms_url": { "type": "string" },
+        "license": { "type": "string" },
+        "reuse_constraints": { "type": "string" },
+        "notes": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "conflict": {
+      "type": "object",
+      "properties": {
+        "field": { "type": "string" },
+        "selected_source": { "type": "string" },
+        "other_sources": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "notes": { "type": "string" }
+      },
+      "required": ["field"],
+      "additionalProperties": true
+    },
+    "source_record": {
+      "type": "object",
+      "properties": {
+        "source": { "type": "string" },
+        "source_id": { "type": "string" },
+        "platform": { "type": "string" },
+        "handle": { "type": "string" },
+        "name": { "type": "string" },
+        "policy_url": { "type": "string" },
+        "rewards": {
+          "oneOf": [{ "type": "string" }, { "$ref": "#/$defs/rewards" }]
+        },
+        "terms_url": { "type": "string" },
+        "license": { "type": "string" },
+        "attribution": { "type": "string" },
+        "reuse_constraints": { "type": "string" },
+        "http_status": { "type": "integer" },
+        "parser_version": { "type": "string" },
+        "git_commit": { "type": "string" },
+        "artifact_path": { "type": "string" },
+        "artifact_hash": { "type": "string" },
+        "hash_algorithm": { "type": "string" },
+        "scope": { "$ref": "#/$defs/scope" },
+        "restrictions": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "safe_harbor": {
+          "oneOf": [
+            { "type": "string" },
+            { "type": "boolean" },
+            { "$ref": "#/$defs/safe_harbor" }
+          ]
+        },
+        "fetched_at": { "type": "string" },
+        "url": { "type": "string" },
+        "notes": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "program": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "platform": { "type": "string" },
+        "handle": { "type": "string" },
+        "policy_url": { "type": "string" },
+        "rewards": {
+          "oneOf": [{ "type": "string" }, { "$ref": "#/$defs/rewards" }]
+        },
+        "safe_harbor": {
+          "oneOf": [
+            { "type": "string" },
+            { "type": "boolean" },
+            { "$ref": "#/$defs/safe_harbor" }
+          ]
+        },
+        "scope": { "$ref": "#/$defs/scope" },
+        "restrictions": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "attribution": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/attribution" }
+        },
+        "identity_keys": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "sources": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/source_record" }
+        },
+        "conflicts": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/conflict" }
+        },
+        "notes": { "type": "string" }
+      },
+      "required": ["id", "name", "sources"],
+      "additionalProperties": true
+    }
+  }
+}

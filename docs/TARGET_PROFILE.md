@@ -17,6 +17,12 @@ target. Use `schemas/target_profile.schema.json` as the contract.
 - `constraints` (rate limits, stop conditions)
 - `notes`
 
+## Scope assets
+Scope assets use `type`, `value`, and optional `ports` entries. Use `wildcard`
+types with a leading `*.` value. Port ranges are `{start, end}` pairs.
+
+See `schemas/scope_asset.schema.json` and `examples/scope_assets_example.json`.
+
 ## Dataflow map
 Document where prompts, retrieval context, embeddings, logs, or training data
 move. Keep this high level and avoid real user data.
@@ -39,6 +45,11 @@ scope:
   in_scope:
     - type: domain
       value: example.com
+    - type: domain
+      value: api.example.com
+      ports:
+        - start: 443
+          end: 443
 ai_surfaces:
   rag: false
   embeddings: false
