@@ -1,0 +1,7 @@
+{
+  "currency": "USD",
+  "min": 100,
+  "max": 5000,
+  "summary": "$100-$5,000",
+  "notes": "Synthetic example."
+}

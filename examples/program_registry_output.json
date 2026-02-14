@@ -1,0 +1,237 @@
+{
+  "schema_version": "0.1.0",
+  "created_at": "2026-01-17T18:43:58.119882+00:00",
+  "updated_at": "2026-01-17T18:43:58.119890+00:00",
+  "programs": [
+    {
+      "id": "program:hackerone-example",
+      "name": "Example Program",
+      "platform": "hackerone",
+      "handle": "example",
+      "policy_url": "https://hackerone.com/example",
+      "rewards": {
+        "currency": "USD",
+        "min": 200,
+        "max": 10000,
+        "summary": "$200-$10,000"
+      },
+      "safe_harbor": "Written authorization on file.",
+      "scope": {
+        "in_scope": [
+          {
+            "type": "domain",
+            "value": "example.com"
+          }
+        ],
+        "out_of_scope": [],
+        "restrictions": [
+          "No denial of service",
+          "No social engineering"
+        ]
+      },
+      "restrictions": [
+        "No denial of service",
+        "No social engineering"
+      ],
+      "attribution": [
+        {
+          "source": "hackerone",
+          "text": "Program data from HackerOne public listing.",
+          "terms_url": "https://hackerone.com/example/terms",
+          "license": "Public listing terms",
+          "reuse_constraints": "Attribution required for reuse."
+        },
+        {
+          "source": "manual",
+          "text": "Manual notes based on public program listing.",
+          "terms_url": "https://hackerone.com/example/terms",
+          "license": "Public listing terms",
+          "reuse_constraints": "Attribution required for reuse."
+        }
+      ],
+      "identity_keys": [
+        "name:example program",
+        "platform:hackerone:example",
+        "url:https://hackerone.com/example"
+      ],
+      "sources": [
+        {
+          "source": "hackerone",
+          "source_id": "hackerone:example",
+          "platform": "hackerone",
+          "handle": "example",
+          "name": "Example Program",
+          "policy_url": "https://hackerone.com/example",
+          "rewards": {
+            "currency": "USD",
+            "min": 100,
+            "max": 5000,
+            "summary": "$100-$5,000"
+          },
+          "terms_url": "https://hackerone.com/example/terms",
+          "license": "Public listing terms",
+          "attribution": "Program data from HackerOne public listing.",
+          "reuse_constraints": "Attribution required for reuse.",
+          "http_status": 200,
+          "parser_version": "0.1.0",
+          "git_commit": "abc1234",
+          "artifact_path": "cache/hackerone/example.html",
+          "artifact_hash": "d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2",
+          "hash_algorithm": "sha256",
+          "scope": {
+            "in_scope": [
+              {
+                "type": "domain",
+                "value": "example.com"
+              }
+            ],
+            "out_of_scope": [
+              {
+                "type": "domain",
+                "value": "internal.example.com"
+              }
+            ],
+            "restrictions": [
+              "No denial of service"
+            ]
+          },
+          "restrictions": [
+            "No denial of service"
+          ],
+          "safe_harbor": "Safe harbor applies within program scope.",
+          "fetched_at": "2026-01-16T00:00:00Z"
+        },
+        {
+          "source": "manual",
+          "source_id": "https://hackerone.com/example",
+          "name": "Example Program",
+          "policy_url": "https://hackerone.com/example",
+          "rewards": {
+            "currency": "USD",
+            "min": 200,
+            "max": 10000,
+            "summary": "$200-$10,000"
+          },
+          "terms_url": "https://hackerone.com/example/terms",
+          "license": "Public listing terms",
+          "attribution": "Manual notes based on public program listing.",
+          "reuse_constraints": "Attribution required for reuse.",
+          "http_status": 200,
+          "parser_version": "0.1.0",
+          "git_commit": "abc1234",
+          "artifact_path": "cache/hackerone/example.html",
+          "artifact_hash": "d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2",
+          "hash_algorithm": "sha256",
+          "scope": {
+            "in_scope": [
+              {
+                "type": "domain",
+                "value": "example.com"
+              }
+            ],
+            "out_of_scope": [],
+            "restrictions": [
+              "No social engineering"
+            ]
+          },
+          "restrictions": [
+            "No social engineering"
+          ],
+          "safe_harbor": "Written authorization on file.",
+          "fetched_at": "2026-01-17T00:00:00Z"
+        }
+      ],
+      "conflicts": [
+        {
+          "field": "rewards",
+          "selected_source": "manual",
+          "other_sources": [
+            "hackerone"
+          ],
+          "notes": "Selected highest-priority source."
+        },
+        {
+          "field": "safe_harbor",
+          "selected_source": "manual",
+          "other_sources": [
+            "hackerone"
+          ],
+          "notes": "Selected highest-priority source."
+        },
+        {
+          "field": "scope",
+          "selected_source": "manual",
+          "other_sources": [
+            "hackerone"
+          ],
+          "notes": "Selected highest-priority scope to avoid expanding coverage."
+        },
+        {
+          "field": "restrictions",
+          "selected_source": "union",
+          "other_sources": [
+            "hackerone",
+            "manual"
+          ],
+          "notes": "Merged union of restriction lists."
+        }
+      ]
+    },
+    {
+      "id": "program:bugcrowd-other-program",
+      "name": "Other Program",
+      "platform": "bugcrowd",
+      "handle": "other-program",
+      "policy_url": "https://bugcrowd.com/other",
+      "rewards": "Bounty varies by severity.",
+      "safe_harbor": true,
+      "scope": {
+        "in_scope": [
+          {
+            "type": "domain",
+            "value": "other.example.com"
+          }
+        ],
+        "restrictions": [
+          "No automated fuzzing"
+        ],
+        "out_of_scope": []
+      },
+      "restrictions": [
+        "No automated fuzzing"
+      ],
+      "identity_keys": [
+        "name:other program",
+        "platform:bugcrowd:other-program",
+        "url:https://bugcrowd.com/other"
+      ],
+      "sources": [
+        {
+          "source": "bugcrowd",
+          "source_id": "bugcrowd:other-program",
+          "platform": "bugcrowd",
+          "handle": "other-program",
+          "name": "Other Program",
+          "policy_url": "https://bugcrowd.com/other",
+          "rewards": "Bounty varies by severity.",
+          "scope": {
+            "in_scope": [
+              {
+                "type": "domain",
+                "value": "other.example.com"
+              }
+            ],
+            "restrictions": [
+              "No automated fuzzing"
+            ],
+            "out_of_scope": []
+          },
+          "restrictions": [
+            "No automated fuzzing"
+          ],
+          "safe_harbor": true
+        }
+      ]
+    }
+  ]
+}

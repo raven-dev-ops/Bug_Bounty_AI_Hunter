@@ -1,0 +1,21 @@
+{
+  "schema_version": "0.1.0",
+  "generated_at": "2026-01-17T19:40:00Z",
+  "summary": {
+    "findings_total": 1,
+    "missing_impact_count": 0,
+    "missing_evidence_count": 0,
+    "missing_repro_steps": false,
+    "missing_scope_proof": false,
+    "roe_confirmed": false
+  },
+  "missing": {
+    "impact": [],
+    "evidence_refs": [],
+    "repro_steps": false,
+    "scope_proof": false,
+    "roe_confirmed": true
+  },
+  "ai_used": false,
+  "ai_review": null
+}

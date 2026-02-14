@@ -1,0 +1,84 @@
+[
+  {
+    "source": "hackerone",
+    "platform": "hackerone",
+    "handle": "example",
+    "name": "Example Program",
+    "policy_url": "https://hackerone.com/example",
+    "terms_url": "https://hackerone.com/example/terms",
+    "license": "Public listing terms",
+    "attribution": "Program data from HackerOne public listing.",
+    "reuse_constraints": "Attribution required for reuse.",
+    "http_status": 200,
+    "parser_version": "0.1.0",
+    "git_commit": "abc1234",
+    "artifact_path": "cache/hackerone/example.html",
+    "artifact_hash": "d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2",
+    "hash_algorithm": "sha256",
+    "rewards": {
+      "currency": "USD",
+      "min": 100,
+      "max": 5000
+    },
+    "scope": {
+      "in_scope": [
+        {
+          "type": "domain",
+          "value": "example.com"
+        }
+      ],
+      "out_of_scope": [
+        {
+          "type": "domain",
+          "value": "internal.example.com"
+        }
+      ],
+      "restrictions": [
+        "No denial of service"
+      ]
+    },
+    "safe_harbor": "Safe harbor applies within program scope."
+  },
+  {
+    "source": "manual",
+    "name": "Example Program",
+    "policy_url": "https://hackerone.com/example/",
+    "rewards": {
+      "currency": "USD",
+      "min": 200,
+      "max": 10000
+    },
+    "scope": {
+      "in_scope": [
+        {
+          "type": "domain",
+          "value": "example.com"
+        }
+      ]
+    },
+    "restrictions": [
+      "No social engineering"
+    ],
+    "safe_harbor": "Written authorization on file."
+  },
+  {
+    "source": "bugcrowd",
+    "platform": "bugcrowd",
+    "handle": "other-program",
+    "name": "Other Program",
+    "policy_url": "https://bugcrowd.com/other",
+    "rewards": "Bounty varies by severity.",
+    "scope": {
+      "in_scope": [
+        {
+          "type": "domain",
+          "value": "other.example.com"
+        }
+      ],
+      "restrictions": [
+        "No automated fuzzing"
+      ]
+    },
+    "safe_harbor": true
+  }
+]

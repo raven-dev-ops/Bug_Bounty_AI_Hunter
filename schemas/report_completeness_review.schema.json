@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ravdevops.com/schemas/report_completeness_review.schema.json",
+  "title": "ReportCompletenessReview",
+  "type": "object",
+  "description": "Completeness review for report bundles.",
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "generated_at": { "type": "string" },
+    "summary": { "type": "object" },
+    "missing": {
+      "type": "object",
+      "properties": {
+        "impact": { "type": "array", "items": { "type": "string" } },
+        "evidence_refs": { "type": "array", "items": { "type": "string" } },
+        "repro_steps": { "type": "boolean" },
+        "scope_proof": { "type": "boolean" },
+        "roe_confirmed": { "type": "boolean" }
+      },
+      "additionalProperties": true
+    },
+    "ai_used": { "type": "boolean" },
+    "ai_review": { "type": ["object", "null"] }
+  },
+  "required": ["schema_version", "summary", "missing"],
+  "additionalProperties": true
+}

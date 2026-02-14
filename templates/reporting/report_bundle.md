@@ -9,6 +9,8 @@ Generated: {generated_at}
 ## Scope
 {scope_summary}
 
+{compliance_checklist}
+
 ## Findings
 {findings_markdown}
 

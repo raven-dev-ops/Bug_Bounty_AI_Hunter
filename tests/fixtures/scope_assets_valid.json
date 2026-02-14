@@ -1,0 +1,25 @@
+[
+  {
+    "type": "domain",
+    "value": "example.com"
+  },
+  {
+    "type": "domain",
+    "value": "api.example.com:443,8000-8080"
+  },
+  {
+    "type": "wildcard",
+    "value": "*.example.com"
+  },
+  {
+    "type": "cidr",
+    "value": "10.0.0.0/24"
+  },
+  {
+    "type": "domain",
+    "value": "admin.example.com",
+    "ports": [
+      { "start": 8443, "end": 8443 }
+    ]
+  }
+]

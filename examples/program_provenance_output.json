@@ -1,0 +1,44 @@
+{
+  "schema_version": "0.1.0",
+  "generated_at": "2026-01-17T19:25:00Z",
+  "programs": [
+    {
+      "program_id": "program:hackerone-example",
+      "name": "Example Program",
+      "platform": "hackerone",
+      "handle": "example",
+      "provenance_score": 1.0,
+      "last_fetched_at": "2026-01-17T00:00:00+00:00",
+      "freshness_days": 0,
+      "signals": {
+        "field_coverage": {
+          "http_status": true,
+          "parser_version": true,
+          "git_commit": true,
+          "artifact_hash": true,
+          "fetched_at": true
+        },
+        "sources_count": 2
+      }
+    },
+    {
+      "program_id": "program:bugcrowd-other-program",
+      "name": "Other Program",
+      "platform": "bugcrowd",
+      "handle": "other-program",
+      "provenance_score": 0.4,
+      "last_fetched_at": null,
+      "freshness_days": null,
+      "signals": {
+        "field_coverage": {
+          "http_status": false,
+          "parser_version": false,
+          "git_commit": false,
+          "artifact_hash": false,
+          "fetched_at": false
+        },
+        "sources_count": 1
+      }
+    }
+  ]
+}

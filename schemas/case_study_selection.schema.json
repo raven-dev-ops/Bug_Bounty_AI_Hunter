@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ravdevops.com/schemas/case_study_selection.schema.json",
+  "title": "CaseStudySelection",
+  "type": "object",
+  "description": "Shortlist of programs for case study selection.",
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "generated_at": { "type": "string" },
+    "criteria": {
+      "type": "object",
+      "properties": {
+        "buckets": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "max_results": { "type": "integer", "minimum": 1 }
+      },
+      "additionalProperties": true
+    },
+    "shortlist": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/selection" }
+    }
+  },
+  "required": ["schema_version", "shortlist"],
+  "additionalProperties": true,
+  "$defs": {
+    "selection": {
+      "type": "object",
+      "properties": {
+        "program_id": { "type": "string" },
+        "name": { "type": "string" },
+        "platform": { "type": "string" },
+        "handle": { "type": "string" },
+        "policy_url": { "type": "string" },
+        "bucket": { "type": "string" },
+        "score": { "type": "number" },
+        "reasons": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "signals": { "type": "object" }
+      },
+      "required": ["program_id", "name", "bucket", "reasons"],
+      "additionalProperties": true
+    }
+  }
+}

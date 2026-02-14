@@ -5,6 +5,7 @@ import os
 from urllib.request import Request, urlopen
 
 from .lib.io_utils import dump_data, load_data
+from .lib.scope_utils import asset_key, normalize_scope_assets
 
 
 def _list(value):
@@ -139,14 +140,18 @@ def _seed_assets(scope):
         value = asset.get("value")
         if not asset_type or not value:
             continue
-        assets.append(
-            {
-                "type": asset_type,
-                "value": value,
-                "source": "scope",
-                "tags": ["seed"],
-            }
-        )
+        ports = asset.get("ports")
+        entry = {
+            "type": asset_type,
+            "value": value,
+            "source": "scope",
+            "tags": ["seed"],
+        }
+        if ports:
+            entry["ports"] = ports
+        if asset.get("notes"):
+            entry["notes"] = asset.get("notes")
+        assets.append(entry)
     return assets
 
 
@@ -204,23 +209,37 @@ def main():
     else:
         profile = {"schema_version": args.schema_version}
 
+    scope_errors = []
+    in_scope, errors = normalize_scope_assets(scope.get("in_scope"))
+    scope_errors.extend(errors)
+    out_scope, errors = normalize_scope_assets(scope.get("out_of_scope"))
+    scope_errors.extend(errors)
+    scope["in_scope"] = in_scope
+    scope["out_of_scope"] = out_scope
+
     if program:
         profile["program"] = program
         profile.setdefault("name", program.get("name"))
     profile["scope"] = scope
     profile.setdefault("assets", [])
     profile["assets"].extend(_seed_assets(scope))
+    normalized_assets, errors = normalize_scope_assets(profile.get("assets"))
+    scope_errors.extend(errors)
     deduped = []
     seen = set()
-    for asset in profile["assets"]:
-        if not isinstance(asset, dict):
+    for asset in normalized_assets:
+        key = asset_key(asset)
+        if not key:
             continue
-        key = (asset.get("type"), asset.get("value"))
         if key in seen:
             continue
         seen.add(key)
         deduped.append(asset)
     profile["assets"] = deduped
+
+    if scope_errors:
+        message = "Scope asset normalization errors:\n" + "\n".join(scope_errors)
+        raise SystemExit(message)
 
     if not profile.get("name"):
         profile["name"] = "Unnamed Program"

@@ -5,5 +5,16 @@
 __pycache__/
 *.pyc
 
+# Packaging/build artifacts
+*.egg-info/
+.coverage
+.hypothesis/
+.ruff_cache/
+site/
+
 # Local outputs
 output/
+
+# Local caches
+LOCAL_APPDATA_FONTCONFIG_CACHE/
+data/ingestion_audit/

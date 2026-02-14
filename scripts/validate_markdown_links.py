@@ -40,9 +40,7 @@ def _scan_file(path, root):
 
 
 def main():
-    parser = argparse.ArgumentParser(
-        description="Validate local markdown links exist."
-    )
+    parser = argparse.ArgumentParser(description="Validate local markdown links exist.")
     parser.add_argument(
         "--root",
         default=".",
@@ -67,7 +65,9 @@ def main():
     if errors:
         for entry in errors:
             print(entry)
-        raise SystemExit(f"Markdown link validation failed with {len(errors)} error(s).")
+        raise SystemExit(
+            f"Markdown link validation failed with {len(errors)} error(s)."
+        )
 
     print("Markdown link validation passed.")
 

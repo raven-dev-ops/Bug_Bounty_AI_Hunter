@@ -1,0 +1,15 @@
+{
+  "programs": [
+    {
+      "name": "Orbit Discovery",
+      "handle": "orbit-discovery",
+      "platform": "self-hosted",
+      "url": "https://orbit.example/security",
+      "bounty": "Up to $1000",
+      "targets": [
+        "orbit.example",
+        "api.orbit.example:443"
+      ]
+    }
+  ]
+}

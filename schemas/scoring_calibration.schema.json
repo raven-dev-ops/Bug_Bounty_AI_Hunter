@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ravdevops.com/schemas/scoring_calibration.schema.json",
+  "title": "ScoringCalibrationDataset",
+  "type": "object",
+  "description": "Labeled dataset for scoring calibration.",
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "generated_at": { "type": "string" },
+    "labels": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/label" }
+    }
+  },
+  "required": ["schema_version", "labels"],
+  "additionalProperties": true,
+  "$defs": {
+    "label": {
+      "type": "object",
+      "properties": {
+        "program_id": { "type": "string" },
+        "expected_bucket": { "type": "string" },
+        "rationale": { "type": "string" }
+      },
+      "required": ["program_id", "expected_bucket"],
+      "additionalProperties": true
+    }
+  }
+}

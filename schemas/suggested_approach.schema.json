@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ravdevops.com/schemas/suggested_approach.schema.json",
+  "title": "SuggestedApproach",
+  "type": "object",
+  "description": "Suggested planning-only approaches per program bucket.",
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "generated_at": { "type": "string" },
+    "programs": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/program" }
+    }
+  },
+  "required": ["schema_version", "programs"],
+  "additionalProperties": true,
+  "$defs": {
+    "program": {
+      "type": "object",
+      "properties": {
+        "program_id": { "type": "string" },
+        "name": { "type": "string" },
+        "platform": { "type": "string" },
+        "handle": { "type": "string" },
+        "policy_url": { "type": "string" },
+        "bucket": { "type": "string" },
+        "score": { "type": "number" },
+        "approach": {
+          "type": "object",
+          "properties": {
+            "summary": { "type": "string" },
+            "steps": {
+              "type": "array",
+              "items": { "type": "string" }
+            }
+          },
+          "required": ["summary", "steps"],
+          "additionalProperties": true
+        }
+      },
+      "required": ["program_id", "bucket", "approach"],
+      "additionalProperties": true
+    }
+  }
+}

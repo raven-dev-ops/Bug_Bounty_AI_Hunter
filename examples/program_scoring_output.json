@@ -1,0 +1,75 @@
+{
+  "schema_version": "0.1.0",
+  "generated_at": "2026-01-17T22:21:03.052266+00:00",
+  "public_only": true,
+  "summary": {
+    "total": 2,
+    "by_bucket": {
+      "Hard": 1,
+      "Medium": 1
+    },
+    "review_required": 0,
+    "average_score": 40.84
+  },
+  "programs": [
+    {
+      "program_id": "program:hackerone-example",
+      "name": "Example Program",
+      "platform": "hackerone",
+      "handle": "example",
+      "policy_url": "https://hackerone.com/example",
+      "score": 46.67,
+      "bucket": "Hard",
+      "review_required": false,
+      "missing_data": [
+        "response_time"
+      ],
+      "signals": {
+        "response_time_hours": null,
+        "response_score": null,
+        "scope_units": 1.0,
+        "scope_in_count": 1,
+        "scope_score": 0.03333333333333333,
+        "restrictions_count": 2,
+        "automation_restricted": false,
+        "application_required": false,
+        "restriction_score": 0.3333333333333333,
+        "reward_max": 10000,
+        "reward_score": 1.0,
+        "safe_harbor_present": null,
+        "feasibility": "ok"
+      },
+      "overrides": []
+    },
+    {
+      "program_id": "program:bugcrowd-other-program",
+      "name": "Other Program",
+      "platform": "bugcrowd",
+      "handle": "other-program",
+      "policy_url": "https://bugcrowd.com/other",
+      "score": 35.0,
+      "bucket": "Medium",
+      "review_required": false,
+      "missing_data": [
+        "response_time",
+        "reward"
+      ],
+      "signals": {
+        "response_time_hours": null,
+        "response_score": null,
+        "scope_units": 1.0,
+        "scope_in_count": 1,
+        "scope_score": 0.03333333333333333,
+        "restrictions_count": 1,
+        "automation_restricted": true,
+        "application_required": false,
+        "restriction_score": 0.3666666666666667,
+        "reward_max": null,
+        "reward_score": null,
+        "safe_harbor_present": true,
+        "feasibility": "limited"
+      },
+      "overrides": []
+    }
+  ]
+}

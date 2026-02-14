@@ -20,6 +20,7 @@ STAGE_MODULES = {
     "issue_drafts": "scripts.export_issue_drafts",
     "finding_reports": "scripts.export_finding_reports",
     "jira_export": "scripts.export_jira",
+    "summary_export": "scripts.export_summary",
     "pdf_export": "scripts.export_pdf",
 }
 

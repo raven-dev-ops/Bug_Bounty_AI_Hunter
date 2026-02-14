@@ -3,6 +3,7 @@ from datetime import datetime, timezone
 from urllib.parse import urlparse
 
 from .lib.io_utils import dump_data, load_data
+from .lib.scope_utils import asset_key
 
 
 DEFAULT_PREFIXES = ["www", "api", "dev", "staging"]
@@ -16,8 +17,11 @@ def _list(value):
     return [value]
 
 
-def _asset_key(asset_type, value):
-    return f"{asset_type}:{value}".lower()
+def _asset_key(asset_type, value, ports=None):
+    asset = {"type": asset_type, "value": value}
+    if ports:
+        asset["ports"] = ports
+    return asset_key(asset)
 
 
 def _parse_prefixes(prefixes):
@@ -53,7 +57,7 @@ def build_assets(profile, prefixes, extra_seeds, include_out_of_scope):
         value = asset.get("value")
         if not asset_type or not value:
             continue
-        key = _asset_key(asset_type, value)
+        key = _asset_key(asset_type, value, asset.get("ports"))
         if key in seen:
             continue
         seen.add(key)
@@ -68,7 +72,7 @@ def build_assets(profile, prefixes, extra_seeds, include_out_of_scope):
         value = asset.get("value")
         if not asset_type or not value:
             continue
-        key = _asset_key(asset_type, value)
+        key = _asset_key(asset_type, value, asset.get("ports"))
         if key in seen:
             continue
         seen.add(key)

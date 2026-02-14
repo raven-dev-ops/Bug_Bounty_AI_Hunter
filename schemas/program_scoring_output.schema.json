@@ -1,0 +1,90 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ravdevops.com/schemas/program_scoring_output.schema.json",
+  "title": "ProgramScoringOutput",
+  "type": "object",
+  "description": "Difficulty scoring output for program registry entries.",
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "generated_at": { "type": "string" },
+    "public_only": { "type": "boolean" },
+    "summary": {
+      "type": "object",
+      "properties": {
+        "total": { "type": "integer", "minimum": 0 },
+        "by_bucket": {
+          "type": "object",
+          "additionalProperties": { "type": "integer", "minimum": 0 }
+        },
+        "review_required": { "type": "integer", "minimum": 0 },
+        "average_score": { "type": ["number", "null"], "minimum": 0 }
+      },
+      "additionalProperties": true
+    },
+    "programs": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/program_score" }
+    }
+  },
+  "required": ["schema_version", "generated_at", "programs"],
+  "$defs": {
+    "program_score": {
+      "type": "object",
+      "properties": {
+        "program_id": { "type": "string" },
+        "name": { "type": "string" },
+        "platform": { "type": "string" },
+        "handle": { "type": "string" },
+        "policy_url": { "type": "string" },
+        "score": { "type": "number", "minimum": 0 },
+        "bucket": {
+          "type": "string",
+          "enum": ["Easy", "Medium", "Hard", "Impossible", "God Mode"]
+        },
+        "review_required": { "type": "boolean" },
+        "missing_data": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "signals": {
+          "type": "object",
+          "properties": {
+            "response_time_hours": { "type": ["number", "null"], "minimum": 0 },
+            "response_score": { "type": ["number", "null"], "minimum": 0 },
+            "scope_units": { "type": ["number", "null"], "minimum": 0 },
+            "scope_in_count": { "type": "integer", "minimum": 0 },
+            "scope_score": { "type": ["number", "null"], "minimum": 0 },
+            "restrictions_count": { "type": "integer", "minimum": 0 },
+            "automation_restricted": { "type": "boolean" },
+            "application_required": { "type": "boolean" },
+            "restriction_score": { "type": ["number", "null"], "minimum": 0 },
+            "reward_max": { "type": ["number", "null"], "minimum": 0 },
+            "reward_score": { "type": ["number", "null"], "minimum": 0 },
+            "safe_harbor_present": { "type": ["boolean", "null"] },
+            "feasibility": { "type": "string" }
+          },
+          "additionalProperties": true
+        },
+        "overrides": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": { "type": "string" },
+              "reason": { "type": "string" },
+              "min_bucket": { "type": "string" }
+            },
+            "required": ["id"],
+            "additionalProperties": true
+          }
+        }
+      },
+      "required": ["score", "bucket"],
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}

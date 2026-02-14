@@ -19,9 +19,7 @@ def _hash_file(path, algorithm):
 def _parse_approval(value):
     parts = [part.strip() for part in value.split("|", maxsplit=2)]
     if len(parts) < 2:
-        raise SystemExit(
-            "Approval must be formatted as 'approver|approved_at|notes'."
-        )
+        raise SystemExit("Approval must be formatted as 'approver|approved_at|notes'.")
     entry = {"approver": parts[0], "approved_at": parts[1]}
     if len(parts) > 2 and parts[2]:
         entry["notes"] = parts[2]
@@ -61,9 +59,7 @@ def main():
         help="Approval in 'approver|approved_at|notes' format.",
     )
     parser.add_argument("--notes", default="", help="Notes for the tool run.")
-    parser.add_argument(
-        "--schema-version", default="0.1.0", help="Schema version."
-    )
+    parser.add_argument("--schema-version", default="0.1.0", help="Schema version.")
     parser.add_argument(
         "--id",
         default="",

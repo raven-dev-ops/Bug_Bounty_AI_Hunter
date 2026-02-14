@@ -12,20 +12,27 @@
     },
     {
       "id": "attachment-002",
+      "path": "compliance_checklist.md",
+      "role": "compliance_checklist",
+      "description": "Compliance checklist for scope and ROE.",
+      "content_type": "text/markdown"
+    },
+    {
+      "id": "attachment-003",
       "path": "findings.json",
       "role": "findings",
       "description": "Structured findings output.",
       "content_type": "application/json"
     },
     {
-      "id": "attachment-003",
+      "id": "attachment-004",
       "path": "reproducibility_pack.json",
       "role": "reproducibility",
       "description": "Reproducibility metadata pack.",
       "content_type": "application/json"
     },
     {
-      "id": "attachment-004",
+      "id": "attachment-005",
       "path": "evidence/request.txt",
       "role": "evidence",
       "description": "Synthetic request/response pair.",
@@ -36,7 +43,7 @@
       ]
     },
     {
-      "id": "attachment-005",
+      "id": "attachment-006",
       "path": "evidence/response.txt",
       "role": "evidence",
       "description": "Synthetic request/response pair.",

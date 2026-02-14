@@ -10,7 +10,10 @@
       "type": "domain",
       "value": "example.com",
       "ports": [
-        { "start": 443, "end": 443 }
+        {
+          "start": 443,
+          "end": 443
+        }
       ]
     }
   ],
