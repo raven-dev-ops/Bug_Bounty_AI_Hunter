@@ -1,7 +1,6 @@
 import argparse
 import json
 import math
-import re
 import unicodedata
 from datetime import datetime, timezone
 from pathlib import Path
@@ -138,12 +137,20 @@ def _format_bool(value):
     return "true" if bool(value) else "false"
 
 
-def _mk_engagement_markdown(engagement, listing_url, fetched_at, stats=None, community=None):
+def _mk_engagement_markdown(
+    engagement, listing_url, fetched_at, stats=None, community=None
+):
     name = _format_value(engagement.get("name"))
     brief_url = str(engagement.get("briefUrl") or "")
     slug = _slug_from_brief_url(brief_url)
-    page_url = f"https://{BUGCROWD_DOMAIN}{brief_url}" if brief_url.startswith("/") else brief_url
-    brief_portal_url = f"https://{BUGCROWD_DOMAIN}/h/engagements/{slug}/brief" if slug else ""
+    page_url = (
+        f"https://{BUGCROWD_DOMAIN}{brief_url}"
+        if brief_url.startswith("/")
+        else brief_url
+    )
+    brief_portal_url = (
+        f"https://{BUGCROWD_DOMAIN}/h/engagements/{slug}/brief" if slug else ""
+    )
 
     reward_summary = engagement.get("rewardSummary") or {}
     reward_text = reward_summary.get("summary") or ""
@@ -155,7 +162,7 @@ def _mk_engagement_markdown(engagement, listing_url, fetched_at, stats=None, com
     lines.append(f"# {name}")
     lines.append("")
     lines.append("## Overview")
-    lines.append(f"- Platform: Bugcrowd")
+    lines.append("- Platform: Bugcrowd")
     lines.append(f"- Engagement URL: {_format_value(page_url)}")
     if brief_portal_url:
         lines.append(f"- Hacker Portal brief URL: {_format_value(brief_portal_url)}")
@@ -181,8 +188,12 @@ def _mk_engagement_markdown(engagement, listing_url, fetched_at, stats=None, com
     lines.append("## Public JSON Endpoints")
     lines.append(f"- Engagement list (JSON): {_format_value(listing_url)}")
     if slug:
-        lines.append(f"- Statistics (JSON): https://{BUGCROWD_DOMAIN}/engagements/{slug}/statistics")
-        lines.append(f"- Hall of fame (JSON): https://{BUGCROWD_DOMAIN}/engagements/{slug}/hall_of_fames.json")
+        lines.append(
+            f"- Statistics (JSON): https://{BUGCROWD_DOMAIN}/engagements/{slug}/statistics"
+        )
+        lines.append(
+            f"- Hall of fame (JSON): https://{BUGCROWD_DOMAIN}/engagements/{slug}/hall_of_fames.json"
+        )
         lines.append(
             f"- Recently joined (JSON): https://{BUGCROWD_DOMAIN}/engagements/{slug}/recently_joined_users.json"
         )
@@ -190,10 +201,16 @@ def _mk_engagement_markdown(engagement, listing_url, fetched_at, stats=None, com
 
     if stats:
         lines.append("## Stats (Public)")
-        lines.append(f"- Rewarded vulnerabilities: {_format_value(stats.get('rewardedVulnerabilities'))}")
-        lines.append(f"- Validation within: {_format_value(stats.get('validationWithin'))}")
+        lines.append(
+            f"- Rewarded vulnerabilities: {_format_value(stats.get('rewardedVulnerabilities'))}"
+        )
+        lines.append(
+            f"- Validation within: {_format_value(stats.get('validationWithin'))}"
+        )
         lines.append(f"- Average payout: {_format_value(stats.get('averagePayout'))}")
-        lines.append(f"- Valid submission count: {_format_value(stats.get('validSubmissionCount'))}")
+        lines.append(
+            f"- Valid submission count: {_format_value(stats.get('validSubmissionCount'))}"
+        )
         lines.append("")
 
     if community:
@@ -236,7 +253,9 @@ def _mk_index_markdown(rows, listing_url, fetched_at, pages_fetched):
     lines.append(f"- Pages fetched: {_format_value(pages_fetched)}")
     lines.append(f"- Fetched at (UTC): {_format_value(fetched_at)}")
     lines.append("")
-    lines.append("| Engagement | Reward | Access | Private | Industry | Service | Scope Rank | Validation |")
+    lines.append(
+        "| Engagement | Reward | Access | Private | Industry | Service | Scope Rank | Validation |"
+    )
     lines.append("| --- | --- | --- | --- | --- | --- | --- | --- |")
     for row in rows:
         rel = row["rel_path"]
@@ -253,18 +272,32 @@ def _mk_index_markdown(rows, listing_url, fetched_at, pages_fetched):
         )
     lines.append("")
     lines.append("Notes:")
-    lines.append("- This board is metadata only. It does not grant authorization to test anything.")
+    lines.append(
+        "- This board is metadata only. It does not grant authorization to test anything."
+    )
     lines.append("- Some engagement details require being logged in to Bugcrowd.")
     lines.append("")
     return "\n".join(lines)
 
 
 def main(argv=None):
-    parser = argparse.ArgumentParser(description="Generate a Bugcrowd bounty board from public data.")
-    parser.add_argument("--category", default="bug_bounty", help="Bugcrowd engagement category (default: bug_bounty).")
-    parser.add_argument("--sort-by", default="promoted", help="Sort key (default: promoted).")
-    parser.add_argument("--sort-direction", default="desc", help="Sort direction (default: desc).")
-    parser.add_argument("--start-page", type=int, default=1, help="Start page (default: 1).")
+    parser = argparse.ArgumentParser(
+        description="Generate a Bugcrowd bounty board from public data."
+    )
+    parser.add_argument(
+        "--category",
+        default="bug_bounty",
+        help="Bugcrowd engagement category (default: bug_bounty).",
+    )
+    parser.add_argument(
+        "--sort-by", default="promoted", help="Sort key (default: promoted)."
+    )
+    parser.add_argument(
+        "--sort-direction", default="desc", help="Sort direction (default: desc)."
+    )
+    parser.add_argument(
+        "--start-page", type=int, default=1, help="Start page (default: 1)."
+    )
     parser.add_argument(
         "--pages",
         type=int,
