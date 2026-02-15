@@ -242,6 +242,9 @@ def _identity_login(http_client, *, email, password, otp_code="", backup_otp_cod
             "Accept": "application/json",
             "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
             "X-CSRF-Token": csrf,
+            "X-Requested-With": "XMLHttpRequest",
+            "Origin": f"https://{BUGCROWD_IDENTITY_DOMAIN}",
+            "Referer": login_url,
         }
         url = f"https://{BUGCROWD_IDENTITY_DOMAIN}{path}"
         resp = http_client._request(url, method="POST", data=body, headers=headers)
