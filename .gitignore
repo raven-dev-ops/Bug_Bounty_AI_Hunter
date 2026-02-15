@@ -26,7 +26,8 @@ data/fetch_cache/
 .env.*
 !.env.example
 BUGCROWD_backup_codes.txt
-*backup_codes*.txt
+BUGCROWD_backup_codes
+BUGCROWD_backup_codes.*
 
 # Auth-required outputs (do not commit program briefs/scope details)
 bounty_board/bugcrowd_full/

@@ -1,4 +1,6 @@
+import tempfile
 import unittest
+from pathlib import Path
 
 from scripts import bugcrowd_briefs
 
@@ -33,6 +35,26 @@ class TestBugcrowdBriefs(unittest.TestCase):
         )
         with self.assertRaises(KeyError):
             bugcrowd_briefs._replace_path_params("/api/:id/items/:missing", {"id": 1})
+
+    def test_backup_codes_file_parsing_and_consumption(self):
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            path = Path(tmp_dir) / "BUGCROWD_backup_codes"
+            with path.open("w", encoding="utf-8", newline="\n") as handle:
+                handle.write("# comment\n")
+                handle.write("\n")
+                handle.write("code1\n")
+                handle.write("code2, code3  code4\n")
+                handle.write("code1 # dup\n")
+
+            codes = bugcrowd_briefs._read_backup_codes_file(path)
+            self.assertEqual(codes, ["code1", "code2", "code3", "code4"])
+
+            consumed = bugcrowd_briefs._consume_backup_code_file(path, codes, "code2")
+            self.assertTrue(consumed)
+            self.assertEqual(
+                bugcrowd_briefs._read_backup_codes_file(path),
+                ["code1", "code3", "code4"],
+            )
 
 
 if __name__ == "__main__":

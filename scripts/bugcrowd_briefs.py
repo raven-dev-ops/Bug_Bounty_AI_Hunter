@@ -96,6 +96,87 @@ def _env_get(env, key):
     return env.get(key, "")
 
 
+_DEFAULT_BACKUP_CODES_FILENAMES = (
+    "BUGCROWD_backup_codes",
+    "BUGCROWD_backup_codes.txt",
+)
+
+
+def _env_truthy(value):
+    return str(value or "").strip().lower() in ("1", "true", "yes", "y", "on")
+
+
+def _find_backup_codes_file(path_hint=""):
+    candidates = []
+    if path_hint:
+        candidates.append(Path(path_hint))
+    else:
+        candidates.extend(Path(name) for name in _DEFAULT_BACKUP_CODES_FILENAMES)
+
+    for path in candidates:
+        try:
+            if path.exists() and path.is_file():
+                return path
+        except OSError:
+            continue
+    return None
+
+
+def _read_backup_codes_file(path):
+    if not path:
+        return []
+
+    try:
+        raw_text = path.read_text(encoding="utf-8", errors="replace")
+    except OSError:
+        return []
+
+    seen = set()
+    codes = []
+    for raw in raw_text.splitlines():
+        line = raw.strip()
+        if not line or line.startswith("#"):
+            continue
+        if "#" in line:
+            line = line.split("#", 1)[0].strip()
+        if not line:
+            continue
+
+        for token in re.split(r"[,\s;]+", line):
+            token = token.strip()
+            if not token or token in seen:
+                continue
+            seen.add(token)
+            codes.append(token)
+
+    return codes
+
+
+def _consume_backup_code_file(path, codes, used_code):
+    if not path or not used_code:
+        return False
+
+    remaining = []
+    consumed = False
+    for code in codes or []:
+        if not consumed and code == used_code:
+            consumed = True
+            continue
+        remaining.append(code)
+
+    if not consumed:
+        return False
+
+    try:
+        with path.open("w", encoding="utf-8", newline="\n") as handle:
+            for code in remaining:
+                handle.write(f"{code}\n")
+    except OSError:
+        return False
+
+    return True
+
+
 def _replace_path_params(endpoint_path, params):
     if not params:
         return endpoint_path
@@ -221,7 +302,16 @@ class BugcrowdHttp:
         return ""
 
 
-def _identity_login(http_client, *, email, password, otp_code="", backup_otp_code=""):
+def _identity_login(
+    http_client,
+    *,
+    email,
+    password,
+    otp_code="",
+    backup_otp_code="",
+    backup_codes_file="",
+    consume_backup_code=False,
+):
     login_url = f"https://{BUGCROWD_IDENTITY_DOMAIN}/login?user_hint=RESEARCHER"
     http_client.get_text(login_url)
     csrf = http_client.get_cookie_value(
@@ -237,6 +327,17 @@ def _identity_login(http_client, *, email, password, otp_code="", backup_otp_cod
             return getpass.getpass(label).strip()
         except (EOFError, KeyboardInterrupt):
             return ""
+
+    file_codes_path = None
+    file_codes = None
+
+    def load_file_codes():
+        nonlocal file_codes_path, file_codes
+        if file_codes is not None:
+            return file_codes_path, file_codes
+        file_codes_path = _find_backup_codes_file(backup_codes_file)
+        file_codes = _read_backup_codes_file(file_codes_path) if file_codes_path else []
+        return file_codes_path, file_codes
 
     def post_form(path, *, otp="", backup=""):
         form = {
@@ -279,31 +380,79 @@ def _identity_login(http_client, *, email, password, otp_code="", backup_otp_cod
 
     if status == 422:
         inner_form = str(payload.get("inner_form") or "")
-        if inner_form == "OtpForm":
-            if not otp_code:
-                otp_code = prompt_secret("Bugcrowd OTP code (BUGCROWD_OTP_CODE): ")
-            if not otp_code:
-                raise SystemExit("Bugcrowd login requires OTP.")
-            status, payload = post_form("/auth/otp-challenge", otp=otp_code)
-        elif inner_form == "BackupOtpForm":
-            if not backup_otp_code:
-                backup_otp_code = prompt_secret(
-                    "Bugcrowd backup code (BUGCROWD_BACKUP_OTP_CODE): "
-                )
-            if not backup_otp_code:
-                raise SystemExit("Bugcrowd login requires a backup code.")
-            status, payload = post_form("/auth/backup-code", backup=backup_otp_code)
-        else:
+        if inner_form not in ("OtpForm", "BackupOtpForm"):
             raise SystemExit(
                 f"Bugcrowd login requires additional steps (inner_form={inner_form})."
             )
 
-        if payload is not None and status in (200, 400):
-            redirect_to = str(payload.get("redirect_to") or "")
-            if redirect_to:
-                http_client.get_text(redirect_to)
+        def try_complete_login(mfa_status, mfa_payload):
+            if mfa_payload is None or mfa_status not in (200, 400):
+                return False
+            redirect_to = str(mfa_payload.get("redirect_to") or "")
+            if not redirect_to:
+                return False
+            http_client.get_text(redirect_to)
+            return True
+
+        def iter_backup_candidates():
+            candidates = []
+            if backup_otp_code:
+                candidates.append(("env", backup_otp_code))
+
+            path, codes = load_file_codes()
+            if path and codes:
+                candidates.extend(("file", code) for code in codes)
+
+            if not candidates:
+                manual = prompt_secret(
+                    "Bugcrowd backup code (BUGCROWD_BACKUP_OTP_CODE): "
+                )
+                if manual:
+                    candidates.append(("prompt", manual))
+
+            seen = set()
+            out = []
+            for source, code in candidates:
+                if not code or code in seen:
+                    continue
+                seen.add(code)
+                out.append((source, code))
+            return out
+
+        def try_backup_codes(*, consume_file_code):
+            for source, code in iter_backup_candidates():
+                mfa_status, mfa_payload = post_form("/auth/backup-code", backup=code)
+                if try_complete_login(mfa_status, mfa_payload):
+                    if source == "file" and consume_file_code:
+                        path, codes = load_file_codes()
+                        if path:
+                            _consume_backup_code_file(path, codes, code)
+                    return True
+            return False
+
+        def try_otp():
+            nonlocal otp_code
+            if not otp_code:
+                otp_code = prompt_secret("Bugcrowd OTP code (BUGCROWD_OTP_CODE): ")
+            if not otp_code:
+                return False
+            mfa_status, mfa_payload = post_form("/auth/otp-challenge", otp=otp_code)
+            return try_complete_login(mfa_status, mfa_payload)
+
+        consume_file_code = bool(consume_backup_code)
+        if inner_form == "OtpForm":
+            if otp_code or (sys.stdin and sys.stdin.isatty()):
+                if try_otp():
+                    return
+            if try_backup_codes(consume_file_code=consume_file_code):
                 return
-        raise SystemExit(f"Bugcrowd login failed after MFA step (status {status}).")
+        else:
+            if try_backup_codes(consume_file_code=consume_file_code):
+                return
+            if try_otp():
+                return
+
+        raise SystemExit("Bugcrowd login failed after MFA step.")
 
     message = str(payload.get("message") or "").strip()
     raise SystemExit(f"Bugcrowd login failed (status {status}): {message or 'unknown'}")
@@ -552,6 +701,8 @@ def main(argv=None):
     password = _env_get(env, "BUGCROWD_PASSWORD")
     otp_code = _env_get(env, "BUGCROWD_OTP_CODE")
     backup_otp_code = _env_get(env, "BUGCROWD_BACKUP_OTP_CODE")
+    backup_codes_file = _env_get(env, "BUGCROWD_BACKUP_CODES_FILE")
+    consume_backup_code = _env_truthy(_env_get(env, "BUGCROWD_CONSUME_BACKUP_CODE"))
 
     http_client = BugcrowdHttp(cookie_header=cookie_header or None)
     if not cookie_header:
@@ -565,6 +716,8 @@ def main(argv=None):
             password=password,
             otp_code=otp_code,
             backup_otp_code=backup_otp_code,
+            backup_codes_file=backup_codes_file,
+            consume_backup_code=consume_backup_code,
         )
 
     fetched_at = _utc_now_iso()
