@@ -530,7 +530,9 @@ def _mk_full_brief_markdown(
     scope_rank,
     target_group_known_issues,
     errors,
+    skipped_sections=None,
 ):
+    skipped = set(skipped_sections or [])
     lines = []
     lines.append(f"# {slug}")
     lines.append("")
@@ -604,7 +606,9 @@ def _mk_full_brief_markdown(
     lines.append("")
 
     lines.append("## Hall Of Fame")
-    if hall_of_fame is not None:
+    if "hall_of_fame" in skipped:
+        lines.append("- skipped (use --include-community)")
+    elif hall_of_fame is not None:
         lines.append("```json")
         lines.append(_as_pretty_json(hall_of_fame).rstrip())
         lines.append("```")
@@ -613,7 +617,9 @@ def _mk_full_brief_markdown(
     lines.append("")
 
     lines.append("## Recently Joined")
-    if recently_joined is not None:
+    if "recently_joined" in skipped:
+        lines.append("- skipped (use --include-community)")
+    elif recently_joined is not None:
         lines.append("```json")
         lines.append(_as_pretty_json(recently_joined).rstrip())
         lines.append("```")
@@ -640,7 +646,9 @@ def _mk_full_brief_markdown(
     lines.append("")
 
     lines.append("## Target Group Known Issue Stats")
-    if target_group_known_issues:
+    if "target_group_known_issues" in skipped:
+        lines.append("- skipped (use --include-target-group-known-issues)")
+    elif target_group_known_issues:
         lines.append("```json")
         lines.append(_as_pretty_json(target_group_known_issues).rstrip())
         lines.append("```")
@@ -694,6 +702,22 @@ def main(argv=None):
         "--combined",
         action="store_true",
         help="Write a combined markdown file with all engagements for the run.",
+    )
+    parser.add_argument(
+        "--include-community",
+        action="store_true",
+        help="Include community endpoints (Hall Of Fame, Recently Joined).",
+    )
+    parser.add_argument(
+        "--include-target-group-known-issues",
+        action="store_true",
+        help="Include per-target-group known issue stats (may be slow).",
+    )
+    parser.add_argument(
+        "--max-target-groups",
+        type=int,
+        default=50,
+        help="Max target groups to fetch known issue stats for (0 = no limit; default: 50).",
     )
     args = parser.parse_args(argv)
 
@@ -786,6 +810,12 @@ def main(argv=None):
         if page_resp.status != 200:
             errors.append(f"Engagement page status {page_resp.status}")
 
+        skipped_sections = []
+        if not args.include_community:
+            skipped_sections.extend(["hall_of_fame", "recently_joined"])
+        if not args.include_target_group_known_issues:
+            skipped_sections.append("target_group_known_issues")
+
         root = _extract_brief_root(page_text)
         if not root:
             errors.append("Missing researcher-engagement-brief-root element")
@@ -804,6 +834,7 @@ def main(argv=None):
                 scope_rank=None,
                 target_group_known_issues={},
                 errors=errors,
+                skipped_sections=skipped_sections,
             )
             _write_text(out_dir / f"{slug}.md", md)
             if args.combined:
@@ -850,12 +881,15 @@ def main(argv=None):
         stats = fetch_json_relative(
             get_endpoint("engagementStatsApi", "getBriefStats"),
         )
-        hall_of_fame = fetch_json_relative(
-            get_endpoint("engagementStatsApi", "getHallOfFamers"),
-        )
-        recently_joined = fetch_json_relative(
-            get_endpoint("engagementStatsApi", "getRecentlyJoinedUsers"),
-        )
+        hall_of_fame = None
+        recently_joined = None
+        if args.include_community:
+            hall_of_fame = fetch_json_relative(
+                get_endpoint("engagementStatsApi", "getHallOfFamers"),
+            )
+            recently_joined = fetch_json_relative(
+                get_endpoint("engagementStatsApi", "getRecentlyJoinedUsers"),
+            )
         known_issues = fetch_json_relative(
             get_endpoint("engagementStatsApi", "getKnownIssuesStats"),
         )
@@ -865,8 +899,17 @@ def main(argv=None):
 
         target_group_known_issues = {}
         tg_path = get_endpoint("engagementStatsApi", "getTargetGroupKnownIssuesStats")
-        if tg_path and isinstance(brief_doc, dict):
+        if (
+            args.include_target_group_known_issues
+            and tg_path
+            and isinstance(brief_doc, dict)
+        ):
             groups = (brief_doc.get("data") or {}).get("scope") or []
+            if args.max_target_groups and len(groups) > args.max_target_groups:
+                errors.append(
+                    f"Truncated target group known issue stats to first {args.max_target_groups} group(s)."
+                )
+                groups = groups[: args.max_target_groups]
             for group in groups:
                 group_id = group.get("id")
                 if not group_id:
@@ -890,6 +933,7 @@ def main(argv=None):
             scope_rank=scope_rank,
             target_group_known_issues=target_group_known_issues,
             errors=errors,
+            skipped_sections=skipped_sections,
         )
         _write_text(out_dir / f"{slug}.md", md)
         if args.combined:
