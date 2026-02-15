@@ -9,6 +9,7 @@ __pycache__/
 *.egg-info/
 .coverage
 .hypothesis/
+.pytest_cache/
 .ruff_cache/
 site/
 

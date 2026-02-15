@@ -3,7 +3,7 @@ import re
 from pathlib import Path
 
 
-LINK_RE = re.compile(r"\\[[^\\]]+\\]\\(([^)]+)\\)")
+LINK_RE = re.compile(r"!?\[[^\]]+\]\(([^)]+)\)")
 
 
 def _is_external(link):
@@ -19,6 +19,8 @@ def _normalize_target(link, root, source_path):
         return None
     if _is_external(link):
         return None
+    if link.startswith("<") and link.endswith(">"):
+        link = link[1:-1].strip()
     if link.startswith("/"):
         return (root / link.lstrip("/")).resolve()
     return (source_path.parent / link).resolve()
@@ -29,8 +31,6 @@ def _scan_file(path, root):
     missing = []
     for match in LINK_RE.finditer(text):
         link = match.group(1).strip()
-        if link.startswith("!"):
-            link = link[1:].strip()
         target = _normalize_target(link, root, path)
         if target is None:
             continue
@@ -49,7 +49,19 @@ def main():
     args = parser.parse_args()
     root = Path(args.root).resolve()
 
-    ignore_dirs = {".git", ".venv", "site", "node_modules"}
+    ignore_dirs = {
+        ".git",
+        ".venv",
+        "site",
+        "node_modules",
+        "__pycache__",
+        ".hypothesis",
+        ".pytest_cache",
+        ".ruff_cache",
+        "LOCAL_APPDATA_FONTCONFIG_CACHE",
+        "data",
+        "output",
+    }
     paths = [
         path
         for path in root.rglob("*.md")

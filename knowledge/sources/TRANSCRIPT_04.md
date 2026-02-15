@@ -3,7 +3,7 @@ Let's go back uh nine years ago to the summer of 2016. Uh it was about to be
 0:06
 just a regular summer, you know, going to the pool, attending Defcon. But little did we know, Niantic, a mobile
 0:13
-game company, was about to release um a new game called Pokémon Go, condemning
+game company, was about to release um a new game called Pokemon Go, condemning
 0:18
 thousands of nerds to be collectively sunburnt. But jokes aside, this was a dream come
 0:25
@@ -11,17 +11,17 @@ true for me and for many, you know, being outside chasing Pokemon, uh,
 0:31
 battling for gym access. It was really, really a dream come true. Uh, except it
 0:37
-wasn't so much for me. I lived in a rural town back then, and there weren't any Pokémon around me. Um, and while
+wasn't so much for me. I lived in a rural town back then, and there weren't any Pokemon around me. Um, and while
 0:44
-everyone in the city was having fun, I had to chase down um, Pokémon very far
+everyone in the city was having fun, I had to chase down um, Pokemon very far
 0:50
 away from my home. And all I had uh, in fact was this lousy scanner. I don't
 0:55
-know if you remember it. Um, but you could only see the nine closest Pokémon
+know if you remember it. Um, but you could only see the nine closest Pokemon
 1:00
 to your location and uh, a footprint one to two or three showing you how close
 1:06
-they are to your location. And honestly, this sucked and all the Pokémon were
+they are to your location. And honestly, this sucked and all the Pokemon were
 1:11
 rattatas anyway. Uh, these are real pictures of me with my friend. Uh, so
 1:16
@@ -29,7 +29,7 @@ naturally, I decided to build a Pokemon scanner that would tell me where all the
 1:22
 caught yet, so I can flex on my friends. Um, so little did I know this uh idea
 1:29
-would take me to an adventure uh of uncovering the Pokémon Go protocol,
+would take me to an adventure uh of uncovering the Pokemon Go protocol,
 1:34
 understanding how it works, and also having to overcome very difficult defense mechanisms uh against uh fake
 1:42
@@ -55,7 +55,7 @@ also have uh quality stickers limited time edition that I will be giving away af
 2:46
 by, ask me questions, take your sticker, and you can also reach out to me on social media. Uh, and like every good
 2:52
-Pokémon trainer, we need to collect badges. So, we'll collect six badges during this talk when we overcome a very
+Pokemon trainer, we need to collect badges. So, we'll collect six badges during this talk when we overcome a very
 2:59
 difficult gym battle. And you can use this to uh know where we are on the talk approximately. Um, one last thing, uh,
 3:07
@@ -79,15 +79,15 @@ and get back all the nearby Pokemon uh to its location. And this is a request th
 4:04
 in a different location and get all the Pokemon around that location. Um, but who's to say that the app doesn't get uh
 4:12
-only the uh information that is played on the lousy scanner, so only a list of nine Pokémon and the footprints of how
+only the uh information that is played on the lousy scanner, so only a list of nine Pokemon and the footprints of how
 4:20
-far they are from you. Uh well, there are two hints. one, if you play Pokémon Go, you know that once you're close
+far they are from you. Uh well, there are two hints. one, if you play Pokemon Go, you know that once you're close
 4:26
 enough to the actual Pokemon, it immediately appears on your screen at a very specific location, which kind of
 4:33
 tells you that the app knows the the exact specific location. The second hint is that servers are lazy. So, no one
 4:40
-wants to do this heavy computation uh that has to do with determining how far a Pokémon is to you. Uh, and Niantic uh
+wants to do this heavy computation uh that has to do with determining how far a Pokemon is to you. Uh, and Niantic uh
 4:49
 would be happy to delegate this computation to your device. you have a very powerful Android device or Apple
 4:54
@@ -99,7 +99,7 @@ the uh to to be able to do this request. I wanted to to see how the protocol
 5:12
 looks like. And to see the protocol, uh I have to uh look at the traffic that
 5:17
-goes between uh the Pokémon Go app and the Pokémon Go servo. And this is attack
+goes between uh the Pokemon Go app and the Pokemon Go servo. And this is attack
 5:22
 called uh sniffing attack. Um we can pretty guess pretty much guess that the
 5:28
@@ -195,7 +195,7 @@ declaration. Uh and we can even tell some some things about the message that we 
 10:16
 You can see that it has two fields. Both of them are strings. Uh so let's apply this technique to the actual message
 10:23
-that we just saw for Pokémon Go. So here it is. It's very loud. You probably can't see anything, but that's fine. Um
+that we just saw for Pokemon Go. So here it is. It's very loud. You probably can't see anything, but that's fine. Um
 10:29
 and um so at first this looks a bit this might look a bit difficult to
 10:35
@@ -233,7 +233,7 @@ blog to read more. But after understanding some of the fields of the request, I 
 12:14
 declaration which is a bit shorter so you can see it better. Uh so how
 12:19
-requests looks like from the Pokémon Go app. Uh so it's actually I called it a request container because it contains
+requests looks like from the Pokemon Go app. Uh so it's actually I called it a request container because it contains
 12:25
 requests. Uh the request container has some metadata fields like the request ID uh my location, my authentication info.
 12:33
@@ -251,13 +251,13 @@ response corresponding to one request. So it's always matching one to one accord
 13:11
 Okay. So now that we know how the general format looks like, uh we have to try and find the actual request that
 13:17
-gets the list of Pokémon, right? That's what we wanted to do for the for the scanner. Uh, but there are tons of
+gets the list of Pokemon, right? That's what we wanted to do for the for the scanner. Uh, but there are tons of
 13:23
 different stuff, ton of different types of requests and I tried to do a few things like searching for Pokemon names,
 13:29
 searching for locations around me. Uh, but I didn't really manage to find the actual uh request type that I wanted.
 13:35
-And what actually solved it for me is playing Pokemon. So, if you played Pokémon, you know that all of them are
+And what actually solved it for me is playing Pokemon. So, if you played Pokemon, you know that all of them are
 13:41
 indexed by an incrementing number. Um, and by looking at the lousy scanner and seeing that it scanned uh a PG and a
 13:48
@@ -273,15 +273,15 @@ a map cell object uh that basically uh includes all the different objects that
 14:16
 are on the this specific map cell in the area including forts which is the internal name for gyms, poker stops uh
 14:24
-etc. It also includes spawn points and Pokémon and more importantly uh it has
+etc. It also includes spawn points and Pokemon and more importantly uh it has
 14:29
 the exact location of the specific Pokemon in this map cell. As you can see, there is a catchable Pokemon at a
 14:36
 very specific location. Uh, and this is the Pokemon number 23. So, who is that
 14:41
-Pokémon? I hope you know it. Um, so upon successfully understanding the protocol
+Pokemon? I hope you know it. Um, so upon successfully understanding the protocol
 14:48
-of how the Pokémon Go app uh requests and gets all the Pokemon in a specific location, we earn our second badge, the
+of how the Pokemon Go app uh requests and gets all the Pokemon in a specific location, we earn our second badge, the
 14:56
 Bradger Protocol. All right. So, uh what do we know so far? uh we know that uh
 15:03
@@ -291,7 +291,7 @@ contains some metadata uh uh on the request uh including a list of requests,
 15:15
 one of which is request number 106 that fetches the map details for a specific
 15:20
-cell. It gets a cell ID and responds with the exact location of Pokémon which is the best case scenario uh for a for
+cell. It gets a cell ID and responds with the exact location of Pokemon which is the best case scenario uh for a for
 15:28
 building a scanner. uh but we still have three open questions. So the first one is how do you construct a request
 15:34
@@ -315,11 +315,11 @@ about other fields that I understood. It didn't care about all the fields that I
 16:29
 other request types. So, best case scenario for me h about that cell ID. So, keen eyed of you may have noticed
 16:36
-that in the previous slide, I call this an S2 cell ID. Turns out uh Pokémon Go
+that in the previous slide, I call this an S2 cell ID. Turns out uh Pokemon Go
 16:41
 uses a framework named S2 cells. It splits a sphere, in this case the Earth,
 16:47
-into cells. Uh you decide on a level which basically controls the size of a specific cell. Pokémon Go works with at
+into cells. Uh you decide on a level which basically controls the size of a specific cell. Pokemon Go works with at
 16:54
 least get map object works with level 15. Um, and then you have a very very
 16:59
@@ -341,7 +341,7 @@ miles. Um, and for each location, it adds a new get map object uh request.
 17:53
 Uh, converts my uh the the actual coordinate to an S2 cell, gets the
 17:58
-request, passes the respond, puts all the different Pokémon that finds on a map, and we have a request container.
+request, passes the respond, puts all the different Pokemon that finds on a map, and we have a request container.
 18:05
 Um, and dumb me. I didn't really record any of the actual uh uh maps that I
 18:12
@@ -349,15 +349,15 @@ built uh with Pokemon from back there. I only actually had this one picture of a
 18:19
 it's not fake and real because I had to blur out my actual location. Uh so that's my only proof to you. Uh but this
 18:26
-is an example log from the scanner that it searches for different Pokémons. I think here it found a Pidgey. Um and it
+is an example log from the scanner that it searches for different Pokemons. I think here it found a Pidgey. Um and it
 18:33
-was great. I spent I flexed on all my friends. I found all the cool Pokémon. I I used it for a couple of of of weeks.
+was great. I spent I flexed on all my friends. I found all the cool Pokemon. I I used it for a couple of of of weeks.
 18:39
 Uh, and upon successfully creating a a Pokemon scanner, uh, we get our third badge, the badge of Pokemon.
 18:47
 So, uh, one quiet Wednesday, I went I got back home and I started my Pokemon
 18:53
-scanner to play a nice, uh, evening of Pokémon Go, uh, only to discover that it
+scanner to play a nice, uh, evening of Pokemon Go, uh, only to discover that it
 18:58
 didn't work. Um, and so my scanner got like a generic error, uh, that I really
 19:04
@@ -367,17 +367,17 @@ looks like. I knew that a few days earlier uh a new update was pushed to the app
 19:18
 the protocol has changed and I needed to update my my scanner. Uh and the fiddler
 19:24
-didn't record anything. And in fact, while it was open, the Pokémon Go app refused to to turn on and refuse to do
+didn't record anything. And in fact, while it was open, the Pokemon Go app refused to to turn on and refuse to do
 19:32
 anything. Um, so okay, we have a challenge. We have a fighter on hands.
 19:38
 Um, so naturally I went online uh to search if anyone else has encountered
 19:43
-this problem. And I realized that I wasn't the only smart guy in the room that decided to build their own Pokémon
+this problem. And I realized that I wasn't the only smart guy in the room that decided to build their own Pokemon
 19:49
 scanner. There were actually uh many different communities online uh uh doing this stuff. One in particular was
 19:57
-Pogdev, a community dedicated to creating unofficial API for Pokémon Go.
+Pogdev, a community dedicated to creating unofficial API for Pokemon Go.
 20:02
 um they had noticed this uh uh issue as well and started tackling it. Uh and in
 20:08
@@ -405,7 +405,7 @@ no one was able to uh sniff the traffic and see uh the protocol and how it looks
 21:25
 actually one researcher uh found this interesting uh uh class was added to the
 21:30
-Pokémon Go app named Niantic Trust Manager. Uh and uh so it implemented a
+Pokemon Go app named Niantic Trust Manager. Uh and uh so it implemented a
 21:36
 check server uh trusted function uh which seems like it implements a defense
 21:41
@@ -421,7 +421,7 @@ stands for, secure uh based on a certificate that is provided to the server uh t
 22:18
 confidentiality, uh HTTPS also promises you integrity, which means that you know that you are talking to the real domain
 22:24
-and not a fake domain that says, "Hey, I am a Pokémon Go server." Uh but that's
+and not a fake domain that says, "Hey, I am a Pokemon Go server." Uh but that's
 22:30
 exactly what HTTP proxy needs to do. it needs to convince the client to speak to it and it will uh parse and and and
 22:38
@@ -555,7 +555,7 @@ that this is some encrypted uh signature over the request that we make that now 
 29:15
 always sent to the server. it just didn't validate it before probably because they suffered from a lot of uh
 29:21
-technical difficulties in the first weeks of Pokémon Go due to the large number of of people that were playing.
+technical difficulties in the first weeks of Pokemon Go due to the large number of of people that were playing.
 29:27
 Okay, so the next uh step that we wanted to do is to find where this Anon 6 is generated in the code so we can
 29:33
@@ -579,7 +579,7 @@ usually the native native code is used for more computational heavy uh operation
 30:24
 mobile games uh mostly rely on native code because they have a lot of graphical related computations
 30:30
-specifically Pokémon Go I think relies on Unity um okay so uh what do you do with uh the
+specifically Pokemon Go I think relies on Unity um okay so uh what do you do with uh the
 30:38
 Java part and the native part to understand it further you have to use our fourth and final technique which I
 30:43
@@ -595,7 +595,7 @@ they disassemble it back to their assembly assembly language. uh and then they a
 31:13
 as close as they can to the original source code that generated the app. Um with Java uh we have Jadex. It's an open
 31:21
-source tool. It's an amazing tool. It does an excellent job. Here you can see the Pokémon Go app opened in Jadex. Uh
+source tool. It's an amazing tool. It does an excellent job. Here you can see the Pokemon Go app opened in Jadex. Uh
 31:27
 and actually the the image from for from before of the certificate pinning class was actually from Jadex as well. It does
 31:34
@@ -873,11 +873,11 @@ the actual authentication. You can laugh at it while I while I talk for the last
 46:12
 know what happened afterwards. So it turned out that so we all treated this effort as something that is necessary to
 46:18
-create a community driving community uh developing tools for for Pokémon Go. We really believe that having access to
+create a community driving community uh developing tools for for Pokemon Go. We really believe that having access to
 46:25
 this kind of tool makes make it possible for people that couldn't play the game normally to have access to it. Um and I
 46:32
-was interested to know where the Pokémon Go hacking scene went from this. So I kind of didn't get involved uh into more
+was interested to know where the Pokemon Go hacking scene went from this. So I kind of didn't get involved uh into more
 46:38
 stuff afterwards. So PCODev continued maintaining the API for about a year and
 46:43
