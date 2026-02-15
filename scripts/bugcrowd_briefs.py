@@ -74,7 +74,8 @@ def _load_dotenv(path):
     env = {}
     if not path.exists():
         return env
-    for raw in path.read_text(encoding="utf-8", errors="replace").splitlines():
+    # utf-8-sig strips a UTF-8 BOM if present (common on Windows).
+    for raw in path.read_text(encoding="utf-8-sig", errors="replace").splitlines():
         line = raw.strip()
         if not line or line.startswith("#"):
             continue
@@ -127,7 +128,8 @@ def _read_backup_codes_file(path):
         return []
 
     try:
-        raw_text = path.read_text(encoding="utf-8", errors="replace")
+        # utf-8-sig strips a UTF-8 BOM if present (common on Windows).
+        raw_text = path.read_text(encoding="utf-8-sig", errors="replace")
     except OSError:
         return []
 

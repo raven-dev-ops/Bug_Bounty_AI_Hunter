@@ -56,6 +56,12 @@ class TestBugcrowdBriefs(unittest.TestCase):
                 ["code1", "code3", "code4"],
             )
 
+    def test_backup_codes_file_strips_utf8_bom(self):
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            path = Path(tmp_dir) / "BUGCROWD_backup_codes"
+            path.write_bytes(b"\xef\xbb\xbf# comment\ncode1\n")
+            self.assertEqual(bugcrowd_briefs._read_backup_codes_file(path), ["code1"])
+
 
 if __name__ == "__main__":
     unittest.main()
