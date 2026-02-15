@@ -55,6 +55,8 @@ def main():
         "site",
         "node_modules",
         "lychee",
+        # Auth-only exports are local-only and may embed HTML that trips link checks.
+        "bugcrowd_full",
         "__pycache__",
         ".hypothesis",
         ".pytest_cache",

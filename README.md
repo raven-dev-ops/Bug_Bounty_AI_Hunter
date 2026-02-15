@@ -68,7 +68,7 @@ advice. Only test systems where you have explicit authorization.
 
 ## Repository layout
 - `docs/` - architecture, rules, and planning docs
-- `bounty_board/` - planning-only bounty board markdown (public metadata only; auth-only exports are ignored by default)
+- `bounty_board/` - planning-only bounty board markdown (public metadata only; auth-only exports are ignored by default). Bugcrowd boards: `bounty_board/bugcrowd/` and `bounty_board/bugcrowd_vdp/`.
 - `schemas/` - data model schemas
 - `components/` - component repos (submodules or subtrees)
 - `knowledge/` - sources, cards, and checklists
