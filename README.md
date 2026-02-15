@@ -9,6 +9,8 @@ advice. Only test systems where you have explicit authorization.
 
 ## Docs
 - `ROADMAP.md`
+- `BUGCROWD.md`
+- `GUIDE.md`
 - `docs/PROJECT_OUTLINE.md`
 - `docs/ROE.md`
 - `docs/PROJECT_MANAGEMENT.md`
@@ -64,6 +66,7 @@ advice. Only test systems where you have explicit authorization.
 
 ## Repository layout
 - `docs/` - architecture, rules, and planning docs
+- `bounty_board/` - planning-only bounty board markdown (public metadata only)
 - `schemas/` - data model schemas
 - `components/` - component repos (submodules or subtrees)
 - `knowledge/` - sources, cards, and checklists

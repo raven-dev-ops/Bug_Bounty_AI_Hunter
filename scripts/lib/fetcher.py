@@ -63,8 +63,9 @@ class Fetcher:
         )
         return metrics
 
-    def _cache_paths(self, url):
-        digest = hashlib.sha256(url.encode("utf-8")).hexdigest()
+    def _cache_paths(self, url, cache_key=None):
+        key = cache_key if cache_key is not None else url
+        digest = hashlib.sha256(key.encode("utf-8")).hexdigest()
         parsed = urlparse(url)
         host = parsed.netloc.replace(":", "_") or "unknown"
         base = Path(host) / digest
@@ -72,10 +73,10 @@ class Fetcher:
         meta_path = base.with_suffix(".json")
         return body_path, meta_path
 
-    def _read_cache(self, url):
+    def _read_cache(self, url, cache_key=None):
         if not self.cache_dir:
             return None, None
-        body_path, meta_path = self._cache_paths(url)
+        body_path, meta_path = self._cache_paths(url, cache_key=cache_key)
         body_path = self.cache_dir / body_path
         meta_path = self.cache_dir / meta_path
         if not body_path.exists() or not meta_path.exists():
@@ -85,10 +86,10 @@ class Fetcher:
         metadata["from_cache"] = True
         return body, metadata
 
-    def _write_cache(self, url, body, metadata):
+    def _write_cache(self, url, body, metadata, cache_key=None):
         if not self.cache_dir:
             return
-        body_path, meta_path = self._cache_paths(url)
+        body_path, meta_path = self._cache_paths(url, cache_key=cache_key)
         body_path = self.cache_dir / body_path
         meta_path = self.cache_dir / meta_path
         body_path.parent.mkdir(parents=True, exist_ok=True)
@@ -144,12 +145,24 @@ class Fetcher:
             self._robots[domain] = parser
         return parser.can_fetch(self.user_agent, url)
 
-    def fetch_text(self, url):
+    def fetch_text(self, url, headers=None):
         domain = self._check_allowlist(url)
         if not self._robots_allowed(domain, url):
             raise SystemExit(f"Robots policy disallows URL: {url}")
 
-        cached_body, cached_meta = self._read_cache(url)
+        cache_key = None
+        if headers:
+            vary = {}
+            for key, value in headers.items():
+                if value is None:
+                    continue
+                key_lower = str(key).strip().lower()
+                if key_lower in ("accept", "x-requested-with"):
+                    vary[key_lower] = str(value)
+            if vary:
+                cache_key = url + "\n" + json.dumps(vary, sort_keys=True)
+
+        cached_body, cached_meta = self._read_cache(url, cache_key=cache_key)
         if cached_body is not None:
             self.metrics["cache_hits"] += 1
             self._domain_metrics(domain)["cache_hits"] += 1
@@ -158,8 +171,13 @@ class Fetcher:
         self.metrics["cache_misses"] += 1
         self._throttle(domain)
 
-        headers = {"User-Agent": self.user_agent}
-        request = Request(url, headers=headers)
+        request_headers = {"User-Agent": self.user_agent}
+        if headers:
+            for key, value in headers.items():
+                if value is None:
+                    continue
+                request_headers[str(key)] = str(value)
+        request = Request(url, headers=request_headers)
         attempt = 0
         while True:
             start = time.perf_counter()
@@ -180,7 +198,7 @@ class Fetcher:
                         "content_length": size_bytes,
                         "from_cache": False,
                     }
-                    self._write_cache(url, body, metadata)
+                    self._write_cache(url, body, metadata, cache_key=cache_key)
 
                     self.metrics["requests"] += 1
                     domain_metrics = self._domain_metrics(domain)

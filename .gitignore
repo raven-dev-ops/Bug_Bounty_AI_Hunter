@@ -18,3 +18,4 @@ output/
 # Local caches
 LOCAL_APPDATA_FONTCONFIG_CACHE/
 data/ingestion_audit/
+data/fetch_cache/
