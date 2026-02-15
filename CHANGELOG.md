@@ -7,6 +7,7 @@ All notable changes to this project will be documented here.
 - Added Bugcrowd bounty board generator and public-only outputs under `bounty_board/` (`python -m scripts.bugcrowd_board`).
 - Fixed local Markdown link validator matching and expanded ignored directories.
 - Normalized transcript source Markdown to ASCII-only where required by repo rules.
+- Added Markdown ASCII validation script and CI gate.
 - Expanded open-source tools guidance and policy docs (`docs/TOOLS.md`, `docs/TOOLS_POLICY.md`).
 - Added safe defaults, pipeline guardrails, scoping, operations, redaction, and governance docs.
 - Added risk assessment template and changelog policy docs.

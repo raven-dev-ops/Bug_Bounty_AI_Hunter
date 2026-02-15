@@ -40,6 +40,8 @@ jobs:
         uses: lycheeverse/lychee-action@v2
         with:
           args: --config .lychee.toml "**/*.md"
+      - name: Check markdown ASCII
+        run: python -m scripts.validate_markdown_ascii
       - name: Tests
         run: |
           coverage run -m unittest discover -s tests

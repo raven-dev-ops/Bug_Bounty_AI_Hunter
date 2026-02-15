@@ -55,6 +55,7 @@ Use `python -m scripts.<module>` to run a script from the repo root.
 - `demo_runner.py` - run the example pipeline end-to-end
 - `validate_schemas.py` - validate example files against schemas
 - `validate_markdown_links.py` - validate local Markdown links
+- `validate_markdown_ascii.py` - validate Markdown is ASCII-only
 - `bugcrowd_board.py` - generate a planning-only Bugcrowd bounty board from public listings (writes Markdown under `bounty_board/`)
 - `bootstrap_issues.sh` - create labels and starter backlog
 - `connectors/` - ingestion connector framework and source implementations

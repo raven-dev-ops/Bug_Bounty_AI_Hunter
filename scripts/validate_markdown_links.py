@@ -58,8 +58,9 @@ def main():
         ".hypothesis",
         ".pytest_cache",
         ".ruff_cache",
+        "fetch_cache",
+        "ingestion_audit",
         "LOCAL_APPDATA_FONTCONFIG_CACHE",
-        "data",
         "output",
     }
     paths = [
