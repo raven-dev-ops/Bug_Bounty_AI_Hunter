@@ -5,7 +5,6 @@ import json
 import math
 import os
 import re
-import sys
 import time
 import unicodedata
 import urllib.error
@@ -313,6 +312,7 @@ def _identity_login(
     backup_otp_code="",
     backup_codes_file="",
     consume_backup_code=False,
+    allow_prompt=False,
 ):
     login_url = f"https://{BUGCROWD_IDENTITY_DOMAIN}/login?user_hint=RESEARCHER"
     http_client.get_text(login_url)
@@ -323,7 +323,7 @@ def _identity_login(
         raise SystemExit("Bugcrowd login failed: missing csrf-token cookie.")
 
     def prompt_secret(label):
-        if not sys.stdin or not sys.stdin.isatty():
+        if not allow_prompt:
             return ""
         try:
             return getpass.getpass(label).strip()
@@ -406,11 +406,12 @@ def _identity_login(
                 candidates.extend(("file", code) for code in codes)
 
             if not candidates:
-                manual = prompt_secret(
-                    "Bugcrowd backup code (BUGCROWD_BACKUP_OTP_CODE): "
-                )
-                if manual:
-                    candidates.append(("prompt", manual))
+                if allow_prompt:
+                    manual = prompt_secret(
+                        "Bugcrowd backup code (BUGCROWD_BACKUP_OTP_CODE): "
+                    )
+                    if manual:
+                        candidates.append(("prompt", manual))
 
             seen = set()
             out = []
@@ -443,7 +444,7 @@ def _identity_login(
 
         consume_file_code = bool(consume_backup_code)
         if inner_form == "OtpForm":
-            if otp_code or (sys.stdin and sys.stdin.isatty()):
+            if otp_code or allow_prompt:
                 if try_otp():
                     return
             if try_backup_codes(consume_file_code=consume_file_code):
@@ -704,6 +705,11 @@ def main(argv=None):
         help="Write a combined markdown file with all engagements for the run.",
     )
     parser.add_argument(
+        "--prompt-mfa",
+        action="store_true",
+        help="Prompt for OTP/backup codes if required (avoid in non-interactive runs).",
+    )
+    parser.add_argument(
         "--include-community",
         action="store_true",
         help="Include community endpoints (Hall Of Fame, Recently Joined).",
@@ -729,6 +735,7 @@ def main(argv=None):
     backup_otp_code = _env_get(env, "BUGCROWD_BACKUP_OTP_CODE")
     backup_codes_file = _env_get(env, "BUGCROWD_BACKUP_CODES_FILE")
     consume_backup_code = _env_truthy(_env_get(env, "BUGCROWD_CONSUME_BACKUP_CODE"))
+    allow_prompt = args.prompt_mfa or _env_truthy(_env_get(env, "BUGCROWD_PROMPT_MFA"))
 
     http_client = BugcrowdHttp(cookie_header=cookie_header or None)
     if not cookie_header:
@@ -744,6 +751,7 @@ def main(argv=None):
             backup_otp_code=backup_otp_code,
             backup_codes_file=backup_codes_file,
             consume_backup_code=consume_backup_code,
+            allow_prompt=allow_prompt,
         )
 
     fetched_at = _utc_now_iso()
