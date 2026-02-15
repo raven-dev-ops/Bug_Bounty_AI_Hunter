@@ -24,6 +24,12 @@ python -m scripts.validate_schemas
 python -m unittest discover -s tests
 ```
 
+## Optional: pytest
+CI runs `unittest`. If you prefer `pytest` locally:
+```bash
+python -m pytest -q
+```
+
 ## Docs-only checks
 ```bash
 python -m scripts.knowledge_lint

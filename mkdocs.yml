@@ -18,6 +18,8 @@ nav:
   - Reference:
       - Project Outline: PROJECT_OUTLINE.md
       - ROE: ROE.md
+      - Bugcrowd SOP: BUGCROWD.md
+      - Pre-Report Guide: GUIDE.md
       - Architecture: ARCHITECTURE.md
       - Components: COMPONENTS.md
       - Component Contract: COMPONENT_CONTRACT.md

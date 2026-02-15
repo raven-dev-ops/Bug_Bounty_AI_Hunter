@@ -13,6 +13,8 @@ advice. Only test systems where you have explicit authorization.
 - `GUIDE.md`
 - `docs/PROJECT_OUTLINE.md`
 - `docs/ROE.md`
+- `docs/BUGCROWD.md` (MkDocs copy of `BUGCROWD.md`)
+- `docs/GUIDE.md` (MkDocs copy of `GUIDE.md`)
 - `docs/PROJECT_MANAGEMENT.md`
 - `docs/TARGET_PROFILE.md`
 - `docs/THREAT_MODEL.md`
@@ -66,7 +68,7 @@ advice. Only test systems where you have explicit authorization.
 
 ## Repository layout
 - `docs/` - architecture, rules, and planning docs
-- `bounty_board/` - planning-only bounty board markdown (public metadata only)
+- `bounty_board/` - planning-only bounty board markdown (public metadata only; auth-only exports are ignored by default)
 - `schemas/` - data model schemas
 - `components/` - component repos (submodules or subtrees)
 - `knowledge/` - sources, cards, and checklists

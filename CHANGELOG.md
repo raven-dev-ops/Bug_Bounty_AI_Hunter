@@ -3,6 +3,10 @@
 All notable changes to this project will be documented here.
 
 ## Unreleased
+- Added MkDocs docs copies and navigation entries for `BUGCROWD.md` and `GUIDE.md` (`docs/BUGCROWD.md`, `docs/GUIDE.md`).
+- Added Bugcrowd auth-only brief exporter (`python -m scripts.bugcrowd_briefs`) that writes local outputs under gitignored `bounty_board/bugcrowd_full/` with a `.env.example` template for credentials.
+- Enforced LF line endings for key text files via `.gitattributes` to reduce CRLF churn across platforms.
+- Updated testing docs to make `unittest` the default runner and keep `pytest` optional.
 - Added Bugcrowd researcher operating policy and pre-report guide docs (`BUGCROWD.md`, `GUIDE.md`).
 - Added Bugcrowd bounty board generator and public-only outputs under `bounty_board/` (`python -m scripts.bugcrowd_board`).
 - Fixed local Markdown link validator matching and expanded ignored directories.

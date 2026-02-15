@@ -6,6 +6,8 @@ hub. Start with rules of engagement and then follow the pipeline lifecycle.
 ## Start here
 - `PROJECT_OUTLINE.md` for scope and goals.
 - `ROE.md` for authorization and safety.
+- `BUGCROWD.md` for Bugcrowd platform operating policy.
+- `GUIDE.md` for pre-report validation workflow.
 - `PIPELINE.md` for orchestration steps.
 - `REPORTING.md` for report and export guidance.
 

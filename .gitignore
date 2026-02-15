@@ -20,3 +20,13 @@ output/
 LOCAL_APPDATA_FONTCONFIG_CACHE/
 data/ingestion_audit/
 data/fetch_cache/
+
+# Local secrets
+.env
+.env.*
+!.env.example
+BUGCROWD_backup_codes.txt
+*backup_codes*.txt
+
+# Auth-required outputs (do not commit program briefs/scope details)
+bounty_board/bugcrowd_full/
