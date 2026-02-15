@@ -1,9 +1,11 @@
 import argparse
+import getpass
 import html
 import json
 import math
 import os
 import re
+import sys
 import time
 import unicodedata
 import urllib.error
@@ -228,6 +230,14 @@ def _identity_login(http_client, *, email, password, otp_code="", backup_otp_cod
     if not csrf:
         raise SystemExit("Bugcrowd login failed: missing csrf-token cookie.")
 
+    def prompt_secret(label):
+        if not sys.stdin or not sys.stdin.isatty():
+            return ""
+        try:
+            return getpass.getpass(label).strip()
+        except (EOFError, KeyboardInterrupt):
+            return ""
+
     def post_form(path, *, otp="", backup=""):
         form = {
             "username": email,
@@ -271,15 +281,17 @@ def _identity_login(http_client, *, email, password, otp_code="", backup_otp_cod
         inner_form = str(payload.get("inner_form") or "")
         if inner_form == "OtpForm":
             if not otp_code:
-                raise SystemExit(
-                    "Bugcrowd login requires OTP. Set BUGCROWD_OTP_CODE and retry."
-                )
+                otp_code = prompt_secret("Bugcrowd OTP code (BUGCROWD_OTP_CODE): ")
+            if not otp_code:
+                raise SystemExit("Bugcrowd login requires OTP.")
             status, payload = post_form("/auth/otp-challenge", otp=otp_code)
         elif inner_form == "BackupOtpForm":
             if not backup_otp_code:
-                raise SystemExit(
-                    "Bugcrowd login requires a backup code. Set BUGCROWD_BACKUP_OTP_CODE and retry."
+                backup_otp_code = prompt_secret(
+                    "Bugcrowd backup code (BUGCROWD_BACKUP_OTP_CODE): "
                 )
+            if not backup_otp_code:
+                raise SystemExit("Bugcrowd login requires a backup code.")
             status, payload = post_form("/auth/backup-code", backup=backup_otp_code)
         else:
             raise SystemExit(
