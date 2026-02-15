@@ -54,6 +54,7 @@ def main():
         ".venv",
         "site",
         "node_modules",
+        "lychee",
         "__pycache__",
         ".hypothesis",
         ".pytest_cache",
