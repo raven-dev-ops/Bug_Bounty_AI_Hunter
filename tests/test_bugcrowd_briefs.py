@@ -62,6 +62,31 @@ class TestBugcrowdBriefs(unittest.TestCase):
             path.write_bytes(b"\xef\xbb\xbf# comment\ncode1\n")
             self.assertEqual(bugcrowd_briefs._read_backup_codes_file(path), ["code1"])
 
+    def test_html_to_md_converts_basic_structure_and_links(self):
+        html_text = (
+            "<p>Moovit\u2019s rules:</p>"
+            "<ul><li>One</li><li>Two</li></ul>"
+            '<p>See <a href="/docs">docs</a>.</p>'
+        )
+        md = bugcrowd_briefs._html_to_md(html_text)
+        self.assertIn("Moovit's rules:", md)
+        self.assertIn("- One", md)
+        self.assertIn("- Two", md)
+        self.assertIn("docs (https://bugcrowd.com/docs)", md)
+
+    def test_reward_range_lines_handles_mixed_keys(self):
+        group = {
+            "rewardRangeData": {
+                "1": {"min": 100, "max": 200},
+                "p2": {"min": 300, "max": 400},
+                "high": {"min": 500, "max": 600},
+            }
+        }
+        lines = bugcrowd_briefs._reward_range_lines(group)
+        self.assertTrue(any(line.startswith("- P1:") for line in lines))
+        self.assertTrue(any(line.startswith("- P2:") for line in lines))
+        self.assertTrue(any(line.startswith("- high:") for line in lines))
+
 
 if __name__ == "__main__":
     unittest.main()

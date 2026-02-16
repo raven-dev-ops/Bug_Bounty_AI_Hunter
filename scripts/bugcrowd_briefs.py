@@ -64,7 +64,7 @@ def _abs_bugcrowd_url(value):
 
 
 _ANCHOR_RE = re.compile(
-    r'(?is)<a\\b[^>]*href=(?P<quote>"|\\\')(?P<href>.*?)(?P=quote)[^>]*>(?P<text>.*?)</a>'
+    r'(?is)<a\b[^>]*href=(?P<quote>"|\')(?P<href>.*?)(?P=quote)[^>]*>(?P<text>.*?)</a>'
 )
 
 
@@ -92,27 +92,27 @@ def _html_to_md(html_text):
     text = _ANCHOR_RE.sub(anchor_repl, text)
 
     # Common structural tags.
-    text = re.sub(r"(?i)<br\\s*/?>", "\n", text)
-    text = re.sub(r"(?i)<hr\\b[^>]*>", "\n\n---\n\n", text)
+    text = re.sub(r"(?i)<br\s*/?>", "\n", text)
+    text = re.sub(r"(?i)<hr\b[^>]*>", "\n\n---\n\n", text)
 
     for level in range(1, 7):
         text = re.sub(
-            rf"(?i)<h{level}\\b[^>]*>",
+            rf"(?i)<h{level}\b[^>]*>",
             "\n\n" + ("#" * level) + " ",
             text,
         )
-        text = re.sub(rf"(?i)</h{level}\\s*>", "\n\n", text)
+        text = re.sub(rf"(?i)</h{level}\s*>", "\n\n", text)
 
-    text = re.sub(r"(?i)<p\\b[^>]*>", "", text)
-    text = re.sub(r"(?i)</p\\s*>", "\n\n", text)
-    text = re.sub(r"(?i)<li\\b[^>]*>", "- ", text)
-    text = re.sub(r"(?i)</li\\s*>", "\n", text)
-    text = re.sub(r"(?i)</?(ul|ol)\\b[^>]*>", "\n", text)
+    text = re.sub(r"(?i)<p\b[^>]*>", "", text)
+    text = re.sub(r"(?i)</p\s*>", "\n\n", text)
+    text = re.sub(r"(?i)<li\b[^>]*>", "- ", text)
+    text = re.sub(r"(?i)</li\s*>", "\n", text)
+    text = re.sub(r"(?i)</?(ul|ol)\b[^>]*>", "\n", text)
 
     # Code blocks (best effort).
-    text = re.sub(r"(?is)<pre\\b[^>]*>\\s*<code\\b[^>]*>", "\n\n```text\n", text)
-    text = re.sub(r"(?is)</code>\\s*</pre>", "\n```\n\n", text)
-    text = re.sub(r"(?is)</?code\\b[^>]*>", "`", text)
+    text = re.sub(r"(?is)<pre\b[^>]*>\s*<code\b[^>]*>", "\n\n```text\n", text)
+    text = re.sub(r"(?is)</code>\s*</pre>", "\n```\n\n", text)
+    text = re.sub(r"(?is)</?code\b[^>]*>", "`", text)
 
     # Strip remaining tags.
     text = re.sub(r"(?s)<[^>]+>", "", text)
@@ -614,9 +614,9 @@ def _reward_range_lines(group):
 
     def key_sort(val):
         try:
-            return int(val)
+            return (0, int(val))
         except (TypeError, ValueError):
-            return str(val)
+            return (1, str(val))
 
     lines = []
     for priority in sorted(reward_data.keys(), key=key_sort):
@@ -631,7 +631,14 @@ def _reward_range_lines(group):
             amount = _format_money(min_value)
         else:
             amount = f"{_format_money(min_value)} - {_format_money(max_value)}"
-        lines.append(f"- P{_md_escape(priority)}: {amount}")
+        priority_text = _md_escape(priority)
+        if priority_text.isdigit():
+            label = f"P{priority_text}"
+        elif priority_text.lower().startswith("p") and priority_text[1:].isdigit():
+            label = f"P{priority_text[1:]}"
+        else:
+            label = priority_text or "n/a"
+        lines.append(f"- {label}: {amount}")
     return lines
 
 

@@ -7,7 +7,7 @@ from scripts import bugcrowd_briefs
 
 
 _BRIEF_DOC_RE = re.compile(
-    r"## Brief Version Document\\s*```json\\s*(?P<json>\\{.*?\\})\\s*```",
+    r"## Brief Version Document\s*```json\s*(?P<json>\{.*?\})\s*```",
     re.S,
 )
 
@@ -28,7 +28,7 @@ def _insert_rendered_sections(markdown_text, rendered_sections):
     if "## Brief (Rendered)" in (markdown_text or ""):
         return markdown_text, False
 
-    match = re.search(r"^## API Endpoints \\(From Page\\)", markdown_text, re.M)
+    match = re.search(r"^## API Endpoints \(From Page\)", markdown_text, re.M)
     if not match:
         return markdown_text, False
 
