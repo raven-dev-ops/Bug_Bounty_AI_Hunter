@@ -16,6 +16,50 @@ nav:
       - Triage: TRIAGE.md
       - Report: REPORTING.md
   - Knowledge:
+      - Curated Index: KNOWLEDGE_INDEX.md
+      - Cards:
+          - kb-0001: knowledge/cards/kb-0001-shadow-data-inventory.md
+          - kb-0002: knowledge/cards/kb-0002-system-prompt-exposure.md
+          - kb-0003: knowledge/cards/kb-0003-rag-context-leakage.md
+          - kb-0004: knowledge/cards/kb-0004-logging-retention-risk.md
+          - kb-0005: knowledge/cards/kb-0005-fine-tuning-data-leakage.md
+          - kb-0006: knowledge/cards/kb-0006-embedding-exposure.md
+          - kb-0007: knowledge/cards/kb-0007-local-service-origin-bypass.md
+          - kb-0008: knowledge/cards/kb-0008-untrusted-update-fetch.md
+          - kb-0009: knowledge/cards/kb-0009-dll-search-order-hijack.md
+          - kb-0010: knowledge/cards/kb-0010-privilege-escalation-path.md
+          - kb-0011: knowledge/cards/kb-0011-toctou-race.md
+          - kb-0012: knowledge/cards/kb-0012-auth-container-tampering.md
+          - kb-0013: knowledge/cards/kb-0013-client-trust-bypass.md
+          - kb-0014: knowledge/cards/kb-0014-protocol-reverse-engineering.md
+          - kb-0015: knowledge/cards/kb-0015-access-control-misconfig.md
+          - kb-0016: knowledge/cards/kb-0016-credential-exposure-in-files.md
+          - kb-0017: knowledge/cards/kb-0017-privileged-library-misuse.md
+          - kb-0018: knowledge/cards/kb-0018-authorization-handling-gaps.md
+          - kb-0019: knowledge/cards/kb-0019-telemetry-gaps.md
+          - kb-0020: knowledge/cards/kb-0020-prompt-social-engineering.md
+          - kb-0021: knowledge/cards/kb-0021-agent-tool-argument-injection.md
+          - kb-0022: knowledge/cards/kb-0022-agent-tool-scope-bleed.md
+          - kb-0023: knowledge/cards/kb-0023-agent-approval-bypass.md
+      - Checklists:
+          - kb-checklist-0001: knowledge/checklists/rag-logging-review.md
+          - kb-checklist-0002: knowledge/checklists/update-installer-review.md
+          - kb-checklist-0003: knowledge/checklists/mobile-api-review.md
+          - kb-checklist-0004: knowledge/checklists/legacy-access-control-review.md
+          - kb-checklist-0005: knowledge/checklists/endpoint-telemetry-review.md
+          - kb-checklist-0006: knowledge/checklists/human-in-loop-review.md
+          - kb-checklist-0007: knowledge/checklists/embeddings-review.md
+          - kb-checklist-0008: knowledge/checklists/agents-review.md
+          - kb-checklist-0009: knowledge/checklists/llm-api-authz-review.md
+          - kb-checklist-0010: knowledge/checklists/bug-bounty-starter-workflow.md
+      - Sources:
+          - kb-src-0001: knowledge/sources/TRANSCRIPT_01.source.md
+          - kb-src-0002: knowledge/sources/TRANSCRIPT_02.source.md
+          - kb-src-0003: knowledge/sources/TRANSCRIPT_03.source.md
+          - kb-src-0004: knowledge/sources/TRANSCRIPT_04.source.md
+          - kb-src-0005: knowledge/sources/TRANSCRIPT_05.source.md
+          - kb-src-0006: knowledge/sources/TRANSCRIPT_06.source.md
+          - kb-src-0007: knowledge/sources/TRANSCRIPT_07.source.md
       - Hack Types: HACK_TYPES.md
       - Coverage Matrix: COVERAGE_MATRIX.md
       - Case Study Selection: CASE_STUDY_SELECTION.md

@@ -3,6 +3,9 @@
 All notable changes to this project will be documented here.
 
 ## Unreleased
+- Made the Bugcrowd brief exporter public-first with optional auth fallback and added `--public-only` and `--auth-required` flags (`python -m scripts.bugcrowd_briefs`).
+- Published curated knowledge items into MkDocs (`docs/knowledge/`, `docs/KNOWLEDGE_INDEX.md`) and added a CI sync check (`python -m scripts.publish_knowledge_docs`).
+- Added a one-command local check runner that mirrors CI (`python -m scripts.check_all`).
 - Added Transcript 07 source notes and a bug bounty starter workflow checklist (`knowledge/sources/TRANSCRIPT_07.md`, `knowledge/checklists/bug-bounty-starter-workflow.md`).
 - Clarified raw source handling in knowledge format docs and added `python -m scripts.knowledge_lint` to CI.
 - Added engagement workspace templates and a scaffold script for recon notes and report drafts (`templates/engagement_workspace/`, `python -m scripts.init_engagement_workspace`).

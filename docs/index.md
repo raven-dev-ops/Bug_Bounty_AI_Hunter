@@ -21,6 +21,7 @@ hub. Start with rules of engagement and then follow the pipeline lifecycle.
 - `ARCHITECTURE.md`
 - `COMPONENTS.md`
 - `COMPONENT_CONTRACT.md`
+- `KNOWLEDGE_INDEX.md`
 - `KNOWLEDGE_FORMAT.md`
 - `TOOLS.md`
 - `TOOLS_POLICY.md`

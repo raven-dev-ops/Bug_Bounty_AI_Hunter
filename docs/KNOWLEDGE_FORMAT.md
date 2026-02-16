@@ -25,6 +25,19 @@ python -m scripts.knowledge_lint
 CI enforces index freshness by regenerating `knowledge/INDEX.md` and failing if
 it changes.
 
+## Publish to MkDocs
+Publish curated knowledge items into the MkDocs site with:
+```bash
+python -m scripts.publish_knowledge_docs
+```
+
+This generates:
+- `docs/KNOWLEDGE_INDEX.md`
+- `docs/knowledge/` (cards, checklists, sources)
+
+CI enforces that published docs stay in sync by regenerating these files and
+failing if they change.
+
 ## Frontmatter (required)
 ```yaml
 ---

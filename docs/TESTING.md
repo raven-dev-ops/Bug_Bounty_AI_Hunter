@@ -19,6 +19,7 @@
 
 ## Run locally
 ```bash
+python -m scripts.check_all
 python -m ruff check scripts tests
 python -m pip_audit -r requirements.txt -r requirements-dev.txt
 python -m scripts.validate_schemas
@@ -34,6 +35,7 @@ python -m pytest -q
 ## Docs-only checks
 ```bash
 python -m scripts.knowledge_lint
+python -m scripts.publish_knowledge_docs
 python -m scripts.validate_markdown_links
 python -m scripts.validate_markdown_ascii
 python -m scripts.knowledge_index --output knowledge/INDEX.md

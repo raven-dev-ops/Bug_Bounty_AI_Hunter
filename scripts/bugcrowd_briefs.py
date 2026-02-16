@@ -880,6 +880,8 @@ def _mk_full_brief_markdown(
     slug,
     engagement_url,
     fetched_at,
+    auth_mode,
+    auth_error,
     endpoints,
     props,
     brief_doc,
@@ -905,6 +907,9 @@ def _mk_full_brief_markdown(
     lines.append("- Platform: Bugcrowd")
     lines.append(f"- Engagement URL: {_md_escape(engagement_url)}")
     lines.append(f"- Fetched at (UTC): {_md_escape(fetched_at)}")
+    lines.append(f"- Auth mode: {_md_escape(auth_mode)}")
+    if auth_error:
+        lines.append(f"- Auth note: {_md_escape(auth_error)}")
     lines.append("")
 
     rendered = _mk_rendered_brief_sections(slug=slug, brief_doc=brief_doc)
@@ -1026,7 +1031,7 @@ def _mk_full_brief_markdown(
 
 def main(argv=None):
     parser = argparse.ArgumentParser(
-        description="Export Bugcrowd engagement briefs (auth-required) to local Markdown."
+        description="Export Bugcrowd engagement briefs to local Markdown."
     )
     parser.add_argument(
         "--category",
@@ -1075,6 +1080,16 @@ def main(argv=None):
         help="Prompt for OTP/backup codes if required (avoid in non-interactive runs).",
     )
     parser.add_argument(
+        "--public-only",
+        action="store_true",
+        help="Skip authentication and export only what is accessible without logging in.",
+    )
+    parser.add_argument(
+        "--auth-required",
+        action="store_true",
+        help="Require a successful login before exporting (default: try public first, then login on 401/403).",
+    )
+    parser.add_argument(
         "--include-community",
         action="store_true",
         help="Include community endpoints (Hall Of Fame, Recently Joined).",
@@ -1103,36 +1118,71 @@ def main(argv=None):
     allow_prompt = args.prompt_mfa or _env_truthy(_env_get(env, "BUGCROWD_PROMPT_MFA"))
 
     http_client = BugcrowdHttp(cookie_header=cookie_header or None)
-    if not cookie_header:
+    auth_mode = "cookie" if cookie_header else "public"
+    auth_error = ""
+    auth_failed = False
+    logged_in = bool(cookie_header)
+
+    def try_login():
+        nonlocal auth_mode, auth_error, auth_failed, logged_in
+        if logged_in:
+            return True
+        if auth_failed or args.public_only:
+            return False
         if not email or not password:
-            raise SystemExit(
-                "Missing auth. Set BUGCROWD_COOKIE or BUGCROWD_EMAIL/BUGCROWD_PASSWORD in .env."
+            auth_error = "Missing auth. Set BUGCROWD_COOKIE or BUGCROWD_EMAIL/BUGCROWD_PASSWORD in .env."
+            auth_failed = True
+            return False
+        try:
+            _identity_login(
+                http_client,
+                email=email,
+                password=password,
+                otp_code=otp_code,
+                backup_otp_code=backup_otp_code,
+                backup_codes_file=backup_codes_file,
+                consume_backup_code=consume_backup_code,
+                allow_prompt=allow_prompt,
             )
-        _identity_login(
-            http_client,
-            email=email,
-            password=password,
-            otp_code=otp_code,
-            backup_otp_code=backup_otp_code,
-            backup_codes_file=backup_codes_file,
-            consume_backup_code=consume_backup_code,
-            allow_prompt=allow_prompt,
-        )
+        except SystemExit as exc:
+            auth_error = str(exc)
+            auth_failed = True
+            return False
+
+        logged_in = True
+        auth_mode = "identity"
+        return True
+
+    if args.auth_required and not try_login():
+        raise SystemExit(auth_error or "Bugcrowd login failed.")
 
     fetched_at = _utc_now_iso()
     out_dir = Path(args.out_dir)
+
+    def list_engagements(page):
+        query = {
+            "category": args.category,
+            "page": page,
+            "sort_by": args.sort_by,
+            "sort_direction": args.sort_direction,
+        }
+        url = BUGCROWD_ENGAGEMENTS_URL + "?" + urllib.parse.urlencode(query)
+        data, resp = http_client.get_json(url, headers=_bugcrowd_list_json_headers())
+        if resp.status in (401, 403) and try_login():
+            data, resp = http_client.get_json(
+                url, headers=_bugcrowd_list_json_headers()
+            )
+        if not isinstance(data, dict):
+            raise SystemExit(
+                f"Unexpected listing payload for page {page} (status {resp.status})."
+            )
+        return data, url
 
     first_page_data = None
     listing_url_first = ""
 
     if args.all_pages:
-        data, listing_url = _list_engagements(
-            http_client,
-            page=args.start_page,
-            category=args.category,
-            sort_by=args.sort_by,
-            sort_direction=args.sort_direction,
-        )
+        data, listing_url = list_engagements(args.start_page)
         listing_url_first = listing_url
         first_page_data = data
         pagination = data.get("paginationMeta") or {}
@@ -1147,13 +1197,7 @@ def main(argv=None):
         if page == args.start_page and first_page_data is not None:
             data = first_page_data
         else:
-            data, listing_url = _list_engagements(
-                http_client,
-                page=page,
-                category=args.category,
-                sort_by=args.sort_by,
-                sort_direction=args.sort_direction,
-            )
+            data, listing_url = list_engagements(page)
             if not listing_url_first:
                 listing_url_first = listing_url
         items = data.get("engagements") or []
@@ -1178,6 +1222,8 @@ def main(argv=None):
     for slug in slugs:
         engagement_url = f"https://{BUGCROWD_DOMAIN}/engagements/{slug}"
         page_text, page_resp = http_client.get_text(engagement_url)
+        if page_resp.status in (401, 403) and try_login():
+            page_text, page_resp = http_client.get_text(engagement_url)
 
         errors = []
         if page_resp.status != 200:
@@ -1190,12 +1236,17 @@ def main(argv=None):
             skipped_sections.append("target_group_known_issues")
 
         root = _extract_brief_root(page_text)
+        if not root and try_login():
+            page_text, page_resp = http_client.get_text(engagement_url)
+            root = _extract_brief_root(page_text)
         if not root:
             errors.append("Missing researcher-engagement-brief-root element")
             md = _mk_full_brief_markdown(
                 slug=slug,
                 engagement_url=engagement_url,
                 fetched_at=fetched_at,
+                auth_mode=auth_mode,
+                auth_error=auth_error,
                 endpoints={},
                 props={},
                 brief_doc=None,
@@ -1237,6 +1288,8 @@ def main(argv=None):
                 resolved = resolved + ".json"
             url = urllib.parse.urljoin(f"https://{BUGCROWD_DOMAIN}", resolved)
             data, resp = http_client.get_json(url)
+            if resp.status in (401, 403) and try_login():
+                data, resp = http_client.get_json(url)
             if data is None:
                 errors.append(
                     f"Non-JSON response for {resolved} (status {resp.status}, type {resp.content_type})"
@@ -1295,6 +1348,8 @@ def main(argv=None):
             slug=slug,
             engagement_url=engagement_url,
             fetched_at=fetched_at,
+            auth_mode=auth_mode,
+            auth_error=auth_error,
             endpoints=endpoints,
             props=props,
             brief_doc=brief_doc,
@@ -1319,6 +1374,9 @@ def main(argv=None):
         lines.append(f"- Listing URL: {_md_escape(listing_url_first or '')}")
         lines.append(f"- Pages fetched: {_md_escape(pages_to_fetch)}")
         lines.append(f"- Fetched at (UTC): {_md_escape(fetched_at)}")
+        lines.append(f"- Auth mode: {_md_escape(auth_mode)}")
+        if auth_error:
+            lines.append(f"- Auth note: {_md_escape(auth_error)}")
         lines.append("")
         for section in combined_sections:
             section_text = section.lstrip()

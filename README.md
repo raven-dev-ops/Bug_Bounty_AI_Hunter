@@ -25,6 +25,8 @@ advice. Only test systems where you have explicit authorization.
 - `docs/KNOWLEDGE_FORMAT.md`
 - `docs/KNOWLEDGE_TAGS.md`
 - `knowledge/INDEX.md`
+- `docs/KNOWLEDGE_INDEX.md` (MkDocs-published knowledge index)
+- `docs/knowledge/` (MkDocs-published knowledge pages)
 - `docs/ARCHITECTURE.md`
 - `docs/PIPELINE.md`
 - `docs/TRIAGE.md`
@@ -69,10 +71,10 @@ advice. Only test systems where you have explicit authorization.
 
 ## Repository layout
 - `docs/` - architecture, rules, and planning docs
-- `bounty_board/` - planning-only bounty board markdown (public metadata only; auth-only exports are ignored by default). Bugcrowd boards: `bounty_board/bugcrowd/` and `bounty_board/bugcrowd_vdp/`.
+- `bounty_board/` - planning-only bounty board markdown (public metadata only). Bugcrowd boards: `bounty_board/bugcrowd/` and `bounty_board/bugcrowd_vdp/`. Full brief exports are generated with `python -m scripts.bugcrowd_briefs` (gitignored under `bounty_board/bugcrowd_full/`).
 - `schemas/` - data model schemas
 - `components/` - component repos (submodules or subtrees)
-- `knowledge/` - sources, cards, and checklists
+- `knowledge/` - sources, cards, and checklists (publish to `docs/knowledge/` with `python -m scripts.publish_knowledge_docs`)
 - `examples/` - sample profiles and outputs
 - `data/` - local tracking data and registries
 - `evidence/` - evidence registry entries
@@ -198,8 +200,8 @@ docker run --rm bbhai
 - Program registry diffs are generated with `python -m scripts.program_registry_diff`.
 - Local program registry storage is managed with `python -m scripts.program_registry_store`.
 - CI runs lint and format checks, schema validation, coverage reporting,
-  dependency audits, knowledge index and coverage matrix checks, golden example
-  re-emits, and a demo runner plan.
+  dependency audits, knowledge index and published docs sync checks, coverage
+  matrix checks, golden example re-emits, and a demo runner plan.
 - Offline connector fixtures for tests live in `tests/fixtures/connectors/`.
 - Catalog build connectors include yeswehack, intigriti, huntr, bounty-targets-data,
   disclose-io, and projectdiscovery (override with `--connectors`).
