@@ -12,3 +12,4 @@ This path focuses on running the workflow end to end for authorized targets.
 ## Helpful references
 - `HACK_TYPES.md` for coverage ideas.
 - `NOTIFICATIONS.md` for alerts and handoffs.
+- `knowledge/checklists/bug-bounty-starter-workflow.md` for a baseline workflow and report habits.

@@ -6,6 +6,12 @@ sections. Keep content safe and non-weaponized.
 See `docs/KNOWLEDGE_TAGS.md` for standard tags and `knowledge/INDEX.md` for the
 current catalog.
 
+Note:
+- `knowledge/sources/*.md` may contain raw source material (for example,
+  transcripts) and may not include frontmatter.
+- Create a matching `knowledge/sources/*.source.md` file with frontmatter for
+  anything you want indexed and reviewed.
+
 Regenerate the index with:
 ```bash
 python -m scripts.knowledge_index --output knowledge/INDEX.md

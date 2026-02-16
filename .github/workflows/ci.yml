@@ -42,6 +42,8 @@ jobs:
           args: --config .lychee.toml "**/*.md"
       - name: Check markdown ASCII
         run: python -m scripts.validate_markdown_ascii
+      - name: Knowledge lint
+        run: python -m scripts.knowledge_lint
       - name: Tests
         run: |
           coverage run -m unittest discover -s tests
