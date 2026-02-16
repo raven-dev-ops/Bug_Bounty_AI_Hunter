@@ -38,7 +38,6 @@ advice. Only test systems where you have explicit authorization.
 - `docs/REPORTING.md`
 - `docs/PUBLIC_ONLY_MODE.md`
 - `docs/EVIDENCE_LOG.md`
-- `docs/TOOLS.md`
 - `docs/TOOLS_POLICY.md`
 - `docs/SAFE_DEFAULTS.md`
 - `docs/PIPELINE_GUARDRAILS.md`

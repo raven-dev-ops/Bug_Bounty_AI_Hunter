@@ -1,7 +1,7 @@
-# Scan Templates
+# Templates
 
-Templates define scan plans and reporting formats. Avoid exploit payloads and
-keep steps high level.
+Templates define scan plans, reporting formats, and engagement workspace
+layouts. Avoid exploit payloads and keep steps high level.
 
 ## Subfolders
 - `reporting/` - report bundle, compliance checklist, program briefs, catalog, and per-finding templates

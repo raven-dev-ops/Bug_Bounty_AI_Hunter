@@ -13,6 +13,7 @@
   - Knowledge frontmatter lint: `python -m scripts.knowledge_lint`
   - Markdown link validation: `python -m scripts.validate_markdown_links`
   - Markdown ASCII validation: `python -m scripts.validate_markdown_ascii`
+  - Docs build: `python -m mkdocs build --strict`
   - Demo runner plan: `python -m scripts.demo_runner --mode plan`
   - Dependency audit: `python -m pip_audit -r requirements.txt -r requirements-dev.txt`
 
@@ -37,6 +38,7 @@ python -m scripts.validate_markdown_links
 python -m scripts.validate_markdown_ascii
 python -m scripts.knowledge_index --output knowledge/INDEX.md
 python -m scripts.coverage_matrix --input docs/coverage_matrix.yaml --output docs/COVERAGE_MATRIX.md
+python -m mkdocs build --strict
 ```
 
 ## PDF golden tests (optional)
