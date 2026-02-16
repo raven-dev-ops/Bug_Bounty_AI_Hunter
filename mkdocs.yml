@@ -15,6 +15,14 @@ nav:
       - Execute: TESTING.md
       - Triage: TRIAGE.md
       - Report: REPORTING.md
+  - Knowledge:
+      - Hack Types: HACK_TYPES.md
+      - Coverage Matrix: COVERAGE_MATRIX.md
+      - Case Study Selection: CASE_STUDY_SELECTION.md
+      - Ingestion Feasibility: INGESTION_FEASIBILITY.md
+      - Program Registry: PROGRAM_REGISTRY.md
+      - Scoring: SCORING.md
+      - Public Only Mode: PUBLIC_ONLY_MODE.md
   - Reference:
       - Project Outline: PROJECT_OUTLINE.md
       - ROE: ROE.md
@@ -34,6 +42,9 @@ nav:
       - Threat Modeling Method: THREAT_MODELING_METHOD.md
       - Pipeline Guardrails: PIPELINE_GUARDRAILS.md
       - Scoping Guide: SCOPING_GUIDE.md
+      - Environment: ENVIRONMENT.md
+      - Notifications: NOTIFICATIONS.md
+      - Intel: INTEL.md
       - Operations: OPERATIONS.md
       - Redaction Guide: REDACTION_GUIDE.md
       - Reporting Examples: REPORTING_EXAMPLES.md
@@ -41,3 +52,10 @@ nav:
       - Risk Assessment Template: RISK_ASSESSMENT.md
       - Changelog Policy: CHANGELOG_POLICY.md
       - Improvement Tasks: IMPROVEMENT_TASKS.md
+      - Project Management: PROJECT_MANAGEMENT.md
+      - Module Boundaries: MODULE_BOUNDARIES.md
+      - LLM Threat Model: LLM_THREAT_MODEL.md
+      - Evidence Log: EVIDENCE_LOG.md
+      - Release Plan: RELEASE_PLAN.md
+      - Release Checklist: RELEASE_CHECKLIST.md
+      - Release Notes Template: RELEASE_NOTES_TEMPLATE.md
