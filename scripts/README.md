@@ -58,5 +58,6 @@ Use `python -m scripts.<module>` to run a script from the repo root.
 - `validate_markdown_ascii.py` - validate Markdown is ASCII-only
 - `bugcrowd_board.py` - generate a planning-only Bugcrowd bounty board from public listings (writes Markdown under `bounty_board/`)
 - `bugcrowd_briefs.py` - export auth-required Bugcrowd engagement briefs and subpages to local Markdown (writes to gitignored `bounty_board/bugcrowd_full/`; community and per-target-group stats are optional flags)
+- `bugcrowd_full_postprocess.py` - postprocess local Bugcrowd brief exports to add rendered brief/scope sections and a local `INDEX.md`
 - `bootstrap_issues.sh` - create labels and starter backlog
 - `connectors/` - ingestion connector framework and source implementations

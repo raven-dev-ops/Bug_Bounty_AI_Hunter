@@ -6,6 +6,7 @@ All notable changes to this project will be documented here.
 - Added Bugcrowd VDP bounty board outputs under `bounty_board/bugcrowd_vdp/` (`python -m scripts.bugcrowd_board --category vdp --combined --all-pages --out-dir bounty_board/bugcrowd_vdp`).
 - Added MkDocs docs copies and navigation entries for `BUGCROWD.md` and `GUIDE.md` (`docs/BUGCROWD.md`, `docs/GUIDE.md`).
 - Added Bugcrowd auth-only brief exporter (`python -m scripts.bugcrowd_briefs`) that writes local outputs under gitignored `bounty_board/bugcrowd_full/` with a `.env.example` template for credentials.
+- Added rendered brief/scope sections for Bugcrowd auth-only brief exports plus a local postprocessor (`python -m scripts.bugcrowd_full_postprocess`) to retrofit existing exports and generate `bounty_board/bugcrowd_full/INDEX.md`.
 - Enforced LF line endings for key text files via `.gitattributes` to reduce CRLF churn across platforms.
 - Updated testing docs to make `unittest` the default runner and keep `pytest` optional.
 - Added Bugcrowd researcher operating policy and pre-report guide docs (`BUGCROWD.md`, `GUIDE.md`).

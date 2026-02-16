@@ -52,6 +52,78 @@ def _md_escape(text):
     return value.strip()
 
 
+def _abs_bugcrowd_url(value):
+    value = str(value or "").strip()
+    if not value:
+        return ""
+    if value.startswith(("http://", "https://")):
+        return value
+    if value.startswith("/"):
+        return f"https://{BUGCROWD_DOMAIN}{value}"
+    return value
+
+
+_ANCHOR_RE = re.compile(
+    r'(?is)<a\\b[^>]*href=(?P<quote>"|\\\')(?P<href>.*?)(?P=quote)[^>]*>(?P<text>.*?)</a>'
+)
+
+
+def _html_to_md(html_text):
+    """Best-effort HTML -> Markdown-ish text for Bugcrowd brief fields."""
+
+    if not html_text:
+        return ""
+
+    text = html.unescape(str(html_text))
+    text = text.replace("\r\n", "\n").replace("\r", "\n")
+
+    def anchor_repl(match):
+        href = html.unescape(match.group("href") or "").strip()
+        if href.startswith("/"):
+            href = f"https://{BUGCROWD_DOMAIN}{href}"
+        inner = html.unescape(match.group("text") or "")
+        inner = re.sub(r"(?s)<[^>]+>", "", inner).strip()
+        if inner and href:
+            if inner == href:
+                return href
+            return f"{inner} ({href})"
+        return inner or href
+
+    text = _ANCHOR_RE.sub(anchor_repl, text)
+
+    # Common structural tags.
+    text = re.sub(r"(?i)<br\\s*/?>", "\n", text)
+    text = re.sub(r"(?i)<hr\\b[^>]*>", "\n\n---\n\n", text)
+
+    for level in range(1, 7):
+        text = re.sub(
+            rf"(?i)<h{level}\\b[^>]*>",
+            "\n\n" + ("#" * level) + " ",
+            text,
+        )
+        text = re.sub(rf"(?i)</h{level}\\s*>", "\n\n", text)
+
+    text = re.sub(r"(?i)<p\\b[^>]*>", "", text)
+    text = re.sub(r"(?i)</p\\s*>", "\n\n", text)
+    text = re.sub(r"(?i)<li\\b[^>]*>", "- ", text)
+    text = re.sub(r"(?i)</li\\s*>", "\n", text)
+    text = re.sub(r"(?i)</?(ul|ol)\\b[^>]*>", "\n", text)
+
+    # Code blocks (best effort).
+    text = re.sub(r"(?is)<pre\\b[^>]*>\\s*<code\\b[^>]*>", "\n\n```text\n", text)
+    text = re.sub(r"(?is)</code>\\s*</pre>", "\n```\n\n", text)
+    text = re.sub(r"(?is)</?code\\b[^>]*>", "`", text)
+
+    # Strip remaining tags.
+    text = re.sub(r"(?s)<[^>]+>", "", text)
+
+    # Normalize whitespace.
+    text = re.sub(r"[ \\t]+\n", "\n", text)
+    text = re.sub(r"\n{3,}", "\n\n", text)
+
+    return _md_escape(text)
+
+
 def _write_text(path, text):
     path.parent.mkdir(parents=True, exist_ok=True)
     ascii_text = _to_ascii(text)
@@ -515,6 +587,287 @@ def _as_pretty_json(value):
     return json.dumps(value, indent=2, sort_keys=True, ensure_ascii=True) + "\n"
 
 
+def _format_money(value):
+    if value is None or value == "":
+        return "n/a"
+    if isinstance(value, bool):
+        return "true" if value else "false"
+    if isinstance(value, int):
+        return f"${value:,}"
+    if isinstance(value, float):
+        if value.is_integer():
+            return f"${int(value):,}"
+        return f"${value:,.2f}"
+    try:
+        parsed = float(str(value))
+    except (ValueError, TypeError):
+        return _md_escape(value)
+    if parsed.is_integer():
+        return f"${int(parsed):,}"
+    return f"${parsed:,.2f}"
+
+
+def _reward_range_lines(group):
+    reward_data = group.get("rewardRangeData") or {}
+    if not isinstance(reward_data, dict) or not reward_data:
+        return []
+
+    def key_sort(val):
+        try:
+            return int(val)
+        except (TypeError, ValueError):
+            return str(val)
+
+    lines = []
+    for priority in sorted(reward_data.keys(), key=key_sort):
+        entry = reward_data.get(priority) or {}
+        if not isinstance(entry, dict):
+            continue
+        min_value = entry.get("min")
+        max_value = entry.get("max")
+        if min_value is None and max_value is None:
+            continue
+        if min_value is not None and max_value is not None and min_value == max_value:
+            amount = _format_money(min_value)
+        else:
+            amount = f"{_format_money(min_value)} - {_format_money(max_value)}"
+        lines.append(f"- P{_md_escape(priority)}: {amount}")
+    return lines
+
+
+def _reward_summary(scope_groups):
+    if not scope_groups:
+        return ""
+
+    lows = []
+    highs = []
+    for group in scope_groups:
+        if not isinstance(group, dict):
+            continue
+        reward_data = group.get("rewardRangeData") or {}
+        if not isinstance(reward_data, dict):
+            continue
+        for entry in reward_data.values():
+            if not isinstance(entry, dict):
+                continue
+            if entry.get("min") is not None:
+                lows.append(entry.get("min"))
+            if entry.get("max") is not None:
+                highs.append(entry.get("max"))
+
+    if not lows and not highs:
+        return ""
+
+    low = min(lows) if lows else None
+    high = max(highs) if highs else None
+    if low is None or high is None:
+        return ""
+    if low == high:
+        return _format_money(low)
+    return f"{_format_money(low)} - {_format_money(high)}"
+
+
+def _mk_rendered_brief_sections(*, slug, brief_doc):
+    if not isinstance(brief_doc, dict):
+        return ""
+
+    data = brief_doc.get("data") or {}
+    if not isinstance(data, dict):
+        data = {}
+    brief = data.get("brief") or {}
+    if not isinstance(brief, dict):
+        brief = {}
+    engagement = data.get("engagement") or {}
+    if not isinstance(engagement, dict):
+        engagement = {}
+    config = data.get("engagementConfiguration") or {}
+    if not isinstance(config, dict):
+        config = {}
+    resources = data.get("resources") or []
+    scope_groups = data.get("scope") or []
+
+    lines = []
+    lines.append("## Brief (Rendered)")
+    lines.append("")
+
+    name = _md_escape(brief.get("name"))
+    if name:
+        lines.append(f"- Program: {name}")
+    tagline = _html_to_md(brief.get("tagline"))
+    if tagline:
+        lines.append(f"- Tagline: {tagline}")
+
+    safe = brief.get("safeHarborStatus") or {}
+    if isinstance(safe, dict):
+        label = _md_escape(safe.get("label"))
+        status = _md_escape(safe.get("status"))
+        desc = _html_to_md(safe.get("description"))
+        if label or status:
+            safe_bits = []
+            if label:
+                safe_bits.append(label)
+            if status:
+                safe_bits.append(f"status={status}")
+            lines.append(f"- Safe harbor: {'; '.join(safe_bits)}")
+        if desc:
+            lines.append(f"- Safe harbor note: {desc}")
+
+    participation = _md_escape(
+        config.get("participation") or brief_doc.get("participation")
+    )
+    if participation:
+        lines.append(f"- Participation: {participation}")
+
+    state = _md_escape(engagement.get("state"))
+    if state:
+        lines.append(f"- State: {state}")
+
+    starts_at = _md_escape(engagement.get("startsAt"))
+    if starts_at:
+        lines.append(f"- Starts at: {starts_at}")
+
+    ends_at = _md_escape(engagement.get("endsAt"))
+    if ends_at:
+        lines.append(f"- Ends at: {ends_at}")
+
+    reward_text = (
+        _reward_summary(scope_groups) if isinstance(scope_groups, list) else ""
+    )
+    if reward_text:
+        lines.append(f"- Reward range (from scope groups): {reward_text}")
+
+    lines.append("")
+    lines.append("### Links")
+    lines.append(
+        f"- Engagement: https://{BUGCROWD_DOMAIN}/engagements/{_md_escape(slug)}"
+    )
+    lines.append(
+        f"- Hacker portal brief: https://{BUGCROWD_DOMAIN}/h/engagements/{_md_escape(slug)}/brief"
+    )
+    lines.append(
+        f"- Announcements: https://{BUGCROWD_DOMAIN}/engagements/{_md_escape(slug)}/announcements"
+    )
+    lines.append(
+        f"- Changelog: https://{BUGCROWD_DOMAIN}/engagements/{_md_escape(slug)}/changelog"
+    )
+    lines.append(
+        f"- Submissions: https://{BUGCROWD_DOMAIN}/engagements/{_md_escape(slug)}/submissions"
+    )
+    lines.append(
+        f"- Crowdstream: https://{BUGCROWD_DOMAIN}/engagements/{_md_escape(slug)}/crowdstream"
+    )
+    lines.append(
+        f"- Hall of fame: https://{BUGCROWD_DOMAIN}/engagements/{_md_escape(slug)}/hall_of_fames"
+    )
+
+    extra_links = {
+        "engagementChangelogUrl": brief_doc.get("engagementChangelogUrl"),
+        "engagementChangelogsUrl": brief_doc.get("engagementChangelogsUrl"),
+        "engagementCrowdstreamUrl": brief_doc.get("engagementCrowdstreamUrl"),
+        "scopedSubmissionsUrl": brief_doc.get("scopedSubmissionsUrl"),
+        "submitReportUrl": brief_doc.get("submitReportUrl"),
+        "credentialsUrl": brief_doc.get("credentialsUrl"),
+        "methodologyUrl": brief_doc.get("methodologyUrl"),
+    }
+    for key in sorted(extra_links.keys()):
+        url_value = _abs_bugcrowd_url(extra_links[key])
+        if url_value:
+            lines.append(f"- {key}: {_md_escape(url_value)}")
+    lines.append("")
+
+    description = _html_to_md(brief.get("description"))
+    if description:
+        lines.append("### Description")
+        lines.append(description)
+        lines.append("")
+
+    targets_overview = _html_to_md(brief.get("targetsOverview"))
+    if targets_overview:
+        lines.append("### Targets Overview / Rules")
+        lines.append(targets_overview)
+        lines.append("")
+
+    additional = _html_to_md(brief.get("additionalInformation"))
+    if additional:
+        lines.append("### Additional Information")
+        lines.append(additional)
+        lines.append("")
+
+    if isinstance(resources, list) and resources:
+        lines.append("### Resources")
+        for entry in resources:
+            if not isinstance(entry, dict):
+                continue
+            title = _md_escape(entry.get("title") or entry.get("name") or "")
+            url = _abs_bugcrowd_url(entry.get("url") or entry.get("link") or "")
+            if title and url:
+                lines.append(f"- {title}: {_md_escape(url)}")
+            elif title:
+                lines.append(f"- {title}")
+            elif url:
+                lines.append(f"- {_md_escape(url)}")
+        lines.append("")
+
+    if isinstance(scope_groups, list) and scope_groups:
+        lines.append("## Scope (Rendered)")
+        lines.append("")
+        for group in scope_groups:
+            if not isinstance(group, dict):
+                continue
+            group_name = _md_escape(group.get("name")) or "Unnamed target group"
+            in_scope = bool(group.get("inScope"))
+            lines.append(
+                f"### {'In Scope' if in_scope else 'Out of Scope'}: {group_name}"
+            )
+            lines.append("")
+
+            rewards = _reward_range_lines(group)
+            if rewards:
+                lines.append("Reward ranges:")
+                lines.extend(rewards)
+                lines.append("")
+
+            group_desc = _html_to_md(
+                group.get("descriptionHtml") or group.get("description")
+            )
+            if group_desc:
+                lines.append("Group notes:")
+                lines.append(group_desc)
+                lines.append("")
+
+            targets = group.get("targets") or []
+            if isinstance(targets, list) and targets:
+                lines.append("Targets:")
+                for target in targets:
+                    if not isinstance(target, dict):
+                        continue
+                    name = _md_escape(target.get("name"))
+                    category = _md_escape(target.get("category"))
+                    uri = _md_escape(target.get("uri") or target.get("ipAddress") or "")
+                    tags = target.get("tags") or []
+                    if isinstance(tags, list):
+                        tags_text = ", ".join(_md_escape(tag) for tag in tags if tag)
+                    else:
+                        tags_text = _md_escape(tags)
+                    desc = _html_to_md(target.get("description"))
+
+                    parts = []
+                    if category:
+                        parts.append(category)
+                    if uri:
+                        parts.append(uri)
+                    if name and name != uri:
+                        parts.append(f"name={name}")
+                    if tags_text:
+                        parts.append(f"tags={tags_text}")
+                    if desc:
+                        parts.append(f"notes={desc}")
+                    if parts:
+                        lines.append(f"- {'; '.join(parts)}")
+                lines.append("")
+    return "\n".join(lines).rstrip()
+
+
 def _mk_full_brief_markdown(
     *,
     slug,
@@ -546,6 +899,11 @@ def _mk_full_brief_markdown(
     lines.append(f"- Engagement URL: {_md_escape(engagement_url)}")
     lines.append(f"- Fetched at (UTC): {_md_escape(fetched_at)}")
     lines.append("")
+
+    rendered = _mk_rendered_brief_sections(slug=slug, brief_doc=brief_doc)
+    if rendered:
+        lines.append(rendered)
+        lines.append("")
 
     if errors:
         lines.append("## Notes / Errors")
