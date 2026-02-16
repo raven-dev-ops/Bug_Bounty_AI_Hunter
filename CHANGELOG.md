@@ -5,6 +5,8 @@ All notable changes to this project will be documented here.
 ## Unreleased
 - Added Transcript 07 source notes and a bug bounty starter workflow checklist (`knowledge/sources/TRANSCRIPT_07.md`, `knowledge/checklists/bug-bounty-starter-workflow.md`).
 - Clarified raw source handling in knowledge format docs and added `python -m scripts.knowledge_lint` to CI.
+- Added engagement workspace templates and a scaffold script for recon notes and report drafts (`templates/engagement_workspace/`, `python -m scripts.init_engagement_workspace`).
+- Added MkDocs page for the bug bounty starter workflow checklist (`docs/BUG_BOUNTY_STARTER_WORKFLOW.md`).
 - Added Bugcrowd VDP bounty board outputs under `bounty_board/bugcrowd_vdp/` (`python -m scripts.bugcrowd_board --category vdp --combined --all-pages --out-dir bounty_board/bugcrowd_vdp`).
 - Added MkDocs docs copies and navigation entries for `BUGCROWD.md` and `GUIDE.md` (`docs/BUGCROWD.md`, `docs/GUIDE.md`).
 - Added Bugcrowd auth-only brief exporter (`python -m scripts.bugcrowd_briefs`) that writes local outputs under gitignored `bounty_board/bugcrowd_full/` with a `.env.example` template for credentials.

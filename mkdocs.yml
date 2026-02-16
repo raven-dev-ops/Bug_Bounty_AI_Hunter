@@ -18,6 +18,7 @@ nav:
   - Reference:
       - Project Outline: PROJECT_OUTLINE.md
       - ROE: ROE.md
+      - Bug Bounty Starter Workflow: BUG_BOUNTY_STARTER_WORKFLOW.md
       - Bugcrowd SOP: BUGCROWD.md
       - Pre-Report Guide: GUIDE.md
       - Architecture: ARCHITECTURE.md

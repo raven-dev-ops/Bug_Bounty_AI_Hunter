@@ -10,6 +10,7 @@ keep steps high level.
   - `reporting/fontconfig.conf` - fontconfig config for PDF engine font discovery
 - `platforms/` - platform-specific issue or report formats
 - `scan_plans/` - safe scan plan templates for `scripts.scan_templates`
+- `engagement_workspace/` - engagement notes, recon log, and report draft skeleton
 
 ## Fields
 - `id`

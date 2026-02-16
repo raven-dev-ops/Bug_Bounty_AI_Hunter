@@ -13,6 +13,7 @@ advice. Only test systems where you have explicit authorization.
 - `GUIDE.md`
 - `docs/PROJECT_OUTLINE.md`
 - `docs/ROE.md`
+- `docs/BUG_BOUNTY_STARTER_WORKFLOW.md`
 - `docs/BUGCROWD.md` (MkDocs copy of `BUGCROWD.md`)
 - `docs/GUIDE.md` (MkDocs copy of `GUIDE.md`)
 - `docs/PROJECT_MANAGEMENT.md`
@@ -76,7 +77,7 @@ advice. Only test systems where you have explicit authorization.
 - `examples/` - sample profiles and outputs
 - `data/` - local tracking data and registries
 - `evidence/` - evidence registry entries
-- `templates/` - scan planning templates
+- `templates/` - scan planning and engagement workspace templates
 - `scripts/` - bootstrap and automation scripts
 - `labs/` - synthetic lab scaffolding
 - `tests/` - unit and validation tests
@@ -135,6 +136,7 @@ bbhai profile --input examples/target_profile_questionnaire.yaml --output output
 
 ## Module Usage
 ```bash
+python -m scripts.init_engagement_workspace --platform bugcrowd --slug moovit-mbb-og
 python -m scripts.target_profile_generate --input examples/target_profile_questionnaire.yaml --output output/target_profile.json
 python -m scripts.dataflow_map --target-profile output/target_profile.json --output output/dataflow_map.json
 python -m scripts.threat_model_generate --target-profile output/target_profile.json --output output/threat_model.json
