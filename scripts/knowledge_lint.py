@@ -7,7 +7,7 @@ import yaml
 REQUIRED_FIELDS = {"id", "title", "type", "status", "tags", "source", "date"}
 TYPE_VALUES = {"source", "card", "checklist"}
 STATUS_VALUES = {"draft", "reviewed"}
-DATE_RE = re.compile(r"^\\d{4}-\\d{2}-\\d{2}$")
+DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 
 
 def _parse_frontmatter(path):
@@ -58,10 +58,17 @@ def main():
     root = Path(__file__).resolve().parents[1]
     knowledge_root = root / "knowledge"
     paths = []
-    for folder in ("cards", "checklists", "sources"):
+    # "sources/" can contain raw materials that intentionally lack frontmatter.
+    # We lint source notes (`*.source.md`) and all cards/checklists.
+    mappings = {
+        "cards": "*.md",
+        "checklists": "*.md",
+        "sources": "*.source.md",
+    }
+    for folder, pattern in mappings.items():
         folder_path = knowledge_root / folder
         if folder_path.exists():
-            paths.extend(folder_path.glob("*.md"))
+            paths.extend(folder_path.glob(pattern))
 
     errors = []
     for path in sorted(paths):

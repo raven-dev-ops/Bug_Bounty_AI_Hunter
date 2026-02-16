@@ -60,6 +60,7 @@ advice. Only test systems where you have explicit authorization.
 - `docs/RELEASE_PLAN.md`
 - `docs/RELEASE_NOTES_TEMPLATE.md`
 - `docs/RELEASE_CHECKLIST.md`
+- `knowledge/checklists/bug-bounty-starter-workflow.md`
 
 ## Choose Your Path
 - `docs/paths/bug-bounty-hunter.md`

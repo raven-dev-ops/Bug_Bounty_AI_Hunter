@@ -26,5 +26,9 @@ when needed and document them here.
 
 ## Process and operations
 - `human-factors`: human-in-the-loop considerations
+- `bug-bounty`: bug bounty participation and program workflow
+- `recon`: reconnaissance and target mapping (authorized)
+- `scoping`: scope review, ROE alignment, and stop conditions
+- `reporting`: writing reproducible reports and evidence bundles
 - `supply-chain`: update and dependency pipelines
 - `reverse-engineering`: client and protocol analysis

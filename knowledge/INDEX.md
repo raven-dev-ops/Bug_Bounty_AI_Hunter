@@ -9,6 +9,7 @@ This index lists knowledge sources, cards, and checklists with status.
 - kb-src-0004 | Transcript 04 - Reverse engineering a mobile API | draft | `knowledge/sources/TRANSCRIPT_04.source.md`
 - kb-src-0005 | Transcript 05 - Mainframe permissions and testing workflow | draft | `knowledge/sources/TRANSCRIPT_05.source.md`
 - kb-src-0006 | Transcript 06 - Apple endpoint security basics | draft | `knowledge/sources/TRANSCRIPT_06.source.md`
+- kb-src-0007 | Transcript 07 - Bug bounty beginner lessons and workflow traps | draft | `knowledge/sources/TRANSCRIPT_07.source.md`
 
 ## Cards
 - kb-0001 | Shadow data inventory for AI applications | draft | `knowledge/cards/kb-0001-shadow-data-inventory.md`
@@ -45,3 +46,4 @@ This index lists knowledge sources, cards, and checklists with status.
 - kb-checklist-0007 | Embeddings and vector exposure review checklist | draft | `knowledge/checklists/embeddings-review.md`
 - kb-checklist-0008 | Agents and tool-use review checklist | draft | `knowledge/checklists/agents-review.md`
 - kb-checklist-0009 | LLM API authorization review checklist | draft | `knowledge/checklists/llm-api-authz-review.md`
+- kb-checklist-0010 | Bug bounty starter workflow checklist | draft | `knowledge/checklists/bug-bounty-starter-workflow.md`

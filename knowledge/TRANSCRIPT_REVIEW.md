@@ -103,3 +103,16 @@ Created cards:
 
 Created checklists:
 - `knowledge/checklists/endpoint-telemetry-review.md`
+
+## TRANSCRIPT_07
+Topic: Starting bug bounties (beginner traps and workflow).
+
+Key themes:
+- Preparation and scope discipline before testing.
+- Organized recon with notes and response pattern review.
+- Tools as support; avoid scanner-driven workflows and false positives.
+- Impact-first prioritization and clear, reproducible reporting.
+- Reflection and community learning to reduce repeated mistakes.
+
+Created checklists:
+- `knowledge/checklists/bug-bounty-starter-workflow.md`
