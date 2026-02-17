@@ -31,6 +31,7 @@ advice. Only test systems where you have explicit authorization.
 - `docs/KNOWLEDGE_INDEX.md` (MkDocs-published knowledge index)
 - `docs/knowledge/` (MkDocs-published knowledge pages)
 - `docs/ARCHITECTURE.md`
+- `docs/ADR_COMMAND_CENTER_ARCHITECTURE.md`
 - `docs/PIPELINE.md`
 - `docs/TRIAGE.md`
 - `docs/SEVERITY_MODEL.md`

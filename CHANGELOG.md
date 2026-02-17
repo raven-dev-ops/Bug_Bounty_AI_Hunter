@@ -3,6 +3,7 @@
 All notable changes to this project will be documented here.
 
 ## Unreleased
+- Added `docs/ADR_COMMAND_CENTER_ARCHITECTURE.md` to document issue #164 with a staged SPA + API + worker architecture mapped to existing schemas and scripts.
 - Added `DEEP_RESEARCH_02_COMMAND_CENTER.md` and seeded GitHub issues (#164-#206) from its issue table.
 - Added `dashboard.html` plus `dashboard/` assets for a local interactive repo overview (knowledge, tools, bounties, sponsor profiles, leaderboards, registry, artifacts).
 - Enhanced the dashboard bounties view with a "Most Wanted" carousel, sponsor website icon support, and Level (P0-P4) tagging/filtering.
