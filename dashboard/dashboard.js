@@ -407,6 +407,58 @@
     return "--band-unknown-rgb";
   }
 
+  function normalizeLevel(level) {
+    const t = String(level || "").trim().toUpperCase();
+    return /^P[0-4]$/.test(t) ? t : "";
+  }
+
+  function levelRank(level) {
+    const t = normalizeLevel(level);
+    if (t === "P0") return 0;
+    if (t === "P1") return 1;
+    if (t === "P2") return 2;
+    if (t === "P3") return 3;
+    if (t === "P4") return 4;
+    return 9;
+  }
+
+  function levelFromNote(noteText) {
+    const t = normLower(noteText);
+    if (!t) return "";
+    if (/\bp0\b/.test(t)) return "P0";
+    if (/\bp1\b/.test(t)) return "P1";
+    if (/\bp2\b/.test(t)) return "P2";
+    if (/\bp3\b/.test(t)) return "P3";
+    if (/\bp4\b/.test(t)) return "P4";
+    return "";
+  }
+
+  function levelFromRewardMax(rewardMax) {
+    const n = Number(rewardMax);
+    if (!Number.isFinite(n)) return "P4";
+    if (n >= 25000) return "P0";
+    if (n >= 10000) return "P1";
+    if (n >= 5000) return "P2";
+    if (n >= 1000) return "P3";
+    return "P4";
+  }
+
+  function levelForRow(row, noteText) {
+    const override = levelFromNote(noteText);
+    if (override) return override;
+    return levelFromRewardMax(row && row.rewardMax);
+  }
+
+  function cssVarForLevel(level) {
+    const t = normalizeLevel(level);
+    if (t === "P0") return "--bad-rgb";
+    if (t === "P1") return "--accent-2-rgb";
+    if (t === "P2") return "--accent-3-rgb";
+    if (t === "P3") return "--ok-rgb";
+    if (t === "P4") return "--tag-other-rgb";
+    return "--tag-other-rgb";
+  }
+
   function tagPill(label, cssVarName) {
     const v = cssVarName || "--neutral-rgb";
     return `<span class="pilltag tag" style="--tag-rgb: var(${esc(v)})">${esc(
@@ -418,6 +470,14 @@
     const v = cssVarName || "--band-unknown-rgb";
     return `<span class="pilltag band" style="--band-rgb: var(${esc(v)})">${esc(
       label
+    )}</span>`;
+  }
+
+  function levelPill(level, cssVarName) {
+    const lbl = normalizeLevel(level) || "P4";
+    const v = cssVarName || cssVarForLevel(lbl);
+    return `<span class="pilltag level" style="--level-rgb: var(${esc(v)})">${esc(
+      lbl
     )}</span>`;
   }
 
@@ -557,6 +617,45 @@
     });
   }
 
+  function parseJsonArray(text) {
+    try {
+      const v = JSON.parse(String(text || ""));
+      return Array.isArray(v) ? v : [];
+    } catch {
+      return [];
+    }
+  }
+
+  function wireImgFallback(root) {
+    const ctx = root || document;
+    $all("img[data-srcs]", ctx).forEach((img) => {
+      if (img.dataset.wired === "1") return;
+      img.dataset.wired = "1";
+
+      const getSrcs = () =>
+        parseJsonArray(img.getAttribute("data-srcs")).map((s) => String(s || "").trim()).filter(Boolean);
+
+      const srcs = getSrcs();
+      if (srcs.length && !img.getAttribute("src")) {
+        img.dataset.srcIndex = "0";
+        img.src = srcs[0];
+      }
+
+      img.addEventListener("load", () => {
+        const prev = img.previousElementSibling;
+        if (prev && prev.classList && prev.classList.contains("fallback")) prev.style.display = "none";
+      });
+
+      img.addEventListener("error", () => {
+        const list = getSrcs();
+        const next = Number(img.dataset.srcIndex || "0") + 1;
+        img.dataset.srcIndex = String(next);
+        if (next < list.length) img.src = list[next];
+        else img.style.display = "none";
+      });
+    });
+  }
+
   function wireImport() {
     const importBtn = $id("importRepoBtn");
     const picker = $id("repoPicker");
@@ -596,11 +695,7 @@
     btn.addEventListener("click", () => {
       const next = state.theme === "dark" ? "light" : "dark";
       applyTheme(next);
-      if (Array.isArray(state.loaded.bountyRows)) {
-        renderBountyLens(state.loaded.bountyRows);
-        renderBountyProfiles(state.loaded.bountyRows);
-        renderLeaderboards(state.loaded.bountyRows);
-      }
+      rerenderBounties();
     });
   }
 
@@ -630,11 +725,7 @@
       applyTheme(systemTheme(), { persist: false });
       setView("overview", { persist: false });
       setBanner("ok", "Cleared local dashboard data.");
-      if (Array.isArray(state.loaded.bountyRows)) {
-        renderBountyLens(state.loaded.bountyRows);
-        renderBountyProfiles(state.loaded.bountyRows);
-        renderLeaderboards(state.loaded.bountyRows);
-      }
+      rerenderBounties();
     });
   }
 
@@ -730,6 +821,27 @@
         // ignore
       }
     }
+  }
+
+  function gotoId(id) {
+    const el = $id(id);
+    if (!el) return;
+    const page = pageForElement(el);
+    if (page) setView(page);
+    requestAnimationFrame(() => el.scrollIntoView({ block: "start" }));
+    try {
+      history.replaceState(null, "", `#${id}`);
+    } catch {
+      // ignore
+    }
+  }
+
+  function rerenderBounties() {
+    if (!Array.isArray(state.loaded.bountyRows)) return;
+    renderMostWanted(state.loaded.bountyRows);
+    renderBountyLens(state.loaded.bountyRows);
+    renderBountyProfiles(state.loaded.bountyRows);
+    renderLeaderboards(state.loaded.bountyRows);
   }
 
   function viewForHash(hash) {
@@ -1278,6 +1390,7 @@
       const noteKey = noteKeyForRow(row);
       const noteText = loadNote(noteKey);
       const specials = specialBadges(row, noteText);
+      const level = levelForRow(row, noteText);
       const specialHtml = specials.length
         ? specials.map((b) => `<span class="pilltag warn">${esc(b)}</span>`).join(" ")
         : `<span class="muted">None</span>`;
@@ -1294,6 +1407,7 @@
         row.private ? `<span class="pilltag warn">private</span>` : `<span class="pilltag ok">public</span>`,
         `<span class="pilltag">${esc(row.access || "n/a")}</span>`,
         bandPill(row.tier || "unknown", cssVarForRewardBand(row.tier)),
+        levelPill(level),
         `<span class="pilltag">${esc(row.rewardText || "n/a")}</span>`,
       ].join(" ");
 
@@ -1424,8 +1538,7 @@
             const ok = saveNote(noteKey, box.value || "");
             if (status)
               status.textContent = ok ? "Saved." : "Could not save (localStorage blocked).";
-            if (ok && Array.isArray(state.loaded.bountyRows))
-              renderBountyLens(state.loaded.bountyRows);
+            if (ok) rerenderBounties();
           };
         }
         if (clearBtn && box) {
@@ -1434,8 +1547,7 @@
             const ok = saveNote(noteKey, "");
             if (status)
               status.textContent = ok ? "Cleared." : "Could not clear (localStorage blocked).";
-            if (ok && Array.isArray(state.loaded.bountyRows))
-              renderBountyLens(state.loaded.bountyRows);
+            if (ok) rerenderBounties();
           };
         }
       }
@@ -1638,6 +1750,22 @@
         (label) => colorVar(cssVarForRewardBand(label), pick(3))
       )
     );
+
+    const lvlCounts = countBy(list, (r) => {
+      const lvl = r && r.level ? r.level : levelForRow(r, r && r.noteText);
+      return normalizeLevel(lvl) || "P4";
+    });
+    const lvlOrder = ["P0", "P1", "P2", "P3", "P4"];
+    const lvlEntries = lvlOrder
+      .map((l) => [l, lvlCounts.get(l) || 0])
+      .filter(([, v]) => v > 0);
+    cards.push(
+      renderChartCard(
+        "Level",
+        lvlEntries.length ? lvlEntries : [["P4", list.length]],
+        (label) => colorVar(cssVarForLevel(label), pick(4))
+      )
+    );
     cards.push(
       renderChartCard(
         "Sponsor (top)",
@@ -1686,6 +1814,22 @@
       .map(([name, n]) => `<span class="pilltag"><strong>${esc(name)}</strong> ${esc(String(n))}</span>`)
       .join(" ");
 
+    const lvlCounts = countBy(list, (r) => {
+      const lvl = r && r.level ? r.level : levelForRow(r, r && r.noteText);
+      return normalizeLevel(lvl) || "P4";
+    });
+    const lvlOrder = ["P0", "P1", "P2", "P3", "P4"];
+    const lvlHtml = lvlOrder
+      .map((l) => {
+        const n = lvlCounts.get(l) || 0;
+        if (!n) return "";
+        return `<span class="pilltag level" style="--level-rgb: var(${esc(
+          cssVarForLevel(l)
+        )})">${esc(l)}: ${esc(String(n))}</span>`;
+      })
+      .filter(Boolean)
+      .join(" ");
+
     wrap.innerHTML = `
       <div class="statgrid">
         <div class="statcard">
@@ -1715,6 +1859,10 @@
       <p>
         <span class="muted"><strong>Top sponsors (by count):</strong></span>
         ${sponsorHtml || "-"}
+      </p>
+      <p>
+        <span class="muted"><strong>Levels:</strong></span>
+        ${lvlHtml || "-"}
       </p>
     `;
   }
@@ -1779,6 +1927,7 @@
     const noteKey = noteKeyForRow(row);
     const noteText = loadNote(noteKey);
     const specials = specialBadges(row, noteText);
+    const level = levelForRow(row, noteText);
     return {
       ...row,
       sponsor,
@@ -1787,10 +1936,286 @@
       osGroup,
       terms: termsFromRow(row),
       specials,
+      level,
       noteKey,
       noteText,
       sourceKey,
     };
+  }
+
+  async function renderMostWanted(allRows) {
+    const wrap = $id("mostWantedWrap");
+    if (!wrap) return;
+    wrap.classList.remove("muted");
+
+    const rows = allRows || [];
+    if (rows.length === 0) {
+      wrap.innerHTML = `<p class="muted">No bounty rows loaded yet.</p>`;
+      return;
+    }
+
+    const token = (state.ui.mwToken || 0) + 1;
+    state.ui.mwToken = token;
+    wrap.innerHTML = `<p class="muted">Building shortlist...</p>`;
+
+    const sponsorMap = new Map();
+    for (const r of rows) {
+      const sponsor = (r && r.sponsor) || sponsorFromEngagement(r && r.name);
+      const key = sponsor || "n/a";
+      if (!sponsorMap.has(key)) sponsorMap.set(key, []);
+      sponsorMap.get(key).push(r);
+    }
+
+    function dynamicRow(r) {
+      const noteText = loadNote(r.noteKey);
+      const specials = specialBadges(r, noteText);
+      const level = levelForRow(r, noteText);
+      return { ...r, noteText, specials, level };
+    }
+
+    function sortPrograms(a, b) {
+      const ar = levelRank(a && a.level);
+      const br = levelRank(b && b.level);
+      if (ar !== br) return ar - br;
+      const am = a && a.rewardMax != null ? a.rewardMax : -1;
+      const bm = b && b.rewardMax != null ? b.rewardMax : -1;
+      if (am !== bm) return bm - am;
+      const ah = a && a.validationHours != null ? a.validationHours : 10 ** 12;
+      const bh = b && b.validationHours != null ? b.validationHours : 10 ** 12;
+      if (ah !== bh) return ah - bh;
+      return String(a && a.name ? a.name : "").localeCompare(String(b && b.name ? b.name : ""));
+    }
+
+    const sponsors = Array.from(sponsorMap.entries()).map(([sponsor, sponsorRows]) => {
+      const list = (sponsorRows || []).map(dynamicRow);
+      list.sort(sortPrograms);
+      const featured = list[0] || null;
+
+      const max = list.reduce((m, r) => Math.max(m, r && r.rewardMax != null ? r.rewardMax : -1), -1);
+      const maxReward = max >= 0 ? max : null;
+      const tier = tierFromRewardMax(maxReward);
+
+      const bestLevel = list.reduce((best, r) => {
+        const lvl = r && r.level ? r.level : "P4";
+        return levelRank(lvl) < levelRank(best) ? lvl : best;
+      }, "P4");
+
+      const fastest = list.reduce((best, r) => {
+        const a = best && best.validationHours != null ? best.validationHours : 10 ** 12;
+        const b = r && r.validationHours != null ? r.validationHours : 10 ** 12;
+        return b < a ? r : best;
+      }, null);
+
+      const specialAgg = uniqueStrings(list.flatMap((r) => (r && r.specials ? r.specials : []))).slice(0, 3);
+      const featuredTags = featured
+        ? [
+            tagPill(featured.surface || "web", cssVarForSurface(featured.surface)),
+            tagPill(featured.device, cssVarForDevice(featured.device)),
+            tagPill(featured.osGroup, cssVarForOsGroup(featured.osGroup)),
+          ]
+        : [];
+
+      return {
+        sponsor,
+        list,
+        featured,
+        programCount: list.length,
+        maxReward,
+        tier,
+        bestLevel,
+        fastest,
+        specialAgg,
+        featuredTags,
+        site: loadSponsorSite(sponsor),
+      };
+    });
+
+    sponsors.sort((a, b) => {
+      const ar = levelRank(a.bestLevel);
+      const br = levelRank(b.bestLevel);
+      if (ar !== br) return ar - br;
+      const am = a.maxReward == null ? -1 : a.maxReward;
+      const bm = b.maxReward == null ? -1 : b.maxReward;
+      if (am !== bm) return bm - am;
+      const ah = a.fastest && a.fastest.validationHours != null ? a.fastest.validationHours : 10 ** 12;
+      const bh = b.fastest && b.fastest.validationHours != null ? b.fastest.validationHours : 10 ** 12;
+      if (ah !== bh) return ah - bh;
+      return String(a.sponsor).localeCompare(String(b.sponsor));
+    });
+
+    const top = sponsors.slice(0, 14);
+    if (top.length === 0) {
+      wrap.innerHTML = `<p class="muted">No sponsors found.</p>`;
+      return;
+    }
+
+    const dossiers = await Promise.all(
+      top.map(async (it) => {
+        const p = it && it.featured && it.featured.detailsPath ? it.featured.detailsPath : "";
+        if (!p) return null;
+        return await getCachedDossier(p).catch(() => null);
+      })
+    );
+    if (state.ui.mwToken !== token) return;
+
+    const cards = top
+      .map((it, idx) => {
+        const featured = it.featured;
+        const dossier = dossiers[idx] || null;
+        const site = it.site || "";
+        const srcs = uniqueStrings([
+          ...iconCandidatesForSite(site),
+          dossier && dossier.logo ? dossier.logo : "",
+        ]);
+
+        const avatar = `
+          <div class="avatarstack" aria-hidden="true">
+            <span class="avatar fallback">${esc(
+              String(it.sponsor || "?")
+                .slice(0, 1)
+                .toUpperCase()
+            )}</span>
+            ${
+              srcs.length
+                ? `<img class="avatar overlay" data-srcs="${esc(
+                    JSON.stringify(srcs)
+                  )}" alt="" loading="lazy" referrerpolicy="no-referrer" />`
+                : ""
+            }
+          </div>
+        `;
+
+        const approach =
+          featured && featured.approach && featured.approach.summary
+            ? String(featured.approach.summary)
+            : "n/a";
+
+        const engagementUrl = dossier && dossier.engagementUrl ? String(dossier.engagementUrl) : "";
+
+        return `
+          <article class="want-card">
+            <div class="want-top">
+              ${avatar}
+              <div class="want-title">
+                <div class="want-name">${esc(it.sponsor)}</div>
+                <div class="want-sub muted">
+                  ${esc((featured && featured.industry) || "n/a")}
+                  <span class="muted"> | </span>
+                  ${esc((featured && featured.service) || "n/a")}
+                  <span class="muted"> | </span>
+                  ${esc((featured && featured.validation) || "n/a")}
+                </div>
+              </div>
+            </div>
+
+            <div class="want-tags">
+              ${levelPill(it.bestLevel)}
+              ${bandPill(it.tier || "unknown", cssVarForRewardBand(it.tier))}
+              ${it.featuredTags.join("")}
+              ${it.specialAgg.map((s) => `<span class="pilltag warn">${esc(s)}</span>`).join(" ")}
+            </div>
+
+            <div class="want-meta">
+              <div><span class="muted">Programs</span><br/><strong>${esc(
+                String(it.programCount)
+              )}</strong></div>
+              <div><span class="muted">Max</span><br/><strong>${esc(
+                formatMoney(it.maxReward)
+              )}</strong></div>
+              <div style="grid-column: span 2">
+                <span class="muted">Approach</span><br/>
+                <span class="muted">${esc(approach)}</span>
+              </div>
+            </div>
+
+            <div class="want-actions">
+              <button class="btn primary" data-mw-open-profile="${esc(it.sponsor)}">Profile</button>
+              ${
+                featured && featured.detailsPath
+                  ? `<button class="btn" data-open-details="${esc(featured.detailsPath)}">Dossier</button>`
+                  : ""
+              }
+              ${engagementUrl ? `<a class="btn" href="${esc(engagementUrl)}" target="_blank" rel="noreferrer">Engagement</a>` : ""}
+              ${site ? `<a class="btn" href="${esc(site)}" target="_blank" rel="noreferrer">Website</a>` : ""}
+            </div>
+
+            ${
+              featured
+                ? `<p class="want-sub muted" style="margin-top:10px">${esc(
+                    termsFromRow(featured)
+                  )}</p>`
+                : ""
+            }
+          </article>
+        `;
+      })
+      .join("");
+
+    wrap.innerHTML = `
+      <div class="carousel-head">
+        <div>
+          <h3>Targets</h3>
+          <p class="muted">Ranked by Level (P0..P4), reward ceiling, and validation speed.</p>
+        </div>
+        <div class="carousel-actions">
+          <button class="btn" data-mw-prev="1" aria-label="Scroll previous">Prev</button>
+          <button class="btn" data-mw-next="1" aria-label="Scroll next">Next</button>
+        </div>
+      </div>
+      <div class="carousel" data-mw-carousel="1" tabindex="0" aria-label="Most wanted carousel">
+        ${cards}
+      </div>
+      <p class="muted" style="margin-top:10px">
+        Tip: add sponsor websites in <a href="#bounty-profiles">Sponsor Profiles</a> to use official thumbnails.
+      </p>
+    `;
+
+    wireImgFallback(wrap);
+
+    const byPath = new Map(rows.filter((r) => r && r.detailsPath).map((r) => [r.detailsPath, r]));
+    $all("[data-open-details]", wrap).forEach((el) => {
+      el.addEventListener("click", async (e) => {
+        e.preventDefault();
+        const path = el.getAttribute("data-open-details") || "";
+        const r = byPath.get(path);
+        if (r) await openBugcrowdDossier(r);
+      });
+    });
+
+    $all("[data-mw-open-profile]", wrap).forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const sponsor = btn.getAttribute("data-mw-open-profile") || "";
+        if (!sponsor) return;
+        state.ui.sponsorKey = sponsor;
+        const all = Array.isArray(state.loaded.bountyRows) ? state.loaded.bountyRows : rows;
+        renderBountyProfiles(all);
+        renderSponsorProfile(
+          sponsor,
+          all.filter((r) => r && String(r.sponsor || "") === sponsor)
+        );
+        gotoId("bounty-profiles");
+      });
+    });
+
+    const carousel = wrap.querySelector('[data-mw-carousel="1"]');
+    const prev = wrap.querySelector('[data-mw-prev="1"]');
+    const next = wrap.querySelector('[data-mw-next="1"]');
+
+    const scrollByCard = (dir) => {
+      if (!carousel) return;
+      const card = carousel.querySelector(".want-card");
+      const dx = card ? Math.round(card.getBoundingClientRect().width + 12) : 340;
+      carousel.scrollBy({ left: dir * dx, behavior: "smooth" });
+    };
+
+    if (prev) prev.addEventListener("click", () => scrollByCard(-1));
+    if (next) next.addEventListener("click", () => scrollByCard(1));
+    if (carousel) {
+      carousel.addEventListener("keydown", (e) => {
+        if (e.key === "ArrowRight") scrollByCard(1);
+        else if (e.key === "ArrowLeft") scrollByCard(-1);
+      });
+    }
   }
 
   function renderBountyLens(allRows) {
@@ -1800,6 +2225,7 @@
 
     const filter = $id("bountyFilter");
     const surfaceSel = $id("bountySurface");
+    const levelSel = $id("bountyLevel");
     const deviceSel = $id("bountyDevice");
     const osSel = $id("bountyOs");
     const sourceSel = $id("bountySource");
@@ -1818,6 +2244,7 @@
     const render = () => {
       const q = normLower(filter && filter.value);
       const surface = surfaceSel ? surfaceSel.value : "all";
+      const level = levelSel ? levelSel.value : "all";
       const device = deviceSel ? deviceSel.value : "all";
       const os = osSel ? osSel.value : "all";
       const src = sourceSel ? sourceSel.value : "all";
@@ -1826,10 +2253,12 @@
       let list = rows.map((r) => {
         const noteText = loadNote(r.noteKey);
         const specials = specialBadges(r, noteText);
-        return { ...r, noteText, specials };
+        const lvl = levelForRow(r, noteText);
+        return { ...r, noteText, specials, level: lvl };
       });
       if (src !== "all") list = list.filter((r) => r.sourceKey === src);
       if (surface !== "all") list = list.filter((r) => r.surface === surface);
+      if (level !== "all") list = list.filter((r) => r.level === level);
       if (device !== "all") list = list.filter((r) => r.device === device);
       if (os !== "all") list = list.filter((r) => r.osGroup === os);
       if (q) {
@@ -1857,6 +2286,7 @@
         "Reward",
         "Reward max",
         "Band",
+        "Level",
         "Special",
         "Terms",
         "Notes",
@@ -1891,6 +2321,7 @@
           esc(r.rewardText || "n/a"),
           `<span class="pilltag">${esc(formatMoney(r.rewardMax))}</span>`,
           bandPill(r.tier || "unknown", cssVarForRewardBand(r.tier)),
+          levelPill(r.level),
           specialHtml,
           `<span class="muted">${esc(r.terms)}</span>`,
           notePill,
@@ -1913,6 +2344,7 @@
 
     if (filter) filter.oninput = render;
     if (surfaceSel) surfaceSel.onchange = render;
+    if (levelSel) levelSel.onchange = render;
     if (deviceSel) deviceSel.onchange = render;
     if (osSel) osSel.onchange = render;
     if (sourceSel) sourceSel.onchange = render;
@@ -1945,6 +2377,38 @@
       return true;
     } catch {
       return false;
+    }
+  }
+
+  function uniqueStrings(items) {
+    const out = [];
+    const seen = new Set();
+    for (const it of items || []) {
+      const s = String(it || "").trim();
+      if (!s) continue;
+      if (seen.has(s)) continue;
+      seen.add(s);
+      out.push(s);
+    }
+    return out;
+  }
+
+  function iconCandidatesForSite(site) {
+    const s = String(site || "").trim();
+    if (!/^https?:\/\//i.test(s)) return [];
+    try {
+      const u = new URL(s);
+      const origin = u.origin;
+      return uniqueStrings([
+        `${origin}/apple-touch-icon.png`,
+        `${origin}/apple-touch-icon-precomposed.png`,
+        `${origin}/favicon.ico`,
+        `${origin}/favicon.png`,
+        `${origin}/favicon-32x32.png`,
+        `${origin}/icon.png`,
+      ]);
+    } catch {
+      return [];
     }
   }
 
@@ -2075,6 +2539,10 @@
       const b = r && r.validationHours != null ? r.validationHours : 10 ** 12;
       return b < a ? r : best;
     }, null);
+    const bestLevel = rows.reduce((best, r) => {
+      const lvl = levelForRow(r, loadNote(r.noteKey));
+      return levelRank(lvl) < levelRank(best) ? lvl : best;
+    }, "P4");
 
     const sponsorTags = [
       `<span class="pilltag neutral">${esc(String(total))} program(s)</span>`,
@@ -2086,6 +2554,7 @@
       fastest && fastest.validationHours != null
         ? `<span class="pilltag">fastest ${esc(fastest.validation || "n/a")}</span>`
         : `<span class="pilltag">fastest n/a</span>`,
+      levelPill(bestLevel),
     ].filter(Boolean);
 
     wrap.innerHTML = `
@@ -2108,18 +2577,7 @@
 
     const logo = bestLogoFromDossiers(dossiers);
     const tagline = bestTaglineFromDossiers(dossiers) || "No public tagline found in cached exports.";
-
-    const favicon =
-      site && /^https?:\/\//i.test(site)
-        ? (() => {
-            try {
-              const u = new URL(site);
-              return `${u.origin}/favicon.ico`;
-            } catch {
-              return "";
-            }
-          })()
-        : "";
+    const iconSrcs = uniqueStrings([...iconCandidatesForSite(site), logo || ""]);
 
     // Aggregate sponsor stats from cached exports where present.
     const rewardedVulns = dossiers
@@ -2183,9 +2641,10 @@
             ? "Bugcrowd"
             : r.sourceKey || "Board";
         const tier = r.tier || "unknown";
-        const special = (r.specials || []).slice(0, 2);
         const noteText = loadNote(r.noteKey);
         const noteBadge = noteText ? `<span class="pilltag warn">note</span>` : "";
+        const level = levelForRow(r, noteText);
+        const special = specialBadges(r, noteText).slice(0, 2);
 
         return `
           <div class="program-card">
@@ -2206,6 +2665,7 @@
               ${tagPill(r.device, cssVarForDevice(r.device))}
               ${tagPill(r.osGroup, cssVarForOsGroup(r.osGroup))}
               ${bandPill(tier, cssVarForRewardBand(tier))}
+              ${levelPill(level)}
               ${r.private ? `<span class="pilltag warn">private</span>` : `<span class="pilltag ok">public</span>`}
               ${noteBadge}
               ${special.map((s) => `<span class="pilltag warn">${esc(s)}</span>`).join(" ")}
@@ -2230,14 +2690,10 @@
             String(sponsor || "?").slice(0, 1).toUpperCase()
           )}</span>
           ${
-            favicon
-              ? `<img class="avatar overlay" src="${esc(
-                  favicon
-                )}" alt="" loading="lazy" referrerpolicy="no-referrer" onload="this.previousElementSibling.style.display='none';" onerror="this.onerror=null;this.style.display='none';" />`
-              : logo
-              ? `<img class="avatar overlay" src="${esc(
-                  logo
-                )}" alt="" loading="lazy" referrerpolicy="no-referrer" onload="this.previousElementSibling.style.display='none';" onerror="this.onerror=null;this.style.display='none';" />`
+            iconSrcs.length
+              ? `<img class="avatar overlay" data-srcs="${esc(
+                  JSON.stringify(iconSrcs)
+                )}" alt="" loading="lazy" referrerpolicy="no-referrer" />`
               : ""
           }
         </div>
@@ -2301,6 +2757,8 @@
       </div>
     `;
 
+    wireImgFallback(wrap);
+
     // Website save/clear.
     const siteBox = wrap.querySelector(`[data-sponsor-site="${cssEscape(sponsor)}"]`);
     const saveBtn = wrap.querySelector(`[data-sponsor-save="${cssEscape(sponsor)}"]`);
@@ -2310,6 +2768,7 @@
         const ok = saveSponsorSite(sponsor, siteBox.value || "");
         setBanner(ok ? "ok" : "warn", ok ? "Saved sponsor website (local)." : "Could not save (localStorage blocked).");
         renderSponsorProfile(sponsor, rows);
+        if (ok) renderMostWanted(state.loaded.bountyRows || []);
       };
     }
     if (clearBtn && siteBox) {
@@ -2318,6 +2777,7 @@
         const ok = saveSponsorSite(sponsor, "");
         setBanner(ok ? "ok" : "warn", ok ? "Cleared sponsor website (local)." : "Could not clear (localStorage blocked).");
         renderSponsorProfile(sponsor, rows);
+        if (ok) renderMostWanted(state.loaded.bountyRows || []);
       };
     }
 
@@ -2413,18 +2873,27 @@
             .map((surf) => {
               const sponsors = bySurface.get(surf);
               const sponsorEntries = Array.from(sponsors.entries()).map(([name, rows]) => {
-                const max = rows.reduce((m, r) => Math.max(m, r.rewardMax || -1), -1);
-                const tier = tierFromRewardMax(max);
+                const max = rows.reduce(
+                  (m, r) => Math.max(m, r && r.rewardMax != null ? r.rewardMax : -1),
+                  -1
+                );
+                const maxReward = max >= 0 ? max : null;
+                const tier = tierFromRewardMax(maxReward);
+                const bestLevel = rows.reduce((best, r) => {
+                  const lvl = levelForRow(r, loadNote(r.noteKey));
+                  return levelRank(lvl) < levelRank(best) ? lvl : best;
+                }, "P4");
                 const right = `<span class="tree-right"><small>${esc(
                   String(rows.length)
-                )} | max ${esc(formatMoney(max))}</small> ${bandPill(
+                )} | max ${esc(formatMoney(maxReward))}</small> ${bandPill(
                   tier,
                   cssVarForRewardBand(tier)
-                )}</span>`;
+                )} ${levelPill(bestLevel)}</span>`;
                 const cls = name === selected ? "tree-link selected" : "tree-link";
                 return {
                   name,
-                  max,
+                  max: maxReward,
+                  bestLevel,
                   count: rows.length,
                   html: `<button class="${cls}" data-sponsor="${esc(name)}"><span>${esc(
                     name
@@ -2433,7 +2902,11 @@
               });
 
               sponsorEntries.sort(
-                (a, b) => (b.max || -1) - (a.max || -1) || (b.count || 0) - (a.count || 0) || a.name.localeCompare(b.name)
+                (a, b) =>
+                  levelRank(a.bestLevel) - levelRank(b.bestLevel) ||
+                  (b.max == null ? -1 : b.max) - (a.max == null ? -1 : a.max) ||
+                  (b.count || 0) - (a.count || 0) ||
+                  a.name.localeCompare(b.name)
               );
               const sponsorItems = sponsorEntries.map((e) => e.html);
               const totalPrograms = Array.from(sponsors.values()).reduce((sum, rows) => sum + rows.length, 0);
@@ -2482,6 +2955,7 @@
 
     const rows = allRows || [];
     const byPath = new Map(rows.filter((r) => r && r.detailsPath).map((r) => [r.detailsPath, r]));
+    const rowLevel = (r) => levelForRow(r, loadNote(r && r.noteKey));
 
     function linkForRow(r) {
       if (r && r.detailsPath) {
@@ -2510,10 +2984,11 @@
     }
 
     const rewardTable = renderTable(
-      ["Engagement", "Sponsor", "Max reward", "Band", "Validation"],
+      ["Engagement", "Sponsor", "Level", "Max reward", "Band", "Validation"],
       topByReward().map((r) => [
         linkForRow(r),
         `<strong>${esc(r.sponsor || "n/a")}</strong>`,
+        levelPill(rowLevel(r)),
         `<span class="pilltag">${esc(formatMoney(r.rewardMax))}</span>`,
         bandPill(r.tier || "unknown", cssVarForRewardBand(r.tier)),
         `<span class="muted">${esc(r.validation || "n/a")}</span>`,
@@ -2522,10 +2997,11 @@
     );
 
     const fastTable = renderTable(
-      ["Engagement", "Sponsor", "Validation", "Service", "Access"],
+      ["Engagement", "Sponsor", "Level", "Validation", "Service", "Access"],
       topByFastestValidation().map((r) => [
         linkForRow(r),
         `<strong>${esc(r.sponsor || "n/a")}</strong>`,
+        levelPill(rowLevel(r)),
         `<span class="pilltag">${esc(r.validation || "n/a")}</span>`,
         `<span class="muted">${esc(r.service || "n/a")}</span>`,
         `<span class="muted">${esc(r.access || "n/a")}</span>`,
@@ -2967,6 +3443,7 @@
       ...(state.loaded.bugcrowdVdpRows || []).map((r) => enrichBountyRow(r, "bugcrowd_vdp")),
     ];
     state.loaded.bountyRows = bountyRows;
+    renderMostWanted(bountyRows);
     renderBountyLens(bountyRows);
     renderBountyProfiles(bountyRows);
     renderLeaderboards(bountyRows);

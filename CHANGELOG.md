@@ -4,6 +4,7 @@ All notable changes to this project will be documented here.
 
 ## Unreleased
 - Added `dashboard.html` plus `dashboard/` assets for a local interactive repo overview (knowledge, tools, bounties, sponsor profiles, leaderboards, registry, artifacts).
+- Enhanced the dashboard bounties view with a "Most Wanted" carousel, sponsor website icon support, and Level (P0-P4) tagging/filtering.
 - Normalized generated Markdown/JSON writers to emit LF line endings (reduces CRLF churn on Windows).
 - Updated `CONTEXT.md` to reflect current repo structure, generated files, and local checks.
 - Expanded `CONTRIBUTING.md` with safety rules, generated-file guidance, and local check commands.

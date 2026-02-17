@@ -74,6 +74,7 @@ advice. Only test systems where you have explicit authorization.
 ## Local Dashboard
 - Preferred: run `python -m http.server 8000` and open `http://localhost:8000/dashboard.html`.
 - If you open `dashboard.html` via `file://`, use "Import repo folder" (Chrome/Edge) to load data.
+- Bounties include a Level (P0-P4) lens/filter and a "Most Wanted" carousel (official icons when sponsor websites are set in Sponsor Profiles).
 
 ## Repository layout
 - `dashboard.html` and `dashboard/` - local interactive repo overview (static HTML/CSS/JS)

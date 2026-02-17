@@ -660,6 +660,116 @@ p {
   margin-top: 10px;
 }
 
+.carousel-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.carousel-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.carousel {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  padding: 8px 4px 14px;
+  scroll-snap-type: x mandatory;
+  scroll-padding-left: 6px;
+  -webkit-overflow-scrolling: touch;
+}
+
+.carousel::-webkit-scrollbar {
+  height: 10px;
+}
+
+.carousel::-webkit-scrollbar-thumb {
+  background: rgb(var(--ink-rgb) / 0.16);
+  border-radius: 999px;
+}
+
+.carousel::-webkit-scrollbar-track {
+  background: rgb(var(--ink-rgb) / 0.06);
+  border-radius: 999px;
+}
+
+.want-card {
+  flex: 0 0 auto;
+  width: 368px;
+  max-width: calc(100vw - 60px);
+  scroll-snap-align: start;
+  border: 1px solid var(--line-2);
+  background: linear-gradient(180deg, var(--surface-2), rgb(var(--accent-rgb) / 0.03));
+  border-radius: 18px;
+  padding: 12px;
+  box-shadow: 0 10px 18px rgb(0 0 0 / 0.06);
+}
+
+.want-card:hover {
+  border-color: rgb(var(--accent-rgb) / 0.25);
+  background: rgb(var(--accent-rgb) / 0.06);
+}
+
+.want-top {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.want-title {
+  min-width: 0;
+}
+
+.want-name {
+  font-family: var(--sans);
+  font-weight: 900;
+  letter-spacing: -0.1px;
+  font-size: 16px;
+}
+
+.want-sub {
+  margin-top: 4px;
+  font-size: 13px;
+  line-height: 1.35;
+}
+
+.want-tags {
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.want-meta {
+  margin-top: 10px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  font-size: 13px;
+}
+
+.want-actions {
+  margin-top: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.want-card .avatarstack,
+.want-card .avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 14px;
+}
+
+.want-card .avatar.fallback {
+  font-size: 22px;
+}
+
 .grid2 {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -918,6 +1028,13 @@ html[data-theme="dark"] .pilltag.tag {
 .pilltag.band {
   border-color: rgb(var(--band-rgb, var(--neutral-rgb)) / 0.35);
   background: rgb(var(--band-rgb, var(--neutral-rgb)) / 0.14);
+}
+
+.pilltag.level {
+  border-color: rgb(var(--level-rgb, var(--neutral-rgb)) / 0.38);
+  background: rgb(var(--level-rgb, var(--neutral-rgb)) / 0.14);
+  font-family: var(--sans);
+  font-weight: 900;
 }
 
 .pilltag.ok {

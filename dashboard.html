@@ -67,6 +67,9 @@
           <details class="drop">
             <summary>Bounties</summary>
             <div class="menu">
+              <a href="#most-wanted"
+                >Most Wanted <span class="hint">carousel</span></a
+              >
               <a href="#bounty-lens"
                 >Lens <span class="hint">categories + sponsors</span></a
               >
@@ -265,6 +268,15 @@
         <div id="validationWrap" class="panel muted">Waiting for data...</div>
       </section>
 
+      <section id="most-wanted" data-page="bounties">
+        <h2>Most Wanted</h2>
+        <p class="muted">
+          A fast shortlist derived from public metadata and your local notes.
+          Thumbnails prefer sponsor website icons when configured.
+        </p>
+        <div id="mostWantedWrap" class="panel muted">Waiting for data...</div>
+      </section>
+
       <section id="bounty-lens" data-page="bounties">
         <h2>Bounty Lens</h2>
         <p class="muted">
@@ -300,6 +312,14 @@
                 <option value="desktop">Desktop</option>
                 <option value="console">Console</option>
                 <option value="other">Other</option>
+              </select>
+              <select id="bountyLevel" aria-label="Level">
+                <option value="all">All levels</option>
+                <option value="P0">P0 (critical)</option>
+                <option value="P1">P1</option>
+                <option value="P2">P2</option>
+                <option value="P3">P3</option>
+                <option value="P4">P4</option>
               </select>
               <select id="bountyDevice" aria-label="Device category">
                 <option value="all">All devices</option>
