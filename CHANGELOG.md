@@ -3,6 +3,7 @@
 All notable changes to this project will be documented here.
 
 ## Unreleased
+- Streamlined CI to reduce redundant checks: linting, docs/link validation, and dependency audit now run once on Python 3.11, while the 3.10-3.12 matrix focuses on unit tests (coverage stays on 3.11).
 - Added `docs/ADR_COMMAND_CENTER_ARCHITECTURE.md` to document issue #164 with a staged SPA + API + worker architecture mapped to existing schemas and scripts.
 - Added `DEEP_RESEARCH_02_COMMAND_CENTER.md` and seeded GitHub issues (#164-#206) from its issue table.
 - Added `dashboard.html` plus `dashboard/` assets for a local interactive repo overview (knowledge, tools, bounties, sponsor profiles, leaderboards, registry, artifacts).
