@@ -209,9 +209,10 @@ docker run --rm bbhai
 - Program registry entries retain source license and attribution metadata.
 - Program registry diffs are generated with `python -m scripts.program_registry_diff`.
 - Local program registry storage is managed with `python -m scripts.program_registry_store`.
-- CI runs lint and format checks, schema validation, coverage reporting,
-  dependency audits, knowledge index and published docs sync checks, coverage
-  matrix checks, golden example re-emits, and a demo runner plan.
+- CI runs lint and format checks, schema validation, dependency audits, test
+  coverage reporting, generated-doc sync checks, coverage matrix checks, golden
+  example re-emits, and a demo runner plan. Matrix test runs are limited to
+  unit tests to avoid redundant non-test checks.
 - Offline connector fixtures for tests live in `tests/fixtures/connectors/`.
 - Catalog build connectors include yeswehack, intigriti, huntr, bounty-targets-data,
   disclose-io, and projectdiscovery (override with `--connectors`).
