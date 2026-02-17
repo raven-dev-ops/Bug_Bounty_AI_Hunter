@@ -1,0 +1,511 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+    <title>BBHAI Dashboard (Local)</title>
+    <link rel="stylesheet" href="dashboard/dashboard.css" />
+  </head>
+  <body>
+    <a class="skip" href="#home">Skip to content</a>
+
+    <header class="topbar">
+      <div class="topbar-inner">
+        <div class="brand">
+          <a class="brand-link" href="#home">BBHAI Dashboard</a>
+          <span class="pill">local</span>
+        </div>
+
+        <button class="nav-toggle" id="navToggle" aria-expanded="false">
+          Menu
+        </button>
+
+        <nav class="mainnav" id="mainNav" aria-label="Primary">
+          <details class="drop">
+            <summary>Overview</summary>
+            <div class="menu">
+              <a href="#home">Home <span class="hint">#home</span></a>
+              <a href="#status">Status <span class="hint">#status</span></a>
+              <a href="#glance">Glance <span class="hint">#glance</span></a>
+              <a href="#repo">Repo Map <span class="hint">#repo</span></a>
+              <a href="#workflows">Lifecycle <span class="hint">#workflows</span></a>
+              <a href="#generated"
+                >Generated <span class="hint">#generated</span></a
+              >
+              <a href="#roadmap">Roadmap <span class="hint">#roadmap</span></a>
+            </div>
+          </details>
+
+          <details class="drop">
+            <summary>Knowledge</summary>
+            <div class="menu">
+              <a href="#hack-types"
+                >Hack Types <span class="hint">docs/HACK_TYPES.md</span></a
+              >
+              <a href="#knowledge-index"
+                >Index <span class="hint">docs/KNOWLEDGE_INDEX.md</span></a
+              >
+              <a href="knowledge/INDEX.md"
+                >knowledge/INDEX <span class="hint">source</span></a
+              >
+            </div>
+          </details>
+
+          <details class="drop">
+            <summary>Tools</summary>
+            <div class="menu">
+              <a href="#cli">CLI <span class="hint">python -m bbhai</span></a>
+              <a href="#scripts"
+                >Scripts <span class="hint">scripts/README.md</span></a
+              >
+              <a href="#templates">Templates <span class="hint">templates</span></a>
+              <a href="#validation">Validation <span class="hint">CI parity</span></a>
+            </div>
+          </details>
+
+          <details class="drop">
+            <summary>Bounties</summary>
+            <div class="menu">
+              <a href="#bounty-lens"
+                >Lens <span class="hint">categories + sponsors</span></a
+              >
+              <a href="#bounty-profiles"
+                >Profiles <span class="hint">sponsors</span></a
+              >
+              <a href="#bounty-charts">Charts <span class="hint">pie</span></a>
+              <a href="#bounty-timeline"
+                >Timeline <span class="hint">freshness</span></a
+              >
+              <a href="#leaderboards"
+                >Leaderboards <span class="hint">top lists</span></a
+              >
+              <a href="#bounty-sources"
+                >Sources <span class="hint">raw tables</span></a
+              >
+              <a href="#program-registry"
+                >Registry <span class="hint">data/program_registry.json</span></a
+              >
+              <a href="#platform-plans"
+                >BugBounty.com <span class="hint">planned</span></a
+              >
+            </div>
+          </details>
+
+          <details class="drop">
+            <summary>Artifacts</summary>
+            <div class="menu">
+              <a href="#artifacts">Outputs <span class="hint">examples/outputs</span></a>
+              <a href="#exports">Exports <span class="hint">examples/exports</span></a>
+              <a href="#findings">Findings <span class="hint">data/findings_db.json</span></a>
+            </div>
+          </details>
+
+          <!-- RPG layer is intentionally hidden for now. -->
+        </nav>
+
+        <div class="actions">
+          <input
+            id="pageSearch"
+            type="search"
+            placeholder="Search..."
+            aria-label="Search"
+          />
+          <select id="viewSelect" aria-label="Focus view">
+            <option value="overview">Overview</option>
+            <option value="knowledge">Knowledge</option>
+            <option value="tools">Tools</option>
+            <option value="bounties">Bounties</option>
+            <option value="artifacts">Artifacts</option>
+            <option value="all">All</option>
+          </select>
+          <button class="btn" id="themeToggleBtn" aria-label="Toggle theme">
+            Theme: <span id="themeModeTop">auto</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main id="home">
+      <section class="hero" data-page="all">
+        <h1>Bug_Bounty_Hunter_AI</h1>
+        <p class="muted">
+          Local dashboard to browse the repo. Authorized testing only.
+        </p>
+
+        <div class="kicker">
+          <span class="badge">Start: docs/ROE.md</span>
+          <span class="badge">Docs: docs/index.md</span>
+          <span class="badge">Boards: bounty_board/</span>
+          <span class="badge">Knowledge: knowledge/</span>
+        </div>
+
+        <div class="tiles">
+          <a class="tile" href="docs/ROE.md">
+            <span class="tile-title">ROE</span>
+            <span class="tile-desc">Authorization and safety rules.</span>
+          </a>
+          <a class="tile" href="docs/index.md">
+            <span class="tile-title">Docs</span>
+            <span class="tile-desc">MkDocs entry point.</span>
+          </a>
+          <a class="tile" href="README.md">
+            <span class="tile-title">README</span>
+            <span class="tile-desc">Install + quick start.</span>
+          </a>
+          <a class="tile" href="#bounty-lens">
+            <span class="tile-title">Boards</span>
+            <span class="tile-desc">Public metadata only.</span>
+          </a>
+        </div>
+
+        <div class="statusline" id="bannerLine" aria-live="polite"></div>
+        <div class="statusline">
+          <span class="pilltag neutral">Mode: <span id="loadMode">auto</span></span>
+          <span class="pilltag neutral">View: <span id="viewMode">overview</span></span>
+          <span class="pilltag neutral">Theme: <span id="themeMode">auto</span></span>
+          <span class="pilltag">Loaded: <span id="loadedCount">0</span></span>
+          <span class="pilltag warn">Errors: <span id="errorCount">0</span></span>
+        </div>
+      </section>
+
+      <section id="status" data-page="overview">
+        <h2>Status</h2>
+        <div class="split">
+          <div class="panel">
+            <h3>Data Controls</h3>
+            <p class="muted">
+              Recommended: run <code>python -m http.server 8000</code> and open
+              <code>http://localhost:8000/dashboard.html</code>. Import is
+              optional and helps when you open via <code>file://</code> or want
+              to search the repo for related artifacts.
+            </p>
+            <div class="statusline">
+              <button class="btn primary" id="importRepoBtn">Import repo folder</button>
+              <button class="btn" id="reloadBtn">Reload data</button>
+              <button class="btn" id="clearLocalBtn">Clear local data</button>
+            </div>
+            <div class="statusline">
+              <span class="muted" id="dataStatus">No local data loaded.</span>
+            </div>
+          </div>
+          <div id="errorsWrap" class="panel muted">No errors yet.</div>
+        </div>
+      </section>
+
+      <section id="glance" data-page="overview">
+        <h2>At a Glance</h2>
+        <div id="glanceWrap" class="panel muted">Waiting for data...</div>
+      </section>
+
+      <section id="repo" data-page="overview">
+        <h2>Repo Map</h2>
+        <div id="repoMap" class="panel muted">Waiting for data...</div>
+      </section>
+
+      <section id="workflows" data-page="overview">
+        <h2>Lifecycle</h2>
+        <div id="workflowsGrid" class="panel muted">Waiting for data...</div>
+      </section>
+
+      <section id="generated" data-page="overview">
+        <h2>Generated Files</h2>
+        <div id="generatedTable" class="panel muted">Waiting for data...</div>
+      </section>
+
+      <section id="cli" data-page="tools">
+        <h2>CLI Cheatsheet</h2>
+        <div id="cliCheatsheet" class="panel muted">Waiting for data...</div>
+      </section>
+
+      <section id="hack-types" data-page="knowledge">
+        <h2>Hack Types</h2>
+        <div class="toolbar">
+          <input id="hackFilter" placeholder="Filter..." aria-label="Filter hack types" />
+          <span class="muted">Rows: <span id="hackCount">0</span></span>
+        </div>
+        <div id="hackTypesTableWrap" class="panel muted">Waiting for data...</div>
+      </section>
+
+      <section id="knowledge-index" data-page="knowledge">
+        <h2>Knowledge Index</h2>
+        <div class="toolbar">
+          <input
+            id="knowledgeFilter"
+            placeholder="Filter..."
+            aria-label="Filter knowledge"
+          />
+          <select id="knowledgeType" aria-label="Knowledge type">
+            <option value="all">All</option>
+            <option value="cards">Cards</option>
+            <option value="checklists">Checklists</option>
+            <option value="sources">Sources</option>
+          </select>
+          <span class="muted">Items: <span id="knowledgeCount">0</span></span>
+        </div>
+        <div id="knowledgeIndexWrap" class="panel muted">Waiting for data...</div>
+      </section>
+
+      <section id="scripts" data-page="tools">
+        <h2>Scripts</h2>
+        <div class="toolbar">
+          <input id="scriptFilter" placeholder="Filter..." aria-label="Filter scripts" />
+          <span class="muted">Tools: <span id="scriptCount">0</span></span>
+        </div>
+        <div id="scriptsWrap" class="panel muted">Waiting for data...</div>
+      </section>
+
+      <section id="templates" data-page="tools">
+        <h2>Templates</h2>
+        <div id="templatesWrap" class="panel muted">Waiting for data...</div>
+      </section>
+
+      <section id="validation" data-page="tools">
+        <h2>Validation</h2>
+        <div id="validationWrap" class="panel muted">Waiting for data...</div>
+      </section>
+
+      <section id="bounty-lens" data-page="bounties">
+        <h2>Bounty Lens</h2>
+        <p class="muted">
+          Categories are heuristics derived from public metadata (names, tags,
+          and service labels). Validate scope and rules in the platform before
+          any testing.
+        </p>
+        <div class="bounty-layout">
+          <aside class="bounty-side">
+            <div id="bountySummaryWrap" class="panel muted">
+              Waiting for data...
+            </div>
+
+            <h3 id="bounty-charts">Charts</h3>
+            <div id="bountyChartsWrap" class="panel muted">Waiting for data...</div>
+
+            <h3 id="bounty-timeline">Timeline</h3>
+            <div id="bountyTimelineWrap" class="panel muted">Waiting for data...</div>
+          </aside>
+
+          <div class="bounty-main">
+            <div class="toolbar">
+              <input
+                id="bountyFilter"
+                placeholder="Search sponsor, engagement, industry..."
+                aria-label="Filter bounties"
+              />
+              <select id="bountySurface" aria-label="Bounty type">
+                <option value="all">All types</option>
+                <option value="web">Web</option>
+                <option value="mobile">Mobile</option>
+                <option value="api">API</option>
+                <option value="desktop">Desktop</option>
+                <option value="console">Console</option>
+                <option value="other">Other</option>
+              </select>
+              <select id="bountyDevice" aria-label="Device category">
+                <option value="all">All devices</option>
+                <option value="mobile">Mobile</option>
+                <option value="pc">PC</option>
+                <option value="console">Console</option>
+                <option value="other">Other</option>
+              </select>
+              <select id="bountyOs" aria-label="OS category">
+                <option value="all">All OS</option>
+                <option value="windows">Windows</option>
+                <option value="linux">Linux</option>
+                <option value="ios">iOS</option>
+                <option value="other">Other</option>
+              </select>
+              <select id="bountySource" aria-label="Bounty source">
+                <option value="all">All sources</option>
+                <option value="bugcrowd">Bugcrowd</option>
+                <option value="bugcrowd_vdp">Bugcrowd VDP</option>
+              </select>
+              <select id="bountySort" aria-label="Sort bounties">
+                <option value="reward_max_desc">Reward max (desc)</option>
+                <option value="reward_max_asc">Reward max (asc)</option>
+                <option value="validation_asc">Validation (fastest)</option>
+                <option value="name_asc">Name (A-Z)</option>
+              </select>
+              <span class="muted">Items: <span id="bountyCount">0</span></span>
+            </div>
+            <div id="bountyLensWrap" class="panel muted">Waiting for data...</div>
+          </div>
+        </div>
+      </section>
+
+      <section id="bounty-profiles" data-page="bounties">
+        <h2>Sponsor Profiles</h2>
+        <p class="muted">
+          Sponsors are grouped by heuristics. Profiles use cached platform
+          metadata (logo, tagline, public stats) when available. Sponsor
+          website icons can be added and are stored locally in your browser.
+        </p>
+
+        <div class="profile-layout">
+          <aside class="profile-side">
+            <div class="toolbar">
+              <input
+                id="profileFilter"
+                placeholder="Filter sponsors or programs..."
+                aria-label="Filter sponsor profiles"
+              />
+              <select id="profileSurface" aria-label="Type">
+                <option value="all">All types</option>
+                <option value="web">Web</option>
+                <option value="mobile">Mobile</option>
+                <option value="api">API</option>
+                <option value="desktop">Desktop</option>
+                <option value="console">Console</option>
+                <option value="other">Other</option>
+              </select>
+              <select id="profileSource" aria-label="Source">
+                <option value="all">All sources</option>
+                <option value="bugcrowd">Bugcrowd</option>
+                <option value="bugcrowd_vdp">Bugcrowd VDP</option>
+              </select>
+              <span class="muted">Sponsors: <span id="profileCount">0</span></span>
+            </div>
+            <div id="bountyTreeWrap" class="panel muted">Waiting for data...</div>
+          </aside>
+
+          <div class="profile-main">
+            <div id="sponsorProfileWrap" class="panel muted">
+              Select a sponsor from the directory.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="leaderboards" data-page="bounties">
+        <h2>Leaderboards</h2>
+        <div id="leaderboardsWrap" class="panel muted">Waiting for data...</div>
+      </section>
+
+      <section id="bounty-sources" data-page="bounties">
+        <h2>Sources (Raw Tables)</h2>
+        <p class="muted">
+          These are the raw table exports under <code>bounty_board/</code>. Use
+          Bounty Lens for the structured view.
+        </p>
+
+        <details class="fold" open>
+          <summary>Bugcrowd (Bug Bounty)</summary>
+          <div class="fold-body">
+            <div class="toolbar">
+              <input
+                id="bugcrowdFilter"
+                placeholder="Filter..."
+                aria-label="Filter board"
+              />
+              <select id="bugcrowdSort" aria-label="Sort board">
+                <option value="reward_max_desc">Reward max (desc)</option>
+                <option value="reward_max_asc">Reward max (asc)</option>
+                <option value="name_asc">Name (A-Z)</option>
+                <option value="validation_asc">Validation (fastest)</option>
+              </select>
+              <span class="muted"
+                >Programs: <span id="bugcrowdCount">0</span></span
+              >
+            </div>
+            <div id="bugcrowdWrap" class="panel muted">Waiting for data...</div>
+          </div>
+        </details>
+
+        <details class="fold">
+          <summary>Bugcrowd (VDP)</summary>
+          <div class="fold-body">
+            <div class="toolbar">
+              <input
+                id="bugcrowdVdpFilter"
+                placeholder="Filter..."
+                aria-label="Filter VDP"
+              />
+              <select id="bugcrowdVdpSort" aria-label="Sort VDP">
+                <option value="name_asc">Name (A-Z)</option>
+                <option value="validation_asc">Validation (fastest)</option>
+              </select>
+              <span class="muted"
+                >Programs: <span id="bugcrowdVdpCount">0</span></span
+              >
+            </div>
+            <div id="bugcrowdVdpWrap" class="panel muted">Waiting for data...</div>
+          </div>
+        </details>
+      </section>
+
+      <section id="program-registry" data-page="bounties">
+        <h2>Program Registry</h2>
+        <div class="toolbar">
+          <input id="registryFilter" placeholder="Filter..." aria-label="Filter registry" />
+          <select id="registryPlatform" aria-label="Platform">
+            <option value="all">All platforms</option>
+          </select>
+          <span class="muted">Programs: <span id="registryCount">0</span></span>
+        </div>
+        <div id="registryWrap" class="panel muted">Waiting for data...</div>
+      </section>
+
+      <section id="platform-plans" data-page="bounties">
+        <h2>BugBounty.com (planned)</h2>
+        <div id="platformPlansWrap" class="panel muted">Waiting for data...</div>
+      </section>
+
+      <section id="artifacts" data-page="artifacts">
+        <h2>Example Outputs</h2>
+        <div class="toolbar">
+          <input id="artifactFilter" placeholder="Filter..." aria-label="Filter artifacts" />
+          <span class="muted">Files: <span id="artifactCount">0</span></span>
+        </div>
+        <div id="artifactsWrap" class="panel muted">Waiting for data...</div>
+      </section>
+
+      <section id="exports" data-page="artifacts">
+        <h2>Example Exports</h2>
+        <div id="exportsWrap" class="panel muted">Waiting for data...</div>
+      </section>
+
+      <section id="findings" data-page="artifacts">
+        <h2>Findings DB</h2>
+        <div id="findingsWrap" class="panel muted">Waiting for data...</div>
+      </section>
+
+      <section id="roadmap" data-page="overview">
+        <h2>Roadmap</h2>
+        <div id="roadmapWrap" class="panel muted">Waiting for data...</div>
+      </section>
+
+      <section id="footer" data-page="all">
+        <h2>Footer</h2>
+        <div class="panel muted">
+          Safety: nothing here is authorization to test. Follow docs/ROE.md and
+          program rules.
+        </div>
+      </section>
+    </main>
+
+    <dialog id="modal">
+      <div class="modal-head">
+        <h3 id="modalTitle">Details</h3>
+        <button class="btn" id="modalCloseBtn">Close</button>
+      </div>
+      <div class="modal-body">
+        <div id="modalRich" class="modal-rich"></div>
+        <details id="modalRaw" class="modal-raw">
+          <summary>Raw</summary>
+          <pre id="modalPre"><code>Loading...</code></pre>
+        </details>
+      </div>
+    </dialog>
+
+    <input
+      id="repoPicker"
+      type="file"
+      webkitdirectory
+      directory
+      multiple
+      style="display: none"
+    />
+
+    <script src="dashboard/dashboard.js" defer></script>
+  </body>
+</html>

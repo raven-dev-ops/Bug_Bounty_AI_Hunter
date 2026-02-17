@@ -59,6 +59,7 @@ Use `python -m scripts.<module>` to run a script from the repo root.
 - `init_engagement_workspace.py` - scaffold a local engagement workspace (notes, recon log, report draft) under `output/`
 - `check_all.py` - run CI-style checks locally (ruff, tests, docs validation, mkdocs build)
 - `publish_knowledge_docs.py` - publish knowledge cards/checklists/sources into `docs/` for MkDocs (`docs/knowledge/` and `docs/KNOWLEDGE_INDEX.md`)
+- `sync_mkdocs_copies.py` - sync MkDocs copies of root docs into `docs/` (`BUGCROWD.md` -> `docs/BUGCROWD.md`, `GUIDE.md` -> `docs/GUIDE.md`)
 - `bugcrowd_board.py` - generate a planning-only Bugcrowd bounty board from public listings (writes Markdown under `bounty_board/`)
 - `bugcrowd_briefs.py` - export Bugcrowd engagement briefs and subpages to local Markdown (writes to gitignored `bounty_board/bugcrowd_full/`; tries public fetch first and only attempts login on 401/403; use `--auth-required` to force login, or `--public-only` to never login; community and per-target-group stats are optional flags)
 - `bugcrowd_full_postprocess.py` - postprocess local Bugcrowd brief exports to add rendered brief/scope sections and a local `INDEX.md`

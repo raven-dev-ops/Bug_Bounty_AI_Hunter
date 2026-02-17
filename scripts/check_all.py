@@ -119,6 +119,21 @@ def main(argv=None):
             ],
         ),
         Check(
+            "Sync MkDocs copies",
+            _py("-m", "scripts.sync_mkdocs_copies"),
+        ),
+        Check(
+            "MkDocs copies clean",
+            [
+                "git",
+                "diff",
+                "--exit-code",
+                "--",
+                "docs/BUGCROWD.md",
+                "docs/GUIDE.md",
+            ],
+        ),
+        Check(
             "Coverage matrix",
             _py(
                 "-m",

@@ -121,7 +121,8 @@ def main():
     content = _render_index(sections)
     output_path = REPO_ROOT / args.output
     output_path.parent.mkdir(parents=True, exist_ok=True)
-    output_path.write_text(content, encoding="utf-8")
+    with output_path.open("w", encoding="utf-8", newline="\n") as handle:
+        handle.write(content)
 
 
 if __name__ == "__main__":

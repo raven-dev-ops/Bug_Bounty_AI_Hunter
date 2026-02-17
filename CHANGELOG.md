@@ -3,6 +3,12 @@
 All notable changes to this project will be documented here.
 
 ## Unreleased
+- Added `dashboard.html` plus `dashboard/` assets for a local interactive repo overview (knowledge, tools, bounties, sponsor profiles, leaderboards, registry, artifacts).
+- Normalized generated Markdown/JSON writers to emit LF line endings (reduces CRLF churn on Windows).
+- Updated `CONTEXT.md` to reflect current repo structure, generated files, and local checks.
+- Expanded `CONTRIBUTING.md` with safety rules, generated-file guidance, and local check commands.
+- Added `python -m scripts.sync_mkdocs_copies` plus CI/local checks to keep `docs/BUGCROWD.md` and `docs/GUIDE.md` in sync with root docs.
+- Added `.github/PULL_REQUEST_TEMPLATE.md` to standardize safety and generated-file checks for PRs.
 - Made the Bugcrowd brief exporter public-first with optional auth fallback and added `--public-only` and `--auth-required` flags (`python -m scripts.bugcrowd_briefs`).
 - Published curated knowledge items into MkDocs (`docs/knowledge/`, `docs/KNOWLEDGE_INDEX.md`) and added a CI sync check (`python -m scripts.publish_knowledge_docs`).
 - Added a one-command local check runner that mirrors CI (`python -m scripts.check_all`).

@@ -11,6 +11,8 @@ advice. Only test systems where you have explicit authorization.
 - `ROADMAP.md`
 - `BUGCROWD.md`
 - `GUIDE.md`
+- `CONTEXT.md`
+- `dashboard.html` (local repo overview)
 - `docs/PROJECT_OUTLINE.md`
 - `docs/ROE.md`
 - `docs/BUG_BOUNTY_STARTER_WORKFLOW.md`
@@ -69,7 +71,12 @@ advice. Only test systems where you have explicit authorization.
 - `docs/paths/appsec-review.md`
 - `docs/paths/threat-model-only.md`
 
+## Local Dashboard
+- Preferred: run `python -m http.server 8000` and open `http://localhost:8000/dashboard.html`.
+- If you open `dashboard.html` via `file://`, use "Import repo folder" (Chrome/Edge) to load data.
+
 ## Repository layout
+- `dashboard.html` and `dashboard/` - local interactive repo overview (static HTML/CSS/JS)
 - `docs/` - architecture, rules, and planning docs
 - `bounty_board/` - planning-only bounty board markdown (public metadata only). Bugcrowd boards: `bounty_board/bugcrowd/` and `bounty_board/bugcrowd_vdp/`. Full brief exports are generated with `python -m scripts.bugcrowd_briefs` (gitignored under `bounty_board/bugcrowd_full/`).
 - `schemas/` - data model schemas

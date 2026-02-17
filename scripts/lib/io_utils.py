@@ -32,10 +32,10 @@ def dump_data(path, data):
 
     if path.suffix.lower() in (".yaml", ".yml"):
         yaml = _require_yaml()
-        with path.open("w", encoding="utf-8") as handle:
+        with path.open("w", encoding="utf-8", newline="\n") as handle:
             yaml.safe_dump(data, handle, sort_keys=False)
         return
 
-    with path.open("w", encoding="utf-8") as handle:
+    with path.open("w", encoding="utf-8", newline="\n") as handle:
         json.dump(data, handle, indent=2)
         handle.write("\n")
