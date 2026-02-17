@@ -2,7 +2,7 @@
 id: kb-checklist-0005
 title: Endpoint telemetry review checklist
 type: checklist
-status: draft
+status: reviewed
 tags: [endpoint-security, telemetry]
 source: TRANSCRIPT_06.md
 date: 2026-01-14

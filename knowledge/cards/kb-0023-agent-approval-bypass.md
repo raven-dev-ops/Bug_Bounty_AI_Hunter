@@ -2,7 +2,7 @@
 id: kb-0023
 title: Agent approval bypass risk
 type: card
-status: draft
+status: reviewed
 tags: [ai-security, agents, access-control]
 source: project
 date: 2026-02-05

@@ -2,7 +2,7 @@
 id: kb-0006
 title: Embedding exposure risk
 type: card
-status: draft
+status: reviewed
 tags: [ai-security, embeddings, privacy]
 source: TRANSCRIPT_01.md
 date: 2026-01-14

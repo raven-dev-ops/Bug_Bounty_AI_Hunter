@@ -3,7 +3,7 @@
 ## Metadata
 - ID: kb-0010
 - Type: card
-- Status: draft
+- Status: reviewed
 - Tags: privilege, installers, windows
 - Source: TRANSCRIPT_02.md
 - Date: 2026-01-14

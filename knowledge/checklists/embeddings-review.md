@@ -2,7 +2,7 @@
 id: kb-checklist-0007
 title: Embeddings and vector exposure review checklist
 type: checklist
-status: draft
+status: reviewed
 tags: [embeddings, ai-security, access-control, logging]
 source: kb-0006-embedding-exposure
 date: 2026-01-15

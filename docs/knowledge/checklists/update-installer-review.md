@@ -3,7 +3,7 @@
 ## Metadata
 - ID: kb-checklist-0002
 - Type: checklist
-- Status: draft
+- Status: reviewed
 - Tags: update-tools, supply-chain, validation
 - Source: TRANSCRIPT_02.md
 - Date: 2026-01-14

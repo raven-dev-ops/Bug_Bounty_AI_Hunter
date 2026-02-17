@@ -980,6 +980,7 @@
       templates.innerHTML = `
         <div class="tiles">
           <a class="tile" href="templates/reporting/README.md"><span class="tile-title">Reporting templates</span><span class="tile-desc">templates/reporting</span></a>
+          <a class="tile" href="templates/platforms/README.md"><span class="tile-title">Platform exports</span><span class="tile-desc">templates/platforms</span></a>
           <a class="tile" href="templates/reporting/standard/README.md"><span class="tile-title">Standard report</span><span class="tile-desc">Markdown templates</span></a>
           <a class="tile" href="templates/engagement_workspace/README.md"><span class="tile-title">Engagement workspace</span><span class="tile-desc">Notes + recon logs</span></a>
           <a class="tile" href="templates/scan_plans/README.md"><span class="tile-title">Scan plans</span><span class="tile-desc">Template-driven plans</span></a>

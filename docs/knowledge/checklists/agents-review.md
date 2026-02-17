@@ -3,7 +3,7 @@
 ## Metadata
 - ID: kb-checklist-0008
 - Type: checklist
-- Status: draft
+- Status: reviewed
 - Tags: ai-security, agents, prompt-injection, access-control, telemetry
 - Source: project
 - Date: 2026-01-15

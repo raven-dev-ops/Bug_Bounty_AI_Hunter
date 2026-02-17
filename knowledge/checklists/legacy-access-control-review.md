@@ -2,7 +2,7 @@
 id: kb-checklist-0004
 title: Legacy access control review checklist
 type: checklist
-status: draft
+status: reviewed
 tags: [access-control, legacy-systems]
 source: TRANSCRIPT_05.md
 date: 2026-01-14

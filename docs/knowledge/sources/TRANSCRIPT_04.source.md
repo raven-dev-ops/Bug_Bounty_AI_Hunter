@@ -3,7 +3,7 @@
 ## Metadata
 - ID: kb-src-0004
 - Type: source
-- Status: draft
+- Status: reviewed
 - Tags: transcript, api-security, reverse-engineering, mobile
 - Source: TRANSCRIPT_04.md
 - Date: 2026-01-14
@@ -20,5 +20,11 @@ fields, and client defenses.
 - Sections on request container fields and auth metadata.
 - Tooling references for client and protocol analysis.
 
-## Planned artifacts
-- Optional card: API reverse engineering workflow (general).
+## Derived artifacts
+Cards:
+- `kb-0012` [Auth container tampering](../cards/kb-0012-auth-container-tampering.md)
+- `kb-0013` [Client trust bypass](../cards/kb-0013-client-trust-bypass.md)
+- `kb-0014` [Protocol reverse engineering risk](../cards/kb-0014-protocol-reverse-engineering.md)
+
+Checklists:
+- `kb-checklist-0003` [Mobile API review checklist](../checklists/mobile-api-review.md)

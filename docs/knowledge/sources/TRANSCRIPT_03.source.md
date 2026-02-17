@@ -3,7 +3,7 @@
 ## Metadata
 - ID: kb-src-0003
 - Type: source
-- Status: draft
+- Status: reviewed
 - Tags: transcript, human-factors, prompts
 - Source: TRANSCRIPT_03.md
 - Date: 2026-01-14
@@ -19,5 +19,9 @@ when working with AI systems.
 ## Notable segments
 - Mid sections discuss prompt interaction and social influence parallels.
 
-## Planned artifacts
-- Optional card: human-in-the-loop expectations for AI security reviews.
+## Derived artifacts
+Cards:
+- `kb-0020` [Prompt social engineering risk](../cards/kb-0020-prompt-social-engineering.md)
+
+Checklists:
+- `kb-checklist-0006` [Human-in-the-loop prompt review checklist](../checklists/human-in-loop-review.md)

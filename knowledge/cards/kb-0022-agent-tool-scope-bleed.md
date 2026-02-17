@@ -2,7 +2,7 @@
 id: kb-0022
 title: Agent tool scope bleed risk
 type: card
-status: draft
+status: reviewed
 tags: [ai-security, agents, access-control]
 source: project
 date: 2026-02-05

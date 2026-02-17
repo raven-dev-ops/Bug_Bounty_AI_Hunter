@@ -3,7 +3,7 @@
 ## Metadata
 - ID: kb-0006
 - Type: card
-- Status: draft
+- Status: reviewed
 - Tags: ai-security, embeddings, privacy
 - Source: TRANSCRIPT_01.md
 - Date: 2026-01-14

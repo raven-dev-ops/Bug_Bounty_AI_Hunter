@@ -2,7 +2,7 @@
 id: kb-0003
 title: RAG context leakage risk
 type: card
-status: draft
+status: reviewed
 tags: [ai-security, rag, privacy, access-control]
 source: TRANSCRIPT_01.md
 date: 2026-01-14

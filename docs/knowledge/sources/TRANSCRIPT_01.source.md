@@ -3,7 +3,7 @@
 ## Metadata
 - ID: kb-src-0001
 - Type: source
-- Status: draft
+- Status: reviewed
 - Tags: transcript, ai-security, rag, embeddings, logging, privacy
 - Source: TRANSCRIPT_01.md
 - Date: 2026-01-14
@@ -23,7 +23,14 @@ primary leakage surfaces.
 - 13:41-15:37 Logging and retention implications.
 - 15:46-17:34 System prompt and context leakage patterns.
 
-## Planned artifacts
-- Cards: shadow data inventory, system prompt exposure, RAG context leakage,
-  logging retention risk.
-- Checklist: RAG and logging review.
+## Derived artifacts
+Cards:
+- `kb-0001` [Shadow data inventory for AI applications](../cards/kb-0001-shadow-data-inventory.md)
+- `kb-0002` [System prompt exposure and reliance risk](../cards/kb-0002-system-prompt-exposure.md)
+- `kb-0003` [RAG context leakage risk](../cards/kb-0003-rag-context-leakage.md)
+- `kb-0004` [Prompt logging and retention risk](../cards/kb-0004-logging-retention-risk.md)
+- `kb-0005` [Fine-tuning data leakage risk](../cards/kb-0005-fine-tuning-data-leakage.md)
+- `kb-0006` [Embedding exposure risk](../cards/kb-0006-embedding-exposure.md)
+
+Checklists:
+- `kb-checklist-0001` [RAG and logging review checklist](../checklists/rag-logging-review.md)

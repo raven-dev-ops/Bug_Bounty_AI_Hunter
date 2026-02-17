@@ -2,7 +2,7 @@
 id: kb-0007
 title: Local service origin bypass
 type: card
-status: draft
+status: reviewed
 tags: [update-tools, local-services, validation]
 source: TRANSCRIPT_02.md
 date: 2026-01-14

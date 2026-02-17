@@ -3,7 +3,7 @@
 ## Metadata
 - ID: kb-0019
 - Type: card
-- Status: draft
+- Status: reviewed
 - Tags: endpoint-security, telemetry
 - Source: TRANSCRIPT_06.md
 - Date: 2026-01-14

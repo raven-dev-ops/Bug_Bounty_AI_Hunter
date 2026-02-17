@@ -2,7 +2,7 @@
 id: kb-0014
 title: Protocol reverse engineering risk
 type: card
-status: draft
+status: reviewed
 tags: [api-security, reverse-engineering]
 source: TRANSCRIPT_04.md
 date: 2026-01-14

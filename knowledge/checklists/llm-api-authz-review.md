@@ -2,7 +2,7 @@
 id: kb-checklist-0009
 title: LLM API authorization review checklist
 type: checklist
-status: draft
+status: reviewed
 tags: [ai-security, api-security, access-control, logging]
 source: project
 date: 2026-02-05

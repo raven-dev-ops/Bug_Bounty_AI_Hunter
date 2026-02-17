@@ -3,7 +3,7 @@
 ## Metadata
 - ID: kb-0007
 - Type: card
-- Status: draft
+- Status: reviewed
 - Tags: update-tools, local-services, validation
 - Source: TRANSCRIPT_02.md
 - Date: 2026-01-14

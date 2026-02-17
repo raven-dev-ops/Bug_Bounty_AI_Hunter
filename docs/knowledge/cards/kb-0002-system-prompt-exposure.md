@@ -3,7 +3,7 @@
 ## Metadata
 - ID: kb-0002
 - Type: card
-- Status: draft
+- Status: reviewed
 - Tags: ai-security, prompt-injection, privacy
 - Source: TRANSCRIPT_01.md
 - Date: 2026-01-14

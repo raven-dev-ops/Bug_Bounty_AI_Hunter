@@ -3,7 +3,7 @@
 ## Metadata
 - ID: kb-0009
 - Type: card
-- Status: draft
+- Status: reviewed
 - Tags: windows, dll, load-path
 - Source: TRANSCRIPT_02.md
 - Date: 2026-01-14

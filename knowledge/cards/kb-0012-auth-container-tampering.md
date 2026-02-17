@@ -2,7 +2,7 @@
 id: kb-0012
 title: Auth container tampering
 type: card
-status: draft
+status: reviewed
 tags: [api-security, auth, mobile]
 source: TRANSCRIPT_04.md
 date: 2026-01-14

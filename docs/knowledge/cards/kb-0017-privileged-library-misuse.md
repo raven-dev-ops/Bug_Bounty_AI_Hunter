@@ -3,7 +3,7 @@
 ## Metadata
 - ID: kb-0017
 - Type: card
-- Status: draft
+- Status: reviewed
 - Tags: privilege, libraries, legacy-systems
 - Source: TRANSCRIPT_05.md
 - Date: 2026-01-14

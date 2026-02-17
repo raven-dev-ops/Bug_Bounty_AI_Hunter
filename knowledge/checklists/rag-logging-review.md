@@ -2,7 +2,7 @@
 id: kb-checklist-0001
 title: RAG and logging review checklist
 type: checklist
-status: draft
+status: reviewed
 tags: [rag, logging, privacy, access-control]
 source: TRANSCRIPT_01.md
 date: 2026-01-14

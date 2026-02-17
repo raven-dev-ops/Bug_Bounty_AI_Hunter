@@ -3,7 +3,7 @@
 ## Metadata
 - ID: kb-0001
 - Type: card
-- Status: draft
+- Status: reviewed
 - Tags: ai-security, rag, embeddings, fine-tuning, logging, privacy
 - Source: TRANSCRIPT_01.md
 - Date: 2026-01-14

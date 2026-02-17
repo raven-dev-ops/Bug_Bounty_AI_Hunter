@@ -3,7 +3,7 @@
 ## Metadata
 - ID: kb-0018
 - Type: card
-- Status: draft
+- Status: reviewed
 - Tags: endpoint-security, authorization
 - Source: TRANSCRIPT_06.md
 - Date: 2026-01-14

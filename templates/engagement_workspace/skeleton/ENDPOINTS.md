@@ -4,5 +4,4 @@ Keep this as a simple map you can skim quickly.
 
 | Endpoint | Method | Auth | Params | Notes |
 | --- | --- | --- | --- | --- |
-| TODO | TODO | TODO | TODO | TODO |
-
+| <path or URL> | <GET/POST/etc> | <cookie/token/none> | <query/body keys> | <notes> |

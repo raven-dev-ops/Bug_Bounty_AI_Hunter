@@ -2,7 +2,7 @@
 id: kb-0020
 title: Prompt social engineering risk
 type: card
-status: draft
+status: reviewed
 tags: [human-factors, prompt-injection]
 source: TRANSCRIPT_03.md
 date: 2026-01-14

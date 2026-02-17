@@ -2,7 +2,7 @@
 id: kb-checklist-0002
 title: Update and installer review checklist
 type: checklist
-status: draft
+status: reviewed
 tags: [update-tools, supply-chain, validation]
 source: TRANSCRIPT_02.md
 date: 2026-01-14

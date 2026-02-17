@@ -3,7 +3,7 @@
 ## Metadata
 - ID: kb-0004
 - Type: card
-- Status: draft
+- Status: reviewed
 - Tags: ai-security, logging, privacy, compliance
 - Source: TRANSCRIPT_01.md
 - Date: 2026-01-14

@@ -2,7 +2,7 @@
 id: kb-checklist-0010
 title: Bug bounty starter workflow checklist
 type: checklist
-status: draft
+status: reviewed
 tags: [bug-bounty, recon, scoping, reporting, human-factors]
 source: kb-src-0007
 date: 2026-02-16

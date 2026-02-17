@@ -2,7 +2,7 @@
 id: kb-0013
 title: Client trust bypass
 type: card
-status: draft
+status: reviewed
 tags: [api-security, client-trust]
 source: TRANSCRIPT_04.md
 date: 2026-01-14

@@ -2,7 +2,7 @@
 id: kb-0016
 title: Credential exposure in files
 type: card
-status: draft
+status: reviewed
 tags: [secrets, file-systems]
 source: TRANSCRIPT_05.md
 date: 2026-01-14

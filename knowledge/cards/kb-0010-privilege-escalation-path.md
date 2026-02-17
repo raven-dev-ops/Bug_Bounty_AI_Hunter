@@ -2,7 +2,7 @@
 id: kb-0010
 title: Privilege escalation path in installers
 type: card
-status: draft
+status: reviewed
 tags: [privilege, installers, windows]
 source: TRANSCRIPT_02.md
 date: 2026-01-14

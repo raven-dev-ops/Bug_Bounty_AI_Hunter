@@ -3,7 +3,7 @@
 ## Metadata
 - ID: kb-checklist-0001
 - Type: checklist
-- Status: draft
+- Status: reviewed
 - Tags: rag, logging, privacy, access-control
 - Source: TRANSCRIPT_01.md
 - Date: 2026-01-14

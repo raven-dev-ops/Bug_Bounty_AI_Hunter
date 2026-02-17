@@ -2,7 +2,7 @@
 id: kb-checklist-0006
 title: Human-in-the-loop prompt review checklist
 type: checklist
-status: draft
+status: reviewed
 tags: [human-factors, prompt-injection]
 source: TRANSCRIPT_03.md
 date: 2026-01-14

@@ -2,7 +2,7 @@
 id: kb-checklist-0008
 title: Agents and tool-use review checklist
 type: checklist
-status: draft
+status: reviewed
 tags: [ai-security, agents, prompt-injection, access-control, telemetry]
 source: project
 date: 2026-01-15

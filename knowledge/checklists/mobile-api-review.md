@@ -2,7 +2,7 @@
 id: kb-checklist-0003
 title: Mobile API review checklist
 type: checklist
-status: draft
+status: reviewed
 tags: [api-security, mobile, auth]
 source: TRANSCRIPT_04.md
 date: 2026-01-14

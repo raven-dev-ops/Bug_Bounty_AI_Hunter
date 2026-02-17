@@ -3,7 +3,7 @@
 ## Metadata
 - ID: kb-0023
 - Type: card
-- Status: draft
+- Status: reviewed
 - Tags: ai-security, agents, access-control
 - Source: project
 - Date: 2026-02-05

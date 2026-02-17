@@ -3,7 +3,7 @@
 ## Metadata
 - ID: kb-src-0005
 - Type: source
-- Status: draft
+- Status: reviewed
 - Tags: transcript, access-control, legacy-systems
 - Source: TRANSCRIPT_05.md
 - Date: 2026-01-14
@@ -19,5 +19,11 @@ tooling for enumeration.
 ## Notable segments
 - Sections on permission models and enumeration workflow.
 
-## Planned artifacts
-- Optional card: legacy access control review checklist (general).
+## Derived artifacts
+Cards:
+- `kb-0015` [Access control misconfiguration in legacy systems](../cards/kb-0015-access-control-misconfig.md)
+- `kb-0016` [Credential exposure in files](../cards/kb-0016-credential-exposure-in-files.md)
+- `kb-0017` [Privileged library misuse](../cards/kb-0017-privileged-library-misuse.md)
+
+Checklists:
+- `kb-checklist-0004` [Legacy access control review checklist](../checklists/legacy-access-control-review.md)

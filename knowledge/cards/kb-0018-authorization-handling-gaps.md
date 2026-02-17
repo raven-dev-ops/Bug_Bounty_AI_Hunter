@@ -2,7 +2,7 @@
 id: kb-0018
 title: Authorization handling gaps in telemetry tools
 type: card
-status: draft
+status: reviewed
 tags: [endpoint-security, authorization]
 source: TRANSCRIPT_06.md
 date: 2026-01-14

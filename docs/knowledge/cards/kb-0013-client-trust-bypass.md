@@ -3,7 +3,7 @@
 ## Metadata
 - ID: kb-0013
 - Type: card
-- Status: draft
+- Status: reviewed
 - Tags: api-security, client-trust
 - Source: TRANSCRIPT_04.md
 - Date: 2026-01-14

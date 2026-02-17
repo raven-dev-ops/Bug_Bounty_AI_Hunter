@@ -3,7 +3,7 @@
 ## Metadata
 - ID: kb-0020
 - Type: card
-- Status: draft
+- Status: reviewed
 - Tags: human-factors, prompt-injection
 - Source: TRANSCRIPT_03.md
 - Date: 2026-01-14

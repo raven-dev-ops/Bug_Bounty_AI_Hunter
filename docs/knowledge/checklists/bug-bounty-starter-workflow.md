@@ -3,7 +3,7 @@
 ## Metadata
 - ID: kb-checklist-0010
 - Type: checklist
-- Status: draft
+- Status: reviewed
 - Tags: bug-bounty, recon, scoping, reporting, human-factors
 - Source: kb-src-0007
 - Date: 2026-02-16

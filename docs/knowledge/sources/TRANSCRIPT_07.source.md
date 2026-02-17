@@ -3,7 +3,7 @@
 ## Metadata
 - ID: kb-src-0007
 - Type: source
-- Status: draft
+- Status: reviewed
 - Tags: transcript, bug-bounty, recon, scoping, reporting, human-factors
 - Source: TRANSCRIPT_07.md
 - Date: 2026-02-16
@@ -25,5 +25,6 @@ scope discipline, structured recon, impact-first focus, and clear reporting.
 - 2:53 reporting quality; screenshots and step-by-step reproduction
 - 3:29 reflection and iteration; learn from failures and community
 
-## Planned artifacts
-- Checklist: `knowledge/checklists/bug-bounty-starter-workflow.md`
+## Derived artifacts
+Checklists:
+- `kb-checklist-0010` [Bug bounty starter workflow checklist](../checklists/bug-bounty-starter-workflow.md)

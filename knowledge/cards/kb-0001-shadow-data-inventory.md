@@ -2,7 +2,7 @@
 id: kb-0001
 title: Shadow data inventory for AI applications
 type: card
-status: draft
+status: reviewed
 tags: [ai-security, rag, embeddings, fine-tuning, logging, privacy]
 source: TRANSCRIPT_01.md
 date: 2026-01-14

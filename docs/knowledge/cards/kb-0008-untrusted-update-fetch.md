@@ -3,7 +3,7 @@
 ## Metadata
 - ID: kb-0008
 - Type: card
-- Status: draft
+- Status: reviewed
 - Tags: update-tools, supply-chain, validation
 - Source: TRANSCRIPT_02.md
 - Date: 2026-01-14

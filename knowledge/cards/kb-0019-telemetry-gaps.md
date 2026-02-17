@@ -2,7 +2,7 @@
 id: kb-0019
 title: Telemetry gaps and coverage blind spots
 type: card
-status: draft
+status: reviewed
 tags: [endpoint-security, telemetry]
 source: TRANSCRIPT_06.md
 date: 2026-01-14

@@ -3,7 +3,7 @@
 ## Metadata
 - ID: kb-0003
 - Type: card
-- Status: draft
+- Status: reviewed
 - Tags: ai-security, rag, privacy, access-control
 - Source: TRANSCRIPT_01.md
 - Date: 2026-01-14

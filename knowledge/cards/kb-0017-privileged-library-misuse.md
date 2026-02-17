@@ -2,7 +2,7 @@
 id: kb-0017
 title: Privileged library misuse
 type: card
-status: draft
+status: reviewed
 tags: [privilege, libraries, legacy-systems]
 source: TRANSCRIPT_05.md
 date: 2026-01-14

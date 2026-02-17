@@ -3,7 +3,7 @@
 ## Metadata
 - ID: kb-checklist-0007
 - Type: checklist
-- Status: draft
+- Status: reviewed
 - Tags: embeddings, ai-security, access-control, logging
 - Source: kb-0006-embedding-exposure
 - Date: 2026-01-15

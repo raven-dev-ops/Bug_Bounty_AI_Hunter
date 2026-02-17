@@ -2,7 +2,7 @@
 id: kb-0002
 title: System prompt exposure and reliance risk
 type: card
-status: draft
+status: reviewed
 tags: [ai-security, prompt-injection, privacy]
 source: TRANSCRIPT_01.md
 date: 2026-01-14

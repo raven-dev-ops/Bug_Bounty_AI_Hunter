@@ -2,7 +2,7 @@
 id: kb-0009
 title: DLL search order hijack risk
 type: card
-status: draft
+status: reviewed
 tags: [windows, dll, load-path]
 source: TRANSCRIPT_02.md
 date: 2026-01-14

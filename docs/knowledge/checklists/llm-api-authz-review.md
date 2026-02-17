@@ -3,7 +3,7 @@
 ## Metadata
 - ID: kb-checklist-0009
 - Type: checklist
-- Status: draft
+- Status: reviewed
 - Tags: ai-security, api-security, access-control, logging
 - Source: project
 - Date: 2026-02-05

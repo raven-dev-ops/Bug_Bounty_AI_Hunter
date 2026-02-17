@@ -2,7 +2,7 @@
 id: kb-0004
 title: Prompt logging and retention risk
 type: card
-status: draft
+status: reviewed
 tags: [ai-security, logging, privacy, compliance]
 source: TRANSCRIPT_01.md
 date: 2026-01-14

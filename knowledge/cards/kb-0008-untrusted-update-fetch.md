@@ -2,7 +2,7 @@
 id: kb-0008
 title: Untrusted update fetch
 type: card
-status: draft
+status: reviewed
 tags: [update-tools, supply-chain, validation]
 source: TRANSCRIPT_02.md
 date: 2026-01-14

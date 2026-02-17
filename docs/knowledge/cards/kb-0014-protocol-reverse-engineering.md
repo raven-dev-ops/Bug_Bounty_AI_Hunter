@@ -3,7 +3,7 @@
 ## Metadata
 - ID: kb-0014
 - Type: card
-- Status: draft
+- Status: reviewed
 - Tags: api-security, reverse-engineering
 - Source: TRANSCRIPT_04.md
 - Date: 2026-01-14

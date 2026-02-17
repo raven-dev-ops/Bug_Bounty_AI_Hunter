@@ -86,7 +86,7 @@ advice. Only test systems where you have explicit authorization.
 - `examples/` - sample profiles and outputs
 - `data/` - local tracking data and registries
 - `evidence/` - evidence registry entries
-- `templates/` - scan planning and engagement workspace templates
+- `templates/` - scan planning, reporting, platform export, and engagement workspace templates
 - `scripts/` - bootstrap and automation scripts
 - `labs/` - synthetic lab scaffolding
 - `tests/` - unit and validation tests

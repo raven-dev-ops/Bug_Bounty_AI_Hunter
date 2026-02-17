@@ -2,7 +2,7 @@
 id: kb-0021
 title: Agent tool argument injection risk
 type: card
-status: draft
+status: reviewed
 tags: [ai-security, agents, prompt-injection, access-control]
 source: project
 date: 2026-02-05

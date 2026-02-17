@@ -3,7 +3,7 @@
 ## Metadata
 - ID: kb-0011
 - Type: card
-- Status: draft
+- Status: reviewed
 - Tags: race-condition, update-tools
 - Source: TRANSCRIPT_02.md
 - Date: 2026-01-14

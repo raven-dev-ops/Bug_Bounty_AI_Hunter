@@ -2,7 +2,7 @@
 id: kb-0005
 title: Fine-tuning data leakage risk
 type: card
-status: draft
+status: reviewed
 tags: [ai-security, fine-tuning, privacy]
 source: TRANSCRIPT_01.md
 date: 2026-01-14

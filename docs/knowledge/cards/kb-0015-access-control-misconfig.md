@@ -3,7 +3,7 @@
 ## Metadata
 - ID: kb-0015
 - Type: card
-- Status: draft
+- Status: reviewed
 - Tags: access-control, legacy-systems
 - Source: TRANSCRIPT_05.md
 - Date: 2026-01-14

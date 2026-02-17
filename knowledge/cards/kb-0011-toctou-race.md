@@ -2,7 +2,7 @@
 id: kb-0011
 title: TOCTOU race in update workflows
 type: card
-status: draft
+status: reviewed
 tags: [race-condition, update-tools]
 source: TRANSCRIPT_02.md
 date: 2026-01-14

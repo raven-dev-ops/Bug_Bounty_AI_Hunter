@@ -2,7 +2,7 @@
 id: kb-0015
 title: Access control misconfiguration in legacy systems
 type: card
-status: draft
+status: reviewed
 tags: [access-control, legacy-systems]
 source: TRANSCRIPT_05.md
 date: 2026-01-14
