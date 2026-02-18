@@ -20,6 +20,9 @@ output/
 LOCAL_APPDATA_FONTCONFIG_CACHE/
 data/ingestion_audit/
 data/fetch_cache/
+data/*.db
+data/*.sqlite
+data/*.sqlite3
 
 # Local secrets
 .env

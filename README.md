@@ -83,6 +83,7 @@ advice. Only test systems where you have explicit authorization.
 ## Repository layout
 - `dashboard.html` and `dashboard/` - local interactive repo overview (static HTML/CSS/JS)
 - `command-center/` - React + TypeScript + Tailwind command-center app scaffold (MVP shell)
+- `command_center_api/` - FastAPI backend with SQLite persistence and ingestion endpoints (MVP baseline)
 - `docs/` - architecture, rules, and planning docs
 - `bounty_board/` - planning-only bounty board markdown (public metadata only). Bugcrowd boards: `bounty_board/bugcrowd/` and `bounty_board/bugcrowd_vdp/`. Full brief exports are generated with `python -m scripts.bugcrowd_briefs` (gitignored under `bounty_board/bugcrowd_full/`).
 - `schemas/` - data model schemas
@@ -113,6 +114,16 @@ cd command-center
 npm install
 npm run dev
 ```
+
+## Command Center Backend API (MVP Baseline)
+```bash
+python -m pip install -r requirements.txt
+python -m scripts.command_center_ingest --db data/command_center.db
+python -m scripts.command_center_api --host 127.0.0.1 --port 8787 --db data/command_center.db
+```
+- OpenAPI contract: `docs/COMMAND_CENTER_OPENAPI.yaml`
+- SQLite schema: `schemas/command_center_sqlite_schema.sql`
+- Local SQLite files under `data/` are gitignored.
 
 ## How To Use
 - Start with `docs/ROE.md` and confirm written authorization.
