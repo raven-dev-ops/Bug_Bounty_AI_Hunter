@@ -114,6 +114,10 @@ cd command-center
 npm install
 npm run dev
 ```
+- Feed and workflow pages now include:
+- Bounty Feed table with filters/sorting and local saved views.
+- Bounty Detail page with provenance/conflict review and workspace creation action.
+- Workspaces page with ROE acknowledgement form and run-mode gating status.
 
 ## Command Center Backend API (MVP Baseline)
 ```bash
@@ -124,6 +128,8 @@ python -m scripts.command_center_api --host 127.0.0.1 --port 8787 --db data/comm
 - OpenAPI contract: `docs/COMMAND_CENTER_OPENAPI.yaml`
 - SQLite schema: `schemas/command_center_sqlite_schema.sql`
 - Local SQLite files under `data/` are gitignored.
+- Workspace creation endpoint scaffolds engagement files plus `ROE_ACK.yaml` and `pipeline_config.yaml`.
+- Run-mode tool records require a workspace with recorded ROE acknowledgement.
 
 ## How To Use
 - Start with `docs/ROE.md` and confirm written authorization.

@@ -386,6 +386,16 @@ def acknowledge_workspace(
     return _row_to_dict(row)
 
 
+def get_workspace(connection: sqlite3.Connection, workspace_id: str) -> dict[str, Any] | None:
+    row = connection.execute(
+        "SELECT * FROM workspaces WHERE id = ?",
+        (workspace_id,),
+    ).fetchone()
+    if row is None:
+        return None
+    return _row_to_dict(row)
+
+
 def list_workspaces(connection: sqlite3.Connection, *, limit: int = 200) -> list[dict[str, Any]]:
     safe_limit = max(1, min(1000, int(limit)))
     rows = connection.execute(

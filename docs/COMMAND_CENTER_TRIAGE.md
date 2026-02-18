@@ -13,7 +13,8 @@ standpoint. Delivery is tracked in GitHub Issues, repo docs, and roadmap.
 
 Issue state policy for this range:
 - `#164` is closed because the ADR was delivered.
-- `#165` through `#206` stay open in `status/ready` until delivery is complete.
+- Delivery issues are closed only after implementation is merged.
+- Use GitHub issue state as the source of truth for which delivery items remain open.
 - Do not close a delivery issue on triage completion alone.
 
 Last updated: 2026-02-18
