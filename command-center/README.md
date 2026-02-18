@@ -9,6 +9,15 @@ This app scaffolds issue delivery for:
 - #174 Build Bounty Detail page
 - #175 Engagement workspace creation
 - #176 ROE acknowledgement UI
+- #177 Tools Hub: script catalog
+- #178 Tool runner API endpoint
+- #179 Tool runner UI
+- #180 Report Composer MVP
+- #181 Issue draft exports UI
+- #182 Findings DB UI
+- #183 Logs page MVP
+- #184 Notifications center MVP
+- #185 Help/Docs embedding
 
 ## Stack
 - React + TypeScript (Vite)
@@ -28,3 +37,9 @@ This app scaffolds issue delivery for:
 - Program feed table backed by `/api/programs` with local saved filter views
 - Program detail view with provenance/conflict display and workspace creation form
 - Workspace list + ROE acknowledgement UI backed by `/api/workspaces` endpoints
+- Tools Hub and runner UI backed by `/api/tools`, `/api/runs`, and `/api/runs/execute`
+- Report composer actions for report bundles and issue draft exports
+- Findings DB CRUD with JSON import/export controls
+- Logs view for searchable tool runs and log tails
+- Notifications center with placeholder channel settings and read state controls
+- In-app docs search and markdown page renderer backed by API endpoints

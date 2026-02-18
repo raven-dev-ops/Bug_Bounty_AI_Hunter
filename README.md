@@ -118,6 +118,10 @@ npm run dev
 - Bounty Feed table with filters/sorting and local saved views.
 - Bounty Detail page with provenance/conflict review and workspace creation action.
 - Workspaces page with ROE acknowledgement form and run-mode gating status.
+- Tools Hub runner page with script catalog, run controls, and log tail viewer.
+- Findings DB UI with CRUD and JSON import/export.
+- Report Composer actions for report bundle and issue draft exports.
+- Logs, notifications, and docs-search pages for operator workflows.
 
 ## Command Center Backend API (MVP Baseline)
 ```bash
@@ -130,6 +134,8 @@ python -m scripts.command_center_api --host 127.0.0.1 --port 8787 --db data/comm
 - Local SQLite files under `data/` are gitignored.
 - Workspace creation endpoint scaffolds engagement files plus `ROE_ACK.yaml` and `pipeline_config.yaml`.
 - Run-mode tool records require a workspace with recorded ROE acknowledgement.
+- Tool execution endpoint runs approved scripts with captured logs and notification events.
+- Docs endpoints provide markdown search and page retrieval for in-app Help/Docs views.
 
 ## How To Use
 - Start with `docs/ROE.md` and confirm written authorization.

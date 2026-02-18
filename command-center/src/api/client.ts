@@ -1,16 +1,6 @@
 export const API_BASE_URL =
   import.meta.env.VITE_COMMAND_CENTER_API_URL ?? "http://127.0.0.1:8787";
 
-type ProgramListResponse = {
-  items: ProgramRow[];
-  count: number;
-};
-
-type WorkspaceListResponse = {
-  items: WorkspaceRow[];
-  count: number;
-};
-
 export type ProgramRow = {
   id: string;
   name: string;
@@ -19,6 +9,20 @@ export type ProgramRow = {
   policy_url: string | null;
   rewards_summary: string | null;
   source: string | null;
+  raw_json: Record<string, unknown>;
+  created_at: string;
+  updated_at: string;
+};
+
+export type FindingRow = {
+  id: string;
+  title: string;
+  severity: string | null;
+  status: string | null;
+  source: string | null;
+  description: string | null;
+  impact: string | null;
+  remediation: string | null;
   raw_json: Record<string, unknown>;
   created_at: string;
   updated_at: string;
@@ -39,6 +43,93 @@ export type WorkspaceRow = {
   updated_at: string;
 };
 
+export type ToolDescriptor = {
+  id: string;
+  name: string;
+  stage: string;
+  description: string;
+};
+
+export type ToolRunRow = {
+  id: string;
+  tool: string;
+  mode: string;
+  status: string;
+  exit_code: number | null;
+  started_at: string;
+  finished_at: string | null;
+  log_path: string | null;
+  artifact_path: string | null;
+  request_json: Record<string, unknown>;
+};
+
+export type NotificationRow = {
+  id: string;
+  channel: string;
+  title: string;
+  body: string;
+  read: number;
+  created_at: string;
+};
+
+export type DocSearchResult = {
+  path: string;
+  title: string;
+  snippet: string;
+};
+
+type ProgramListResponse = {
+  items: ProgramRow[];
+  count: number;
+};
+
+type FindingListResponse = {
+  items: FindingRow[];
+  count: number;
+};
+
+type WorkspaceListResponse = {
+  items: WorkspaceRow[];
+  count: number;
+};
+
+type ToolListResponse = {
+  items: ToolDescriptor[];
+  count: number;
+};
+
+type RunListResponse = {
+  items: ToolRunRow[];
+  count: number;
+};
+
+type NotificationListResponse = {
+  items: NotificationRow[];
+  count: number;
+};
+
+type DocsSearchResponse = {
+  items: DocSearchResult[];
+  count: number;
+};
+
+type FindingsExportResponse = {
+  findings: Record<string, unknown>[];
+  count: number;
+};
+
+type RunLogResponse = {
+  run_id: string;
+  log_path: string;
+  content: string;
+};
+
+type ReportRunResponse = {
+  run: ToolRunRow;
+  output_dir: string;
+  files: string[];
+};
+
 type ListProgramParams = {
   query?: string;
   limit?: number;
@@ -57,6 +148,34 @@ type CreateWorkspacePayload = {
 type AckWorkspacePayload = {
   acknowledged_by: string;
   authorized_target: string;
+};
+
+type ExecuteRunPayload = {
+  tool: string;
+  mode: "plan" | "run";
+  args: string[];
+  workspace_id?: string;
+  timeout_seconds?: number;
+};
+
+type ReportBundlePayload = {
+  findings_path: string;
+  target_profile_path: string;
+  output_dir: string;
+  evidence_path?: string;
+  repro_steps_path?: string;
+  workspace_id?: string;
+  timeout_seconds?: number;
+};
+
+type IssueDraftPayload = {
+  findings_path: string;
+  target_profile_path: string;
+  output_dir: string;
+  platform: string;
+  attachments_manifest_path?: string;
+  workspace_id?: string;
+  timeout_seconds?: number;
 };
 
 async function parseJsonResponse<T>(response: Response): Promise<T> {
@@ -99,6 +218,48 @@ export async function getProgram(programId: string): Promise<ProgramRow> {
   return parseJsonResponse<ProgramRow>(response);
 }
 
+export async function listFindings(limit = 1000): Promise<FindingRow[]> {
+  const response = await fetch(`${API_BASE_URL}/api/findings?limit=${limit}`);
+  const data = await parseJsonResponse<FindingListResponse>(response);
+  return data.items;
+}
+
+export async function upsertFinding(payload: Record<string, unknown>): Promise<FindingRow> {
+  const response = await fetch(`${API_BASE_URL}/api/findings`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+  return parseJsonResponse<FindingRow>(response);
+}
+
+export async function deleteFinding(findingId: string): Promise<void> {
+  const safeId = encodeURIComponent(findingId);
+  const response = await fetch(`${API_BASE_URL}/api/findings/${safeId}`, {
+    method: "DELETE",
+  });
+  await parseJsonResponse<{ ok: boolean }>(response);
+}
+
+export async function importFindings(
+  findings: Record<string, unknown>[],
+  source = "command_center_import",
+): Promise<number> {
+  const response = await fetch(`${API_BASE_URL}/api/findings/import`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ findings, source }),
+  });
+  const data = await parseJsonResponse<{ ok: boolean; count: number }>(response);
+  return data.count;
+}
+
+export async function exportFindings(): Promise<Record<string, unknown>[]> {
+  const response = await fetch(`${API_BASE_URL}/api/findings/export`);
+  const data = await parseJsonResponse<FindingsExportResponse>(response);
+  return data.findings;
+}
+
 export async function listWorkspaces(): Promise<WorkspaceRow[]> {
   const response = await fetch(`${API_BASE_URL}/api/workspaces?limit=500`);
   const data = await parseJsonResponse<WorkspaceListResponse>(response);
@@ -110,9 +271,7 @@ export async function createWorkspace(
 ): Promise<WorkspaceRow> {
   const response = await fetch(`${API_BASE_URL}/api/workspaces`, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload),
   });
   return parseJsonResponse<WorkspaceRow>(response);
@@ -125,10 +284,110 @@ export async function acknowledgeWorkspace(
   const safeId = encodeURIComponent(workspaceId);
   const response = await fetch(`${API_BASE_URL}/api/workspaces/${safeId}/ack`, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload),
   });
   return parseJsonResponse<WorkspaceRow>(response);
+}
+
+export async function listTools(): Promise<ToolDescriptor[]> {
+  const response = await fetch(`${API_BASE_URL}/api/tools`);
+  const data = await parseJsonResponse<ToolListResponse>(response);
+  return data.items;
+}
+
+export async function listRuns(limit = 300): Promise<ToolRunRow[]> {
+  const response = await fetch(`${API_BASE_URL}/api/runs?limit=${limit}`);
+  const data = await parseJsonResponse<RunListResponse>(response);
+  return data.items;
+}
+
+export async function getRunLog(runId: string, tailLines = 200): Promise<RunLogResponse> {
+  const safeId = encodeURIComponent(runId);
+  const response = await fetch(
+    `${API_BASE_URL}/api/runs/${safeId}/log?tail_lines=${tailLines}`,
+  );
+  return parseJsonResponse<RunLogResponse>(response);
+}
+
+export async function executeRun(payload: ExecuteRunPayload): Promise<ToolRunRow> {
+  const response = await fetch(`${API_BASE_URL}/api/runs/execute`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+  return parseJsonResponse<ToolRunRow>(response);
+}
+
+export async function generateReportBundle(
+  payload: ReportBundlePayload,
+): Promise<ReportRunResponse> {
+  const response = await fetch(`${API_BASE_URL}/api/reports/bundle`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+  return parseJsonResponse<ReportRunResponse>(response);
+}
+
+export async function generateIssueDrafts(
+  payload: IssueDraftPayload,
+): Promise<ReportRunResponse> {
+  const response = await fetch(`${API_BASE_URL}/api/reports/issue-drafts`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+  return parseJsonResponse<ReportRunResponse>(response);
+}
+
+export async function listNotifications(
+  unreadOnly = false,
+): Promise<NotificationRow[]> {
+  const response = await fetch(
+    `${API_BASE_URL}/api/notifications?unread_only=${unreadOnly}`,
+  );
+  const data = await parseJsonResponse<NotificationListResponse>(response);
+  return data.items;
+}
+
+export async function createNotification(payload: {
+  channel: string;
+  title: string;
+  body: string;
+}): Promise<NotificationRow> {
+  const response = await fetch(`${API_BASE_URL}/api/notifications`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+  return parseJsonResponse<NotificationRow>(response);
+}
+
+export async function setNotificationRead(
+  notificationId: string,
+  read: boolean,
+): Promise<NotificationRow> {
+  const safeId = encodeURIComponent(notificationId);
+  const response = await fetch(`${API_BASE_URL}/api/notifications/${safeId}/read`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ read }),
+  });
+  return parseJsonResponse<NotificationRow>(response);
+}
+
+export async function searchDocs(query: string, limit = 30): Promise<DocSearchResult[]> {
+  const safeQuery = encodeURIComponent(query);
+  const response = await fetch(
+    `${API_BASE_URL}/api/docs/search?query=${safeQuery}&limit=${limit}`,
+  );
+  const data = await parseJsonResponse<DocsSearchResponse>(response);
+  return data.items;
+}
+
+export async function loadDocPage(path: string): Promise<{ path: string; content: string }> {
+  const safePath = encodeURIComponent(path);
+  const response = await fetch(`${API_BASE_URL}/api/docs/page?path=${safePath}`);
+  return parseJsonResponse<{ path: string; content: string }>(response);
 }

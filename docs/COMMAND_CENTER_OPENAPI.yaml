@@ -88,6 +88,33 @@ paths:
       responses:
         "200":
           description: Upserted finding
+  /api/findings/export:
+    get:
+      summary: Export findings as JSON list
+      responses:
+        "200":
+          description: Findings export payload
+  /api/findings/import:
+    post:
+      summary: Import findings JSON list
+      requestBody:
+        required: true
+      responses:
+        "200":
+          description: Import count
+  /api/findings/{finding_id}:
+    delete:
+      summary: Delete one finding
+      parameters:
+        - in: path
+          name: finding_id
+          required: true
+          schema: { type: string }
+      responses:
+        "200":
+          description: Finding deleted
+        "404":
+          description: Finding not found
   /api/workspaces:
     get:
       summary: List workspaces
@@ -157,6 +184,122 @@ paths:
           description: Workspace requires ROE acknowledgement
         "404":
           description: Workspace not found
+  /api/runs/execute:
+    post:
+      summary: Execute an approved script and capture run logs
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/ToolExecuteInput" }
+      responses:
+        "200":
+          description: Completed run row
+  /api/runs/{run_id}:
+    get:
+      summary: Get one tool run
+      parameters:
+        - in: path
+          name: run_id
+          required: true
+          schema: { type: string }
+      responses:
+        "200":
+          description: Run row
+        "404":
+          description: Run not found
+  /api/runs/{run_id}/log:
+    get:
+      summary: Get tool run log tail
+      parameters:
+        - in: path
+          name: run_id
+          required: true
+          schema: { type: string }
+        - in: query
+          name: tail_lines
+          schema: { type: integer, minimum: 1, maximum: 2000 }
+      responses:
+        "200":
+          description: Log tail content
+        "404":
+          description: Run not found
+  /api/tools:
+    get:
+      summary: List approved runnable tool modules
+      responses:
+        "200":
+          description: Tool catalog
+  /api/reports/bundle:
+    post:
+      summary: Execute report bundle generation script
+      requestBody:
+        required: true
+      responses:
+        "200":
+          description: Run row plus output files
+  /api/reports/issue-drafts:
+    post:
+      summary: Execute issue draft export script
+      requestBody:
+        required: true
+      responses:
+        "200":
+          description: Run row plus output files
+  /api/notifications:
+    get:
+      summary: List notifications
+      responses:
+        "200":
+          description: Notification list
+    post:
+      summary: Create notification event
+      requestBody:
+        required: true
+      responses:
+        "200":
+          description: Created notification
+  /api/notifications/{notification_id}/read:
+    post:
+      summary: Mark a notification read/unread
+      parameters:
+        - in: path
+          name: notification_id
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+      responses:
+        "200":
+          description: Updated notification
+        "404":
+          description: Notification not found
+  /api/docs/search:
+    get:
+      summary: Search markdown docs under docs/
+      parameters:
+        - in: query
+          name: query
+          schema: { type: string }
+        - in: query
+          name: limit
+          schema: { type: integer, minimum: 1, maximum: 100 }
+      responses:
+        "200":
+          description: Docs search results
+  /api/docs/page:
+    get:
+      summary: Load one markdown doc page by relative path
+      parameters:
+        - in: query
+          name: path
+          required: true
+          schema: { type: string }
+      responses:
+        "200":
+          description: Markdown page content
+        "404":
+          description: Page not found
 components:
   schemas:
     ProgramRow:
@@ -211,3 +354,12 @@ components:
           type: array
           items: { type: string }
         workspace_id: { type: string }
+    ToolExecuteInput:
+      allOf:
+        - $ref: "#/components/schemas/ToolRunInput"
+        - type: object
+          properties:
+            timeout_seconds:
+              type: integer
+              minimum: 1
+              maximum: 7200
