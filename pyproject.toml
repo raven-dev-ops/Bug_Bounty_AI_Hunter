@@ -10,7 +10,12 @@ readme = "README.md"
 requires-python = ">=3.10"
 license = { text = "Apache-2.0" }
 authors = [{ name = "Raven DevOps", email = "support@ravdevops.com" }]
-dependencies = ["jsonschema==4.26.0", "pyyaml==6.0.3"]
+dependencies = [
+  "jsonschema==4.26.0",
+  "pyyaml==6.0.3",
+  "fastapi==0.115.8",
+  "uvicorn==0.34.0",
+]
 
 [project.optional-dependencies]
 dev = [
@@ -30,7 +35,7 @@ py-modules = ["bbhai"]
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["scripts*"]
+include = ["scripts*", "command_center_api*"]
 
 [tool.pytest.ini_options]
 asyncio_default_fixture_loop_scope = "function"

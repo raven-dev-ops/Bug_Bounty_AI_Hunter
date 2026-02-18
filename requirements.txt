@@ -1,2 +1,4 @@
 jsonschema==4.26.0
 pyyaml==6.0.3
+fastapi==0.115.8
+uvicorn==0.34.0

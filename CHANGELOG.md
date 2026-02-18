@@ -3,6 +3,7 @@
 All notable changes to this project will be documented here.
 
 ## Unreleased
+- Added Command Center backend MVP baseline with FastAPI endpoints, SQLite persistence schema, and artifact ingestion from `data/program_registry.json`, `data/findings_db.json`, and `bounty_board/` (issues #168, #169, #170, #171).
 - Added `command-center/` React + TypeScript + Tailwind scaffold with routed pages, responsive app shell navigation, command palette skeleton, and dark-yellow theme tokens with a switcher (issues #165, #166, #167).
 - Updated `scripts/bootstrap_issues.sh` to use the correct default repo, require `gh` auth up front, and support overriding the target with `GITHUB_REPO`.
 - Corrected command-center triage tracking: issue `#164` stays closed (ADR delivered), while issues `#165`-`#206` remain open in `status/ready` until delivery completion.

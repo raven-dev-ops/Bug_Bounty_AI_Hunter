@@ -1,0 +1,193 @@
+openapi: 3.1.0
+info:
+  title: Command Center API
+  version: 0.1.0
+  description: >
+    Internal REST contract for command-center resources. MVP includes programs,
+    findings, workspaces, ingestion, and tool-run tracking.
+servers:
+  - url: http://127.0.0.1:8787
+paths:
+  /health:
+    get:
+      summary: Health check
+      responses:
+        "200":
+          description: Service is healthy
+  /api/ingest:
+    post:
+      summary: Ingest existing repo artifacts into SQLite
+      parameters:
+        - in: query
+          name: program_registry_path
+          schema: { type: string }
+        - in: query
+          name: findings_db_path
+          schema: { type: string }
+        - in: query
+          name: bounty_board_root
+          schema: { type: string }
+      responses:
+        "200":
+          description: Ingestion counts
+  /api/programs:
+    get:
+      summary: List programs
+      parameters:
+        - in: query
+          name: query
+          schema: { type: string }
+        - in: query
+          name: limit
+          schema: { type: integer, minimum: 1, maximum: 500 }
+      responses:
+        "200":
+          description: Program list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items: { $ref: "#/components/schemas/ProgramRow" }
+                  count: { type: integer }
+  /api/programs/{program_id}:
+    get:
+      summary: Get one program
+      parameters:
+        - in: path
+          name: program_id
+          required: true
+          schema: { type: string }
+      responses:
+        "200":
+          description: Program
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ProgramRow" }
+        "404":
+          description: Program not found
+  /api/findings:
+    get:
+      summary: List findings
+      parameters:
+        - in: query
+          name: limit
+          schema: { type: integer, minimum: 1, maximum: 1000 }
+      responses:
+        "200":
+          description: Findings list
+    post:
+      summary: Create or update finding
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/FindingInput" }
+      responses:
+        "200":
+          description: Upserted finding
+  /api/workspaces:
+    get:
+      summary: List workspaces
+      responses:
+        "200":
+          description: Workspace list
+    post:
+      summary: Create workspace
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/WorkspaceInput" }
+      responses:
+        "200":
+          description: Created workspace
+  /api/workspaces/{workspace_id}/ack:
+    post:
+      summary: Record ROE acknowledgment
+      parameters:
+        - in: path
+          name: workspace_id
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/WorkspaceAckInput" }
+      responses:
+        "200":
+          description: Updated workspace
+        "404":
+          description: Workspace not found
+  /api/runs:
+    get:
+      summary: List tool runs
+      responses:
+        "200":
+          description: Run list
+    post:
+      summary: Queue a tool run record
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/ToolRunInput" }
+      responses:
+        "200":
+          description: Created run
+components:
+  schemas:
+    ProgramRow:
+      type: object
+      properties:
+        id: { type: string }
+        name: { type: string }
+        platform: { type: string }
+        handle: { type: string }
+        policy_url: { type: string }
+        source: { type: string }
+        raw_json: { type: object }
+    FindingInput:
+      type: object
+      required: [id, title]
+      properties:
+        id: { type: string }
+        title: { type: string }
+        severity: { type: string }
+        status: { type: string }
+        source: { type: string }
+        description: { type: string }
+        impact: { type: string }
+        remediation: { type: string }
+        extra: { type: object }
+    WorkspaceInput:
+      type: object
+      required: [platform, slug, name]
+      properties:
+        platform: { type: string }
+        slug: { type: string }
+        name: { type: string }
+        engagement_url: { type: string }
+        root_dir: { type: string }
+    WorkspaceAckInput:
+      type: object
+      required: [acknowledged_by, authorized_target]
+      properties:
+        acknowledged_by: { type: string }
+        authorized_target: { type: string }
+    ToolRunInput:
+      type: object
+      required: [tool]
+      properties:
+        tool: { type: string }
+        mode:
+          type: string
+          enum: [plan, run]
+        args:
+          type: array
+          items: { type: string }
+        workspace_id: { type: string }
+

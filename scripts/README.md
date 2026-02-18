@@ -64,4 +64,6 @@ Use `python -m scripts.<module>` to run a script from the repo root.
 - `bugcrowd_briefs.py` - export Bugcrowd engagement briefs and subpages to local Markdown (writes to gitignored `bounty_board/bugcrowd_full/`; tries public fetch first and only attempts login on 401/403; use `--auth-required` to force login, or `--public-only` to never login; community and per-target-group stats are optional flags)
 - `bugcrowd_full_postprocess.py` - postprocess local Bugcrowd brief exports to add rendered brief/scope sections and a local `INDEX.md`
 - `bootstrap_issues.sh` - create labels and starter backlog
+- `command_center_api.py` - run the Command Center FastAPI backend
+- `command_center_ingest.py` - ingest registry/findings/board artifacts into Command Center SQLite
 - `connectors/` - ingestion connector framework and source implementations
