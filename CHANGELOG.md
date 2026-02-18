@@ -3,6 +3,7 @@
 All notable changes to this project will be documented here.
 
 ## Unreleased
+- Added `command-center/` React + TypeScript + Tailwind scaffold with routed pages, responsive app shell navigation, command palette skeleton, and dark-yellow theme tokens with a switcher (issues #165, #166, #167).
 - Updated `scripts/bootstrap_issues.sh` to use the correct default repo, require `gh` auth up front, and support overriding the target with `GITHUB_REPO`.
 - Corrected command-center triage tracking: issue `#164` stays closed (ADR delivered), while issues `#165`-`#206` remain open in `status/ready` until delivery completion.
 - Streamlined CI to reduce redundant checks: linting, docs/link validation, and dependency audit now run once on Python 3.11, while the 3.10-3.12 matrix focuses on unit tests (coverage stays on 3.11).

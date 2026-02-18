@@ -1,0 +1,26 @@
+@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap");
+
+:root,
+:root[data-theme="amber-dark"] {
+  --cc-bg: 16 14 9;
+  --cc-surface: 27 23 14;
+  --cc-text: 246 236 203;
+  --cc-muted: 181 165 113;
+  --cc-accent: 240 186 63;
+  --cc-accent-strong: 255 216 121;
+  --cc-border: 83 70 35;
+  --cc-danger: 255 123 81;
+  color-scheme: dark;
+}
+
+:root[data-theme="sand-light"] {
+  --cc-bg: 250 246 232;
+  --cc-surface: 255 252 245;
+  --cc-text: 48 39 19;
+  --cc-muted: 112 95 54;
+  --cc-accent: 176 116 26;
+  --cc-accent-strong: 139 86 0;
+  --cc-border: 198 176 120;
+  --cc-danger: 166 44 24;
+  color-scheme: light;
+}

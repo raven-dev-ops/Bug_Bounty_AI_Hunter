@@ -82,6 +82,7 @@ advice. Only test systems where you have explicit authorization.
 
 ## Repository layout
 - `dashboard.html` and `dashboard/` - local interactive repo overview (static HTML/CSS/JS)
+- `command-center/` - React + TypeScript + Tailwind command-center app scaffold (MVP shell)
 - `docs/` - architecture, rules, and planning docs
 - `bounty_board/` - planning-only bounty board markdown (public metadata only). Bugcrowd boards: `bounty_board/bugcrowd/` and `bounty_board/bugcrowd_vdp/`. Full brief exports are generated with `python -m scripts.bugcrowd_briefs` (gitignored under `bounty_board/bugcrowd_full/`).
 - `schemas/` - data model schemas
@@ -104,6 +105,13 @@ Editable installs:
 ```bash
 python -m pip install -e .
 python -m pip install -e .[dev]
+```
+
+## Command Center Frontend (MVP Scaffold)
+```bash
+cd command-center
+npm install
+npm run dev
 ```
 
 ## How To Use

@@ -31,3 +31,7 @@ BUGCROWD_backup_codes.*
 
 # Auth-required outputs (do not commit program briefs/scope details)
 bounty_board/bugcrowd_full/
+
+# Node/web build artifacts
+node_modules/
+dist/
