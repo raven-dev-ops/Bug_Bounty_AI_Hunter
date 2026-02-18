@@ -138,6 +138,7 @@ python -m scripts.command_center_api --host 127.0.0.1 --port 8787 --db data/comm
 - Run-mode tool records require a workspace with recorded ROE acknowledgement.
 - Tool execution endpoint runs approved scripts with captured logs and notification events.
 - Docs endpoints provide markdown search and page retrieval for in-app Help/Docs views.
+- Connector endpoints support Bugcrowd, GitHub, Intigriti, and YesWeHack sync flows with webhook/audit coverage and connector-run tracking.
 
 ## How To Use
 - Start with `docs/ROE.md` and confirm written authorization.

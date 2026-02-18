@@ -162,6 +162,83 @@ paths:
           description: Updated workspace
         "404":
           description: Workspace not found
+  /api/tasks:
+    get:
+      summary: List synced tasks
+      responses:
+        "200":
+          description: Task list
+  /api/connectors/bugcrowd/programs/sync:
+    post:
+      summary: Sync Bugcrowd programs (API token optional; registry fallback if absent)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/BugcrowdProgramSyncInput" }
+      responses:
+        "200":
+          description: Connector run summary
+  /api/connectors/bugcrowd/submissions/sync:
+    post:
+      summary: Sync Bugcrowd submissions status history
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/BugcrowdSubmissionSyncInput" }
+      responses:
+        "200":
+          description: Connector run summary
+  /api/connectors/bugcrowd/webhook:
+    post:
+      summary: Receive Bugcrowd webhook events with signature verification
+      responses:
+        "200":
+          description: Webhook accepted
+        "401":
+          description: Signature verification failed
+  /api/connectors/github/issues/sync:
+    post:
+      summary: Sync GitHub issues into tasks
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/GithubSyncInput" }
+      responses:
+        "200":
+          description: Connector run summary
+  /api/connectors/github/webhook:
+    post:
+      summary: Receive GitHub issue webhooks and update tasks
+      responses:
+        "200":
+          description: Webhook accepted
+        "401":
+          description: Signature verification failed
+  /api/connectors/intigriti/sync:
+    post:
+      summary: Sync Intigriti programs via connector parser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/ConnectorSyncInput" }
+      responses:
+        "200":
+          description: Connector run summary
+  /api/connectors/yeswehack/sync:
+    post:
+      summary: Sync YesWeHack programs via connector parser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/ConnectorSyncInput" }
+      responses:
+        "200":
+          description: Connector run summary
   /api/runs:
     get:
       summary: List tool runs
@@ -363,3 +440,41 @@ components:
               type: integer
               minimum: 1
               maximum: 7200
+    ConnectorSyncInput:
+      type: object
+      properties:
+        limit:
+          type: integer
+          minimum: 1
+          maximum: 500
+        fixtures_dir:
+          type: string
+    BugcrowdProgramSyncInput:
+      type: object
+      properties:
+        token: { type: string }
+        limit:
+          type: integer
+          minimum: 1
+          maximum: 500
+    BugcrowdSubmissionSyncInput:
+      type: object
+      properties:
+        token: { type: string }
+        since: { type: string }
+        cursor: { type: string }
+        limit:
+          type: integer
+          minimum: 1
+          maximum: 200
+    GithubSyncInput:
+      type: object
+      required: [repo]
+      properties:
+        repo: { type: string }
+        token: { type: string }
+        state: { type: string }
+        limit:
+          type: integer
+          minimum: 1
+          maximum: 500

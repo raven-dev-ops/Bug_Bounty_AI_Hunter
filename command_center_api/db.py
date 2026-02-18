@@ -151,6 +151,23 @@ def init_schema(db_path: Path | str = DEFAULT_DB_PATH) -> None:
               started_at TEXT NOT NULL,
               finished_at TEXT
             );
+
+            CREATE TABLE IF NOT EXISTS connector_http_cache (
+              url TEXT PRIMARY KEY,
+              etag TEXT,
+              last_modified TEXT,
+              response_json TEXT,
+              updated_at TEXT NOT NULL
+            );
+
+            CREATE TABLE IF NOT EXISTS submission_status_history (
+              id TEXT PRIMARY KEY,
+              platform TEXT NOT NULL,
+              submission_id TEXT NOT NULL,
+              status TEXT NOT NULL,
+              raw_json TEXT NOT NULL,
+              observed_at TEXT NOT NULL
+            );
             """
         )
 
@@ -576,6 +593,165 @@ def mark_notification_read(
     if row is None:
         return None
     return _row_to_dict(row)
+
+
+def create_connector_run(
+    connection: sqlite3.Connection,
+    *,
+    run_id: str,
+    connector: str,
+    status: str,
+    summary: dict[str, Any],
+) -> dict[str, Any]:
+    now = utc_now()
+    connection.execute(
+        """
+        INSERT INTO connector_runs (id, connector, status, summary_json, started_at, finished_at)
+        VALUES (?, ?, ?, ?, ?, ?)
+        """,
+        (run_id, connector, status, _json_dump(summary), now, None),
+    )
+    row = connection.execute("SELECT * FROM connector_runs WHERE id = ?", (run_id,)).fetchone()
+    if row is None:
+        raise RuntimeError("failed to create connector run")
+    item = _row_to_dict(row)
+    item["summary_json"] = json.loads(item["summary_json"])
+    return item
+
+
+def finish_connector_run(
+    connection: sqlite3.Connection,
+    *,
+    run_id: str,
+    status: str,
+    summary: dict[str, Any],
+) -> dict[str, Any] | None:
+    now = utc_now()
+    connection.execute(
+        """
+        UPDATE connector_runs
+        SET status = ?,
+            summary_json = ?,
+            finished_at = ?
+        WHERE id = ?
+        """,
+        (status, _json_dump(summary), now, run_id),
+    )
+    row = connection.execute("SELECT * FROM connector_runs WHERE id = ?", (run_id,)).fetchone()
+    if row is None:
+        return None
+    item = _row_to_dict(row)
+    item["summary_json"] = json.loads(item["summary_json"])
+    return item
+
+
+def get_http_cache(connection: sqlite3.Connection, url: str) -> dict[str, Any] | None:
+    row = connection.execute(
+        "SELECT * FROM connector_http_cache WHERE url = ?",
+        (url,),
+    ).fetchone()
+    if row is None:
+        return None
+    item = _row_to_dict(row)
+    payload = item.get("response_json")
+    if payload:
+        item["response_json"] = json.loads(str(payload))
+    else:
+        item["response_json"] = None
+    return item
+
+
+def upsert_http_cache(
+    connection: sqlite3.Connection,
+    *,
+    url: str,
+    etag: str | None,
+    last_modified: str | None,
+    response_json: dict[str, Any] | None,
+) -> dict[str, Any]:
+    now = utc_now()
+    payload = _json_dump(response_json or {})
+    connection.execute(
+        """
+        INSERT INTO connector_http_cache (url, etag, last_modified, response_json, updated_at)
+        VALUES (?, ?, ?, ?, ?)
+        ON CONFLICT(url) DO UPDATE SET
+          etag = excluded.etag,
+          last_modified = excluded.last_modified,
+          response_json = excluded.response_json,
+          updated_at = excluded.updated_at
+        """,
+        (url, etag, last_modified, payload, now),
+    )
+    item = get_http_cache(connection, url)
+    if item is None:
+        raise RuntimeError("failed to upsert connector_http_cache")
+    return item
+
+
+def add_submission_status_event(
+    connection: sqlite3.Connection,
+    *,
+    event_id: str,
+    platform: str,
+    submission_id: str,
+    status: str,
+    payload: dict[str, Any],
+) -> None:
+    connection.execute(
+        """
+        INSERT OR REPLACE INTO submission_status_history (
+          id, platform, submission_id, status, raw_json, observed_at
+        ) VALUES (?, ?, ?, ?, ?, ?)
+        """,
+        (event_id, platform, submission_id, status, _json_dump(payload), utc_now()),
+    )
+
+
+def upsert_task(connection: sqlite3.Connection, task: dict[str, Any]) -> dict[str, Any]:
+    now = utc_now()
+    task_id = str(task.get("id") or "").strip()
+    if not task_id:
+        raise ValueError("task.id is required")
+    connection.execute(
+        """
+        INSERT INTO tasks (
+          id, title, status, linked_program_id, linked_finding_id, created_at, updated_at
+        ) VALUES (?, ?, ?, ?, ?, ?, ?)
+        ON CONFLICT(id) DO UPDATE SET
+          title = excluded.title,
+          status = excluded.status,
+          linked_program_id = excluded.linked_program_id,
+          linked_finding_id = excluded.linked_finding_id,
+          updated_at = excluded.updated_at
+        """,
+        (
+            task_id,
+            str(task.get("title") or "").strip(),
+            str(task.get("status") or "open").strip(),
+            str(task.get("linked_program_id") or "").strip() or None,
+            str(task.get("linked_finding_id") or "").strip() or None,
+            now,
+            now,
+        ),
+    )
+    row = connection.execute("SELECT * FROM tasks WHERE id = ?", (task_id,)).fetchone()
+    if row is None:
+        raise RuntimeError("failed to upsert task")
+    return _row_to_dict(row)
+
+
+def list_tasks(connection: sqlite3.Connection, *, limit: int = 200) -> list[dict[str, Any]]:
+    safe_limit = max(1, min(1000, int(limit)))
+    rows = connection.execute(
+        """
+        SELECT * FROM tasks
+        ORDER BY updated_at DESC
+        LIMIT ?
+        """,
+        (safe_limit,),
+    ).fetchall()
+    return [_row_to_dict(row) for row in rows]
 
 
 def add_audit_event(
