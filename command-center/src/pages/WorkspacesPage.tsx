@@ -1,4 +1,4 @@
-import { FormEvent, useEffect, useMemo, useState } from "react";
+import { FormEvent, useCallback, useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import {
   acknowledgeWorkspace,
@@ -34,14 +34,14 @@ export function WorkspacesPage() {
   const [ackError, setAckError] = useState("");
   const [ackResult, setAckResult] = useState("");
 
-  async function refreshWorkspaces() {
+  const refreshWorkspaces = useCallback(async () => {
     setLoading(true);
     setError("");
     try {
       const items = await listWorkspaces();
       setWorkspaces(items);
-      if (!selectedWorkspaceId && items.length > 0) {
-        setSelectedWorkspaceId(items[0].id);
+      if (items.length > 0) {
+        setSelectedWorkspaceId((current) => current || items[0].id);
       }
     } catch (reason: unknown) {
       const message = reason instanceof Error ? reason.message : "Failed to list workspaces";
@@ -49,11 +49,11 @@ export function WorkspacesPage() {
     } finally {
       setLoading(false);
     }
-  }
+  }, []);
 
   useEffect(() => {
     void refreshWorkspaces();
-  }, []);
+  }, [refreshWorkspaces]);
 
   useEffect(() => {
     if (focusedWorkspaceId) {

@@ -1,4 +1,4 @@
-import { FormEvent, useEffect, useMemo, useState } from "react";
+import { FormEvent, useCallback, useEffect, useMemo, useState } from "react";
 import {
   executeRun,
   getRunLog,
@@ -31,7 +31,7 @@ export function ToolsHubPage() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  async function refreshData() {
+  const refreshData = useCallback(async () => {
     const [catalogItems, workspaceItems, runItems] = await Promise.all([
       listTools(),
       listWorkspaces(),
@@ -40,17 +40,17 @@ export function ToolsHubPage() {
     setTools(catalogItems);
     setWorkspaces(workspaceItems);
     setRuns(runItems);
-    if (!selectedTool && catalogItems.length > 0) {
-      setSelectedTool(catalogItems[0].id);
+    if (catalogItems.length > 0) {
+      setSelectedTool((current) => current || catalogItems[0].id);
     }
-  }
+  }, []);
 
   useEffect(() => {
     refreshData().catch((reason: unknown) => {
       const message = reason instanceof Error ? reason.message : "Failed to load tools";
       setError(message);
     });
-  }, []);
+  }, [refreshData]);
 
   const groupedTools = useMemo(() => {
     const groups = new Map<string, ToolDescriptor[]>();
