@@ -316,6 +316,14 @@ def upsert_finding(connection: sqlite3.Connection, finding: dict[str, Any], *, s
     return item
 
 
+def delete_finding(connection: sqlite3.Connection, finding_id: str) -> bool:
+    cursor = connection.execute(
+        "DELETE FROM findings WHERE id = ?",
+        (finding_id,),
+    )
+    return cursor.rowcount > 0
+
+
 def upsert_workspace(connection: sqlite3.Connection, workspace: dict[str, Any]) -> dict[str, Any]:
     now = utc_now()
     workspace_id = str(workspace.get("id") or "").strip()
@@ -464,6 +472,110 @@ def list_tool_runs(connection: sqlite3.Connection, *, limit: int = 200) -> list[
         item["request_json"] = json.loads(item["request_json"])
         items.append(item)
     return items
+
+
+def get_tool_run(connection: sqlite3.Connection, run_id: str) -> dict[str, Any] | None:
+    row = connection.execute("SELECT * FROM tool_runs WHERE id = ?", (run_id,)).fetchone()
+    if row is None:
+        return None
+    item = _row_to_dict(row)
+    item["request_json"] = json.loads(item["request_json"])
+    return item
+
+
+def update_tool_run(
+    connection: sqlite3.Connection,
+    *,
+    run_id: str,
+    status: str,
+    exit_code: int | None,
+    finished_at: str | None,
+    log_path: str | None,
+    artifact_path: str | None = None,
+) -> dict[str, Any] | None:
+    connection.execute(
+        """
+        UPDATE tool_runs
+        SET status = ?,
+            exit_code = ?,
+            finished_at = ?,
+            log_path = ?,
+            artifact_path = ?
+        WHERE id = ?
+        """,
+        (status, exit_code, finished_at, log_path, artifact_path, run_id),
+    )
+    return get_tool_run(connection, run_id)
+
+
+def create_notification(
+    connection: sqlite3.Connection,
+    *,
+    notification_id: str,
+    channel: str,
+    title: str,
+    body: str,
+) -> dict[str, Any]:
+    connection.execute(
+        """
+        INSERT INTO notifications (id, channel, title, body, read, created_at)
+        VALUES (?, ?, ?, ?, ?, ?)
+        """,
+        (notification_id, channel, title, body, 0, utc_now()),
+    )
+    row = connection.execute("SELECT * FROM notifications WHERE id = ?", (notification_id,)).fetchone()
+    if row is None:
+        raise RuntimeError("failed to create notification")
+    return _row_to_dict(row)
+
+
+def list_notifications(
+    connection: sqlite3.Connection,
+    *,
+    limit: int = 200,
+    unread_only: bool = False,
+) -> list[dict[str, Any]]:
+    safe_limit = max(1, min(1000, int(limit)))
+    if unread_only:
+        rows = connection.execute(
+            """
+            SELECT * FROM notifications
+            WHERE read = 0
+            ORDER BY created_at DESC
+            LIMIT ?
+            """,
+            (safe_limit,),
+        ).fetchall()
+    else:
+        rows = connection.execute(
+            """
+            SELECT * FROM notifications
+            ORDER BY created_at DESC
+            LIMIT ?
+            """,
+            (safe_limit,),
+        ).fetchall()
+    return [_row_to_dict(row) for row in rows]
+
+
+def mark_notification_read(
+    connection: sqlite3.Connection,
+    *,
+    notification_id: str,
+    read: bool,
+) -> dict[str, Any] | None:
+    connection.execute(
+        """
+        UPDATE notifications
+        SET read = ?
+        WHERE id = ?
+        """,
+        (_normalize_bool(read), notification_id),
+    )
+    row = connection.execute("SELECT * FROM notifications WHERE id = ?", (notification_id,)).fetchone()
+    if row is None:
+        return None
+    return _row_to_dict(row)
 
 
 def add_audit_event(
