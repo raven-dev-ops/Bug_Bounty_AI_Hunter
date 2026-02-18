@@ -103,3 +103,20 @@ CREATE TABLE IF NOT EXISTS connector_runs (
   finished_at TEXT
 );
 
+CREATE TABLE IF NOT EXISTS connector_http_cache (
+  url TEXT PRIMARY KEY,
+  etag TEXT,
+  last_modified TEXT,
+  response_json TEXT,
+  updated_at TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS submission_status_history (
+  id TEXT PRIMARY KEY,
+  platform TEXT NOT NULL,
+  submission_id TEXT NOT NULL,
+  status TEXT NOT NULL,
+  raw_json TEXT NOT NULL,
+  observed_at TEXT NOT NULL
+);
+

@@ -1,13 +1,14 @@
 from __future__ import annotations
 
 import uuid
+import os
 from pathlib import Path
 from typing import Any
 
-from fastapi import FastAPI, HTTPException, Query
+from fastapi import FastAPI, HTTPException, Query, Request
 from pydantic import BaseModel, Field
 
-from command_center_api import db, docs_search, ingest, tools, workspace
+from command_center_api import db, docs_search, ingest, integrations, tools, workspace
 
 
 class FindingInput(BaseModel):
@@ -81,6 +82,30 @@ class NotificationInput(BaseModel):
 
 class NotificationReadInput(BaseModel):
     read: bool = True
+
+
+class ConnectorSyncInput(BaseModel):
+    limit: int = Field(default=100, ge=1, le=500)
+    fixtures_dir: str | None = None
+
+
+class BugcrowdProgramSyncInput(BaseModel):
+    token: str | None = None
+    limit: int = Field(default=100, ge=1, le=500)
+
+
+class BugcrowdSubmissionSyncInput(BaseModel):
+    token: str | None = None
+    since: str | None = None
+    cursor: str | None = None
+    limit: int = Field(default=100, ge=1, le=200)
+
+
+class GithubSyncInput(BaseModel):
+    repo: str = Field(min_length=3)
+    token: str | None = None
+    state: str = "open"
+    limit: int = Field(default=100, ge=1, le=500)
 
 
 def create_app(*, db_path: Path | str = db.DEFAULT_DB_PATH) -> FastAPI:
@@ -190,6 +215,44 @@ def create_app(*, db_path: Path | str = db.DEFAULT_DB_PATH) -> FastAPI:
         if updated is None:
             raise HTTPException(status_code=500, detail="failed to update tool run")
         return updated
+
+    def _run_connector_job(
+        *,
+        connector_name: str,
+        job: Any,
+    ) -> dict[str, Any]:
+        run_id = f"connector:{uuid.uuid4().hex}"
+        with db.get_connection(app.state.db_path) as connection:
+            db.create_connector_run(
+                connection,
+                run_id=run_id,
+                connector=connector_name,
+                status="running",
+                summary={},
+            )
+        try:
+            with db.get_connection(app.state.db_path) as connection:
+                summary = job(connection)
+        except RuntimeError as exc:
+            with db.get_connection(app.state.db_path) as connection:
+                db.finish_connector_run(
+                    connection,
+                    run_id=run_id,
+                    status="failed",
+                    summary={"error": str(exc)},
+                )
+            raise HTTPException(status_code=400, detail=str(exc)) from exc
+
+        with db.get_connection(app.state.db_path) as connection:
+            finished = db.finish_connector_run(
+                connection,
+                run_id=run_id,
+                status="completed",
+                summary=summary,
+            )
+        if finished is None:
+            raise HTTPException(status_code=500, detail="failed to finalize connector run")
+        return {"run": finished, "summary": summary}
 
     @app.get("/health")
     def health() -> dict[str, str]:
@@ -313,6 +376,179 @@ def create_app(*, db_path: Path | str = db.DEFAULT_DB_PATH) -> FastAPI:
                 authorized_target=payload.authorized_target,
             )
         return item
+
+    @app.get("/api/tasks")
+    def list_tasks(limit: int = Query(default=200, ge=1, le=1000)) -> dict[str, Any]:
+        with db.get_connection(app.state.db_path) as connection:
+            items = db.list_tasks(connection, limit=limit)
+        return {"items": items, "count": len(items)}
+
+    @app.post("/api/connectors/bugcrowd/programs/sync")
+    def sync_bugcrowd_programs(payload: BugcrowdProgramSyncInput, request: Request) -> dict[str, Any]:
+        client_ip = request.client.host if request.client else "unknown"
+        return _run_connector_job(
+            connector_name="bugcrowd_programs",
+            job=lambda connection: integrations.sync_bugcrowd_programs(
+                connection=connection,
+                token=payload.token or os.getenv("BUGCROWD_API_TOKEN"),
+                client_ip=client_ip,
+                limit=payload.limit,
+            ),
+        )
+
+    @app.post("/api/connectors/bugcrowd/submissions/sync")
+    def sync_bugcrowd_submissions(payload: BugcrowdSubmissionSyncInput, request: Request) -> dict[str, Any]:
+        client_ip = request.client.host if request.client else "unknown"
+        return _run_connector_job(
+            connector_name="bugcrowd_submissions",
+            job=lambda connection: integrations.sync_bugcrowd_submissions(
+                connection=connection,
+                token=payload.token or os.getenv("BUGCROWD_API_TOKEN"),
+                client_ip=client_ip,
+                since=payload.since,
+                cursor=payload.cursor,
+                limit=payload.limit,
+            ),
+        )
+
+    @app.post("/api/connectors/bugcrowd/webhook")
+    async def bugcrowd_webhook(request: Request) -> dict[str, Any]:
+        raw_body = await request.body()
+        signature = request.headers.get("x-bugcrowd-signature")
+        secret = os.getenv("BUGCROWD_WEBHOOK_SECRET")
+        if not integrations.verify_webhook_signature(
+            payload_raw=raw_body,
+            signature_header=signature,
+            secret=secret,
+        ):
+            raise HTTPException(status_code=401, detail="invalid webhook signature")
+
+        payload = await request.json()
+        if not isinstance(payload, dict):
+            raise HTTPException(status_code=400, detail="webhook payload must be a JSON object")
+        event_type = str(payload.get("event_type") or payload.get("event") or "bugcrowd.webhook")
+        submission = payload.get("submission")
+        status_updates = 0
+        with db.get_connection(app.state.db_path) as connection:
+            db.add_audit_event(
+                connection,
+                event_id=f"audit:{uuid.uuid4().hex}",
+                event_type=event_type,
+                actor="bugcrowd_webhook",
+                payload=payload,
+            )
+            if isinstance(submission, dict):
+                submission_id = str(submission.get("id") or "").strip()
+                status = str(submission.get("status") or submission.get("state") or "unknown").strip()
+                if submission_id:
+                    db.add_submission_status_event(
+                        connection,
+                        event_id=f"bugcrowd:{submission_id}:{status}",
+                        platform="bugcrowd",
+                        submission_id=submission_id,
+                        status=status,
+                        payload=submission,
+                    )
+                    db.create_notification(
+                        connection,
+                        notification_id=f"notification:{uuid.uuid4().hex}",
+                        channel="bugcrowd",
+                        title=f"Bugcrowd submission update: {submission_id}",
+                        body=f"Submission status is now {status}.",
+                    )
+                    status_updates = 1
+        return {"ok": True, "event_type": event_type, "status_updates": status_updates}
+
+    @app.post("/api/connectors/github/issues/sync")
+    def sync_github_issues(payload: GithubSyncInput) -> dict[str, Any]:
+        return _run_connector_job(
+            connector_name="github_issues",
+            job=lambda connection: integrations.sync_github_issues(
+                connection=connection,
+                repo=payload.repo,
+                token=payload.token or os.getenv("GITHUB_TOKEN"),
+                state=payload.state,
+                limit=payload.limit,
+            ),
+        )
+
+    @app.post("/api/connectors/github/webhook")
+    async def github_webhook(request: Request) -> dict[str, Any]:
+        raw_body = await request.body()
+        signature = request.headers.get("x-hub-signature-256")
+        secret = os.getenv("GITHUB_WEBHOOK_SECRET")
+        if not integrations.verify_webhook_signature(
+            payload_raw=raw_body,
+            signature_header=signature,
+            secret=secret,
+        ):
+            raise HTTPException(status_code=401, detail="invalid webhook signature")
+
+        payload = await request.json()
+        if not isinstance(payload, dict):
+            raise HTTPException(status_code=400, detail="webhook payload must be a JSON object")
+        event_type = request.headers.get("x-github-event", "github.webhook")
+        issue = payload.get("issue")
+        task_id = ""
+        with db.get_connection(app.state.db_path) as connection:
+            db.add_audit_event(
+                connection,
+                event_id=f"audit:{uuid.uuid4().hex}",
+                event_type=event_type,
+                actor="github_webhook",
+                payload=payload,
+            )
+            if isinstance(issue, dict):
+                number = issue.get("number")
+                title = str(issue.get("title") or "").strip()
+                state_value = str(issue.get("state") or "open").strip().lower()
+                repository = payload.get("repository")
+                if isinstance(repository, dict):
+                    repo_name = str(repository.get("full_name") or "unknown/repo")
+                else:
+                    repo_name = "unknown/repo"
+                if number and title:
+                    task_id = f"github:{repo_name}:{number}"
+                    db.upsert_task(
+                        connection,
+                        {
+                            "id": task_id,
+                            "title": title,
+                            "status": state_value,
+                        },
+                    )
+                    db.create_notification(
+                        connection,
+                        notification_id=f"notification:{uuid.uuid4().hex}",
+                        channel="github",
+                        title=f"GitHub issue event: {repo_name}#{number}",
+                        body=f"Issue status: {state_value}.",
+                    )
+        return {"ok": True, "event_type": event_type, "task_id": task_id}
+
+    @app.post("/api/connectors/intigriti/sync")
+    def sync_intigriti(payload: ConnectorSyncInput) -> dict[str, Any]:
+        return _run_connector_job(
+            connector_name="intigriti",
+            job=lambda connection: integrations.sync_public_connector(
+                connection=connection,
+                connector_name="intigriti",
+                fixtures_dir=payload.fixtures_dir,
+                limit=payload.limit,
+            ),
+        )
+
+    @app.post("/api/connectors/yeswehack/sync")
+    def sync_yeswehack(payload: ConnectorSyncInput) -> dict[str, Any]:
+        return _run_connector_job(
+            connector_name="yeswehack",
+            job=lambda connection: integrations.sync_public_connector(
+                connection=connection,
+                connector_name="yeswehack",
+                fixtures_dir=payload.fixtures_dir,
+                limit=payload.limit,
+            ),
+        )
 
     @app.get("/api/tools")
     def list_tools() -> dict[str, Any]:
