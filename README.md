@@ -185,6 +185,7 @@ docker run --rm bbhai
 ## Notes
 - PDFs are maintained locally and are ignored by git.
 - Issue backlog is tracked in GitHub Issues.
+- Command-center backlog issues `#165`-`#206` are triage-complete and remain open in `status/ready`; issue `#164` is closed after ADR delivery (see `docs/COMMAND_CENTER_TRIAGE.md`).
 - Issue labels use `prio:`, `type:`, and `area:` prefixes (see `docs/PROJECT_MANAGEMENT.md`).
 - Milestone status and backlog tracking are aligned with `ROADMAP.md` and GitHub milestones.
 - Scope assets support ports and wildcards; see `schemas/scope_asset.schema.json` and `examples/scope_assets_example.json`.

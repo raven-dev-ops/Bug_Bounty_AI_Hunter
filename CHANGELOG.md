@@ -3,6 +3,7 @@
 All notable changes to this project will be documented here.
 
 ## Unreleased
+- Corrected command-center triage tracking: issue `#164` stays closed (ADR delivered), while issues `#165`-`#206` remain open in `status/ready` until delivery completion.
 - Streamlined CI to reduce redundant checks: linting, docs/link validation, and dependency audit now run once on Python 3.11, while the 3.10-3.12 matrix focuses on unit tests (coverage stays on 3.11).
 - Added `docs/ADR_COMMAND_CENTER_ARCHITECTURE.md` to document issue #164 with a staged SPA + API + worker architecture mapped to existing schemas and scripts.
 - Seeded GitHub issues (#164-#206) for the command-center redesign backlog.

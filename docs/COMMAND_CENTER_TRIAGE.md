@@ -9,7 +9,12 @@ Triage completion definition used for these issues:
 - Milestone, effort, and area labels are present.
 
 Result: each triage stub issue in this range is now complete from a triage
-standpoint and can be closed. Delivery is tracked in repo docs and roadmap.
+standpoint. Delivery is tracked in GitHub Issues, repo docs, and roadmap.
+
+Issue state policy for this range:
+- `#164` is closed because the ADR was delivered.
+- `#165` through `#206` stay open in `status/ready` until delivery is complete.
+- Do not close a delivery issue on triage completion alone.
 
 Last updated: 2026-02-18
 
