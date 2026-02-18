@@ -90,6 +90,43 @@ export type MetricSnapshotRow = {
   captured_at: string;
 };
 
+export type ScopeMapNode = {
+  id: string;
+  type: string;
+  label: string;
+  x: number;
+  y: number;
+  severity?: string;
+  status?: string;
+  platform?: string;
+};
+
+export type ScopeMapEdge = {
+  source: string;
+  target: string;
+  relation: string;
+};
+
+export type ScopeMapPayload = {
+  graph: {
+    nodes: ScopeMapNode[];
+    edges: ScopeMapEdge[];
+    counts: Record<string, number>;
+  };
+  overlays: {
+    threat_score: number;
+    severity_counts: Record<string, number>;
+    finding_status_counts: Record<string, number>;
+    task_status_counts: Record<string, number>;
+    run_status_counts: Record<string, number>;
+    timeline: Array<{
+      metric_name: string;
+      value: number;
+      captured_at: string;
+    }>;
+  };
+};
+
 export type DocSearchResult = {
   path: string;
   title: string;
@@ -168,6 +205,8 @@ type MetricsComputeResponse = {
   metrics: Record<string, number>;
   snapshots: MetricSnapshotRow[];
 };
+
+type ScopeMapResponse = ScopeMapPayload;
 
 type ListProgramParams = {
   query?: string;
@@ -514,6 +553,12 @@ export async function listMetricSnapshots(
   const response = await fetch(`${API_BASE_URL}/api/metrics/snapshots?${query.toString()}`);
   const data = await parseJsonResponse<MetricSnapshotResponse>(response);
   return data.items;
+}
+
+export async function getScopeMap(limit = 200): Promise<ScopeMapPayload> {
+  const query = new URLSearchParams({ limit: String(limit) });
+  const response = await fetch(`${API_BASE_URL}/api/visualizations/scope-map?${query.toString()}`);
+  return parseJsonResponse<ScopeMapResponse>(response);
 }
 
 export async function searchDocs(query: string, limit = 30): Promise<DocSearchResult[]> {

@@ -168,6 +168,86 @@ def init_schema(db_path: Path | str = DEFAULT_DB_PATH) -> None:
               raw_json TEXT NOT NULL,
               observed_at TEXT NOT NULL
             );
+
+            CREATE TABLE IF NOT EXISTS organizations (
+              id TEXT PRIMARY KEY,
+              name TEXT NOT NULL,
+              created_at TEXT NOT NULL
+            );
+
+            CREATE TABLE IF NOT EXISTS principals (
+              id TEXT PRIMARY KEY,
+              email TEXT,
+              display_name TEXT,
+              oidc_sub TEXT,
+              created_at TEXT NOT NULL
+            );
+
+            CREATE TABLE IF NOT EXISTS role_bindings (
+              id TEXT PRIMARY KEY,
+              org_id TEXT NOT NULL,
+              principal_id TEXT NOT NULL,
+              role TEXT NOT NULL,
+              scope TEXT NOT NULL DEFAULT 'global',
+              created_at TEXT NOT NULL,
+              updated_at TEXT NOT NULL
+            );
+
+            CREATE UNIQUE INDEX IF NOT EXISTS idx_role_binding_unique
+            ON role_bindings(org_id, principal_id, role, scope);
+
+            CREATE TABLE IF NOT EXISTS teams (
+              id TEXT PRIMARY KEY,
+              org_id TEXT NOT NULL,
+              name TEXT NOT NULL,
+              created_at TEXT NOT NULL,
+              updated_at TEXT NOT NULL
+            );
+
+            CREATE UNIQUE INDEX IF NOT EXISTS idx_teams_org_name
+            ON teams(org_id, name);
+
+            CREATE TABLE IF NOT EXISTS team_members (
+              id TEXT PRIMARY KEY,
+              team_id TEXT NOT NULL,
+              principal_id TEXT NOT NULL,
+              role TEXT NOT NULL DEFAULT 'member',
+              created_at TEXT NOT NULL,
+              updated_at TEXT NOT NULL
+            );
+
+            CREATE UNIQUE INDEX IF NOT EXISTS idx_team_members_unique
+            ON team_members(team_id, principal_id);
+
+            CREATE TABLE IF NOT EXISTS sessions (
+              id TEXT PRIMARY KEY,
+              principal_id TEXT NOT NULL,
+              org_id TEXT NOT NULL,
+              token_hash TEXT NOT NULL,
+              issued_at TEXT NOT NULL,
+              expires_at TEXT NOT NULL
+            );
+
+            CREATE TABLE IF NOT EXISTS job_queue (
+              id TEXT PRIMARY KEY,
+              idempotency_key TEXT,
+              kind TEXT NOT NULL,
+              payload_json TEXT NOT NULL,
+              status TEXT NOT NULL,
+              attempts INTEGER NOT NULL DEFAULT 0,
+              max_attempts INTEGER NOT NULL DEFAULT 3,
+              last_error TEXT,
+              created_at TEXT NOT NULL,
+              updated_at TEXT NOT NULL,
+              started_at TEXT,
+              finished_at TEXT
+            );
+
+            CREATE UNIQUE INDEX IF NOT EXISTS idx_job_queue_idempotency
+            ON job_queue(idempotency_key);
+
+            CREATE UNIQUE INDEX IF NOT EXISTS idx_sessions_token_hash
+            ON sessions(token_hash);
             """
         )
 
@@ -806,6 +886,555 @@ def list_metric_snapshots(
     return [_row_to_dict(row) for row in rows]
 
 
+def upsert_organization(
+    connection: sqlite3.Connection,
+    *,
+    org_id: str,
+    name: str,
+) -> dict[str, Any]:
+    now = utc_now()
+    connection.execute(
+        """
+        INSERT INTO organizations (id, name, created_at)
+        VALUES (?, ?, ?)
+        ON CONFLICT(id) DO UPDATE SET
+          name = excluded.name
+        """,
+        (org_id, name, now),
+    )
+    row = connection.execute("SELECT * FROM organizations WHERE id = ?", (org_id,)).fetchone()
+    if row is None:
+        raise RuntimeError("failed to upsert organization")
+    return _row_to_dict(row)
+
+
+def list_organizations(connection: sqlite3.Connection, *, limit: int = 200) -> list[dict[str, Any]]:
+    safe_limit = max(1, min(1000, int(limit)))
+    rows = connection.execute(
+        """
+        SELECT * FROM organizations
+        ORDER BY created_at DESC
+        LIMIT ?
+        """,
+        (safe_limit,),
+    ).fetchall()
+    return [_row_to_dict(row) for row in rows]
+
+
+def upsert_principal(
+    connection: sqlite3.Connection,
+    *,
+    principal_id: str,
+    email: str | None,
+    display_name: str | None,
+    oidc_sub: str | None,
+) -> dict[str, Any]:
+    now = utc_now()
+    connection.execute(
+        """
+        INSERT INTO principals (id, email, display_name, oidc_sub, created_at)
+        VALUES (?, ?, ?, ?, ?)
+        ON CONFLICT(id) DO UPDATE SET
+          email = excluded.email,
+          display_name = excluded.display_name,
+          oidc_sub = excluded.oidc_sub
+        """,
+        (principal_id, email, display_name, oidc_sub, now),
+    )
+    row = connection.execute("SELECT * FROM principals WHERE id = ?", (principal_id,)).fetchone()
+    if row is None:
+        raise RuntimeError("failed to upsert principal")
+    return _row_to_dict(row)
+
+
+def get_principal(connection: sqlite3.Connection, principal_id: str) -> dict[str, Any] | None:
+    row = connection.execute("SELECT * FROM principals WHERE id = ?", (principal_id,)).fetchone()
+    if row is None:
+        return None
+    return _row_to_dict(row)
+
+
+def list_principals(connection: sqlite3.Connection, *, limit: int = 200) -> list[dict[str, Any]]:
+    safe_limit = max(1, min(1000, int(limit)))
+    rows = connection.execute(
+        """
+        SELECT * FROM principals
+        ORDER BY created_at DESC
+        LIMIT ?
+        """,
+        (safe_limit,),
+    ).fetchall()
+    return [_row_to_dict(row) for row in rows]
+
+
+def upsert_role_binding(
+    connection: sqlite3.Connection,
+    *,
+    binding_id: str,
+    org_id: str,
+    principal_id: str,
+    role: str,
+    scope: str = "global",
+) -> dict[str, Any]:
+    now = utc_now()
+    connection.execute(
+        """
+        INSERT INTO role_bindings (id, org_id, principal_id, role, scope, created_at, updated_at)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
+        ON CONFLICT(org_id, principal_id, role, scope) DO UPDATE SET
+          updated_at = excluded.updated_at
+        """,
+        (binding_id, org_id, principal_id, role, scope, now, now),
+    )
+    row = connection.execute(
+        """
+        SELECT * FROM role_bindings
+        WHERE org_id = ? AND principal_id = ? AND role = ? AND scope = ?
+        """,
+        (org_id, principal_id, role, scope),
+    ).fetchone()
+    if row is None:
+        raise RuntimeError("failed to upsert role binding")
+    return _row_to_dict(row)
+
+
+def list_role_bindings_for_principal(
+    connection: sqlite3.Connection,
+    *,
+    principal_id: str,
+    org_id: str | None = None,
+) -> list[dict[str, Any]]:
+    if org_id:
+        rows = connection.execute(
+            """
+            SELECT * FROM role_bindings
+            WHERE principal_id = ? AND org_id = ?
+            ORDER BY created_at DESC
+            """,
+            (principal_id, org_id),
+        ).fetchall()
+    else:
+        rows = connection.execute(
+            """
+            SELECT * FROM role_bindings
+            WHERE principal_id = ?
+            ORDER BY created_at DESC
+            """,
+            (principal_id,),
+        ).fetchall()
+    return [_row_to_dict(row) for row in rows]
+
+
+def list_role_bindings(
+    connection: sqlite3.Connection,
+    *,
+    org_id: str | None = None,
+    principal_id: str | None = None,
+    limit: int = 500,
+) -> list[dict[str, Any]]:
+    safe_limit = max(1, min(2000, int(limit)))
+    if org_id and principal_id:
+        rows = connection.execute(
+            """
+            SELECT * FROM role_bindings
+            WHERE org_id = ? AND principal_id = ?
+            ORDER BY updated_at DESC
+            LIMIT ?
+            """,
+            (org_id, principal_id, safe_limit),
+        ).fetchall()
+    elif org_id:
+        rows = connection.execute(
+            """
+            SELECT * FROM role_bindings
+            WHERE org_id = ?
+            ORDER BY updated_at DESC
+            LIMIT ?
+            """,
+            (org_id, safe_limit),
+        ).fetchall()
+    elif principal_id:
+        rows = connection.execute(
+            """
+            SELECT * FROM role_bindings
+            WHERE principal_id = ?
+            ORDER BY updated_at DESC
+            LIMIT ?
+            """,
+            (principal_id, safe_limit),
+        ).fetchall()
+    else:
+        rows = connection.execute(
+            """
+            SELECT * FROM role_bindings
+            ORDER BY updated_at DESC
+            LIMIT ?
+            """,
+            (safe_limit,),
+        ).fetchall()
+    return [_row_to_dict(row) for row in rows]
+
+
+def upsert_team(
+    connection: sqlite3.Connection,
+    *,
+    team_id: str,
+    org_id: str,
+    name: str,
+) -> dict[str, Any]:
+    now = utc_now()
+    connection.execute(
+        """
+        INSERT INTO teams (id, org_id, name, created_at, updated_at)
+        VALUES (?, ?, ?, ?, ?)
+        ON CONFLICT(org_id, name) DO UPDATE SET
+          updated_at = excluded.updated_at
+        """,
+        (team_id, org_id, name, now, now),
+    )
+    row = connection.execute(
+        """
+        SELECT * FROM teams
+        WHERE org_id = ? AND name = ?
+        """,
+        (org_id, name),
+    ).fetchone()
+    if row is None:
+        raise RuntimeError("failed to upsert team")
+    return _row_to_dict(row)
+
+
+def list_teams(
+    connection: sqlite3.Connection,
+    *,
+    org_id: str,
+    limit: int = 200,
+) -> list[dict[str, Any]]:
+    safe_limit = max(1, min(1000, int(limit)))
+    rows = connection.execute(
+        """
+        SELECT * FROM teams
+        WHERE org_id = ?
+        ORDER BY updated_at DESC
+        LIMIT ?
+        """,
+        (org_id, safe_limit),
+    ).fetchall()
+    return [_row_to_dict(row) for row in rows]
+
+
+def get_team(connection: sqlite3.Connection, team_id: str) -> dict[str, Any] | None:
+    row = connection.execute("SELECT * FROM teams WHERE id = ?", (team_id,)).fetchone()
+    if row is None:
+        return None
+    return _row_to_dict(row)
+
+
+def upsert_team_member(
+    connection: sqlite3.Connection,
+    *,
+    member_id: str,
+    team_id: str,
+    principal_id: str,
+    role: str = "member",
+) -> dict[str, Any]:
+    now = utc_now()
+    connection.execute(
+        """
+        INSERT INTO team_members (id, team_id, principal_id, role, created_at, updated_at)
+        VALUES (?, ?, ?, ?, ?, ?)
+        ON CONFLICT(team_id, principal_id) DO UPDATE SET
+          role = excluded.role,
+          updated_at = excluded.updated_at
+        """,
+        (member_id, team_id, principal_id, role, now, now),
+    )
+    row = connection.execute(
+        """
+        SELECT * FROM team_members
+        WHERE team_id = ? AND principal_id = ?
+        """,
+        (team_id, principal_id),
+    ).fetchone()
+    if row is None:
+        raise RuntimeError("failed to upsert team member")
+    return _row_to_dict(row)
+
+
+def list_team_members(
+    connection: sqlite3.Connection,
+    *,
+    team_id: str,
+    limit: int = 500,
+) -> list[dict[str, Any]]:
+    safe_limit = max(1, min(2000, int(limit)))
+    rows = connection.execute(
+        """
+        SELECT * FROM team_members
+        WHERE team_id = ?
+        ORDER BY updated_at DESC
+        LIMIT ?
+        """,
+        (team_id, safe_limit),
+    ).fetchall()
+    return [_row_to_dict(row) for row in rows]
+
+
+def create_session(
+    connection: sqlite3.Connection,
+    *,
+    session_id: str,
+    principal_id: str,
+    org_id: str,
+    token_hash: str,
+    issued_at: str,
+    expires_at: str,
+) -> dict[str, Any]:
+    connection.execute(
+        """
+        INSERT INTO sessions (id, principal_id, org_id, token_hash, issued_at, expires_at)
+        VALUES (?, ?, ?, ?, ?, ?)
+        """,
+        (session_id, principal_id, org_id, token_hash, issued_at, expires_at),
+    )
+    row = connection.execute("SELECT * FROM sessions WHERE id = ?", (session_id,)).fetchone()
+    if row is None:
+        raise RuntimeError("failed to create session")
+    return _row_to_dict(row)
+
+
+def get_session_by_token_hash(
+    connection: sqlite3.Connection,
+    token_hash: str,
+) -> dict[str, Any] | None:
+    row = connection.execute(
+        "SELECT * FROM sessions WHERE token_hash = ?",
+        (token_hash,),
+    ).fetchone()
+    if row is None:
+        return None
+    return _row_to_dict(row)
+
+
+def get_session(connection: sqlite3.Connection, session_id: str) -> dict[str, Any] | None:
+    row = connection.execute("SELECT * FROM sessions WHERE id = ?", (session_id,)).fetchone()
+    if row is None:
+        return None
+    return _row_to_dict(row)
+
+
+def list_sessions_for_principal(
+    connection: sqlite3.Connection,
+    *,
+    principal_id: str,
+    limit: int = 20,
+) -> list[dict[str, Any]]:
+    safe_limit = max(1, min(200, int(limit)))
+    rows = connection.execute(
+        """
+        SELECT * FROM sessions
+        WHERE principal_id = ?
+        ORDER BY issued_at DESC
+        LIMIT ?
+        """,
+        (principal_id, safe_limit),
+    ).fetchall()
+    return [_row_to_dict(row) for row in rows]
+
+
+def delete_session(connection: sqlite3.Connection, session_id: str) -> bool:
+    cursor = connection.execute("DELETE FROM sessions WHERE id = ?", (session_id,))
+    return cursor.rowcount > 0
+
+
+def enqueue_job(
+    connection: sqlite3.Connection,
+    *,
+    job_id: str,
+    idempotency_key: str | None,
+    kind: str,
+    payload: dict[str, Any],
+    max_attempts: int = 3,
+) -> dict[str, Any]:
+    if idempotency_key:
+        existing = get_job_by_idempotency_key(connection, idempotency_key=idempotency_key)
+        if existing is not None:
+            return existing
+    now = utc_now()
+    connection.execute(
+        """
+        INSERT INTO job_queue (
+          id, idempotency_key, kind, payload_json, status, attempts, max_attempts,
+          last_error, created_at, updated_at, started_at, finished_at
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        """,
+        (
+            job_id,
+            idempotency_key,
+            kind,
+            _json_dump(payload),
+            "queued",
+            0,
+            max(1, int(max_attempts)),
+            None,
+            now,
+            now,
+            None,
+            None,
+        ),
+    )
+    row = connection.execute("SELECT * FROM job_queue WHERE id = ?", (job_id,)).fetchone()
+    if row is None:
+        raise RuntimeError("failed to enqueue job")
+    item = _row_to_dict(row)
+    item["payload_json"] = json.loads(item["payload_json"])
+    return item
+
+
+def get_job(connection: sqlite3.Connection, job_id: str) -> dict[str, Any] | None:
+    row = connection.execute("SELECT * FROM job_queue WHERE id = ?", (job_id,)).fetchone()
+    if row is None:
+        return None
+    item = _row_to_dict(row)
+    item["payload_json"] = json.loads(item["payload_json"])
+    return item
+
+
+def get_job_by_idempotency_key(
+    connection: sqlite3.Connection,
+    *,
+    idempotency_key: str,
+) -> dict[str, Any] | None:
+    row = connection.execute(
+        "SELECT * FROM job_queue WHERE idempotency_key = ?",
+        (idempotency_key,),
+    ).fetchone()
+    if row is None:
+        return None
+    item = _row_to_dict(row)
+    item["payload_json"] = json.loads(item["payload_json"])
+    return item
+
+
+def list_jobs(connection: sqlite3.Connection, *, limit: int = 200) -> list[dict[str, Any]]:
+    safe_limit = max(1, min(1000, int(limit)))
+    rows = connection.execute(
+        """
+        SELECT * FROM job_queue
+        ORDER BY created_at DESC
+        LIMIT ?
+        """,
+        (safe_limit,),
+    ).fetchall()
+    items: list[dict[str, Any]] = []
+    for row in rows:
+        item = _row_to_dict(row)
+        item["payload_json"] = json.loads(item["payload_json"])
+        items.append(item)
+    return items
+
+
+def claim_next_job(connection: sqlite3.Connection) -> dict[str, Any] | None:
+    row = connection.execute(
+        """
+        SELECT *
+        FROM job_queue
+        WHERE status = 'queued'
+          AND attempts < max_attempts
+        ORDER BY created_at ASC
+        LIMIT 1
+        """,
+    ).fetchone()
+    if row is None:
+        return None
+    job_id = row["id"]
+    now = utc_now()
+    connection.execute(
+        """
+        UPDATE job_queue
+        SET status = 'running',
+            attempts = attempts + 1,
+            updated_at = ?,
+            started_at = ?
+        WHERE id = ?
+        """,
+        (now, now, job_id),
+    )
+    updated = connection.execute("SELECT * FROM job_queue WHERE id = ?", (job_id,)).fetchone()
+    if updated is None:
+        return None
+    item = _row_to_dict(updated)
+    item["payload_json"] = json.loads(item["payload_json"])
+    return item
+
+
+def finish_job(
+    connection: sqlite3.Connection,
+    *,
+    job_id: str,
+    status: str,
+    last_error: str | None = None,
+) -> dict[str, Any] | None:
+    now = utc_now()
+    current = connection.execute("SELECT * FROM job_queue WHERE id = ?", (job_id,)).fetchone()
+    if current is None:
+        return None
+    attempts = int(current["attempts"] or 0)
+    max_attempts = int(current["max_attempts"] or 1)
+    next_status = status
+    finished_at: str | None = now
+    if status == "failed" and attempts < max_attempts:
+        # Keep failed jobs retryable until max attempts is reached.
+        next_status = "queued"
+        finished_at = None
+    if next_status in {"queued", "running"}:
+        finished_at = None
+    connection.execute(
+        """
+        UPDATE job_queue
+        SET status = ?,
+            last_error = ?,
+            updated_at = ?,
+            finished_at = ?
+        WHERE id = ?
+        """,
+        (next_status, last_error, now, finished_at, job_id),
+    )
+    row = connection.execute("SELECT * FROM job_queue WHERE id = ?", (job_id,)).fetchone()
+    if row is None:
+        return None
+    item = _row_to_dict(row)
+    item["payload_json"] = json.loads(item["payload_json"])
+    return item
+
+
+def retry_job(connection: sqlite3.Connection, *, job_id: str) -> dict[str, Any] | None:
+    now = utc_now()
+    row = connection.execute("SELECT * FROM job_queue WHERE id = ?", (job_id,)).fetchone()
+    if row is None:
+        return None
+    current_status = str(row["status"])
+    if current_status == "running":
+        raise ValueError("cannot retry running job")
+    connection.execute(
+        """
+        UPDATE job_queue
+        SET status = 'queued',
+            updated_at = ?,
+            started_at = NULL,
+            finished_at = NULL
+        WHERE id = ?
+        """,
+        (now, job_id),
+    )
+    updated = connection.execute("SELECT * FROM job_queue WHERE id = ?", (job_id,)).fetchone()
+    if updated is None:
+        return None
+    item = _row_to_dict(updated)
+    item["payload_json"] = json.loads(item["payload_json"])
+    return item
+
+
 def add_audit_event(
     connection: sqlite3.Connection,
     *,
@@ -821,3 +1450,21 @@ def add_audit_event(
         """,
         (event_id, event_type, actor, _json_dump(payload), utc_now()),
     )
+
+
+def list_audit_events(connection: sqlite3.Connection, *, limit: int = 500) -> list[dict[str, Any]]:
+    safe_limit = max(1, min(5000, int(limit)))
+    rows = connection.execute(
+        """
+        SELECT * FROM audit_events
+        ORDER BY created_at DESC
+        LIMIT ?
+        """,
+        (safe_limit,),
+    ).fetchall()
+    items: list[dict[str, Any]] = []
+    for row in rows:
+        item = _row_to_dict(row)
+        item["payload_json"] = json.loads(item["payload_json"])
+        items.append(item)
+    return items

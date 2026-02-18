@@ -10,6 +10,7 @@ import { PagePlaceholder } from "./pages/PagePlaceholder";
 import { ReportsPage } from "./pages/ReportsPage";
 import { TaskBoardPage } from "./pages/TaskBoardPage";
 import { ToolsHubPage } from "./pages/ToolsHubPage";
+import { VisualizationPage } from "./pages/VisualizationPage";
 import { WorkspacesPage } from "./pages/WorkspacesPage";
 import { navItems } from "./routes";
 import { AppShell } from "./shell/AppShell";
@@ -29,6 +30,7 @@ export function App() {
           }
         />
         <Route path="/analytics" element={<AnalyticsPage />} />
+        <Route path="/scope-map" element={<VisualizationPage />} />
         <Route path="/feed" element={<BountyFeedPage />} />
         <Route path="/feed/:programId" element={<BountyDetailPage />} />
         <Route path="/workspaces" element={<WorkspacesPage />} />
