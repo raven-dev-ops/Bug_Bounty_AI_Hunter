@@ -82,4 +82,5 @@ Keep one active milestone per release slice plus a `Backlog` milestone.
 
 ## Bootstrapping labels and issues
 If you want to create labels and the starter backlog via GitHub CLI, use:
-- `scripts/bootstrap_issues.sh`
+- `GITHUB_REPO=<owner>/<repo> scripts/bootstrap_issues.sh`
+- If `GITHUB_REPO` is not set, the script targets `raven-dev-ops/Bug_Bounty_AI_Hunter`.
