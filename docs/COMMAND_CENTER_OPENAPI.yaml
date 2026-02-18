@@ -104,6 +104,19 @@ paths:
       responses:
         "200":
           description: Created workspace
+  /api/workspaces/{workspace_id}:
+    get:
+      summary: Get one workspace
+      parameters:
+        - in: path
+          name: workspace_id
+          required: true
+          schema: { type: string }
+      responses:
+        "200":
+          description: Workspace row
+        "404":
+          description: Workspace not found
   /api/workspaces/{workspace_id}/ack:
     post:
       summary: Record ROE acknowledgment
@@ -138,6 +151,12 @@ paths:
       responses:
         "200":
           description: Created run
+        "400":
+          description: Run mode requires workspace_id
+        "403":
+          description: Workspace requires ROE acknowledgement
+        "404":
+          description: Workspace not found
 components:
   schemas:
     ProgramRow:
@@ -172,6 +191,8 @@ components:
         name: { type: string }
         engagement_url: { type: string }
         root_dir: { type: string }
+        scaffold_files: { type: boolean, default: true }
+        force: { type: boolean, default: false }
     WorkspaceAckInput:
       type: object
       required: [acknowledged_by, authorized_target]
@@ -190,4 +211,3 @@ components:
           type: array
           items: { type: string }
         workspace_id: { type: string }
-

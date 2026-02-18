@@ -7,7 +7,7 @@ from typing import Any
 from fastapi import FastAPI, HTTPException, Query
 from pydantic import BaseModel, Field
 
-from command_center_api import db, ingest
+from command_center_api import db, ingest, workspace
 
 
 class FindingInput(BaseModel):
@@ -28,6 +28,8 @@ class WorkspaceInput(BaseModel):
     name: str = Field(min_length=1)
     engagement_url: str | None = None
     root_dir: str | None = None
+    scaffold_files: bool = True
+    force: bool = False
 
 
 class WorkspaceAckInput(BaseModel):
@@ -112,11 +114,28 @@ def create_app(*, db_path: Path | str = db.DEFAULT_DB_PATH) -> FastAPI:
     @app.post("/api/workspaces")
     def create_workspace(payload: WorkspaceInput) -> dict[str, Any]:
         workspace_id = f"workspace:{payload.platform}:{payload.slug}"
-        workspace = payload.model_dump()
-        workspace["id"] = workspace_id
-        workspace["roe_acknowledged"] = False
+        workspace_data = payload.model_dump()
+        workspace_data["id"] = workspace_id
+        workspace_data["roe_acknowledged"] = False
+        if payload.scaffold_files:
+            scaffolded = workspace.scaffold_workspace_files(
+                platform=payload.platform,
+                slug=payload.slug,
+                engagement_url=payload.engagement_url or "",
+                out_root=payload.root_dir or "output/engagements",
+                force=payload.force,
+            )
+            workspace_data["root_dir"] = scaffolded["root_dir"]
         with db.get_connection(app.state.db_path) as connection:
-            item = db.upsert_workspace(connection, workspace)
+            item = db.upsert_workspace(connection, workspace_data)
+        return item
+
+    @app.get("/api/workspaces/{workspace_id}")
+    def get_workspace(workspace_id: str) -> dict[str, Any]:
+        with db.get_connection(app.state.db_path) as connection:
+            item = db.get_workspace(connection, workspace_id)
+        if item is None:
+            raise HTTPException(status_code=404, detail="workspace not found")
         return item
 
     @app.post("/api/workspaces/{workspace_id}/ack")
@@ -130,6 +149,14 @@ def create_app(*, db_path: Path | str = db.DEFAULT_DB_PATH) -> FastAPI:
             )
         if item is None:
             raise HTTPException(status_code=404, detail="workspace not found")
+        root_dir = str(item.get("root_dir") or "").strip()
+        if root_dir:
+            workspace.write_roe_ack_file(
+                workspace_dir=root_dir,
+                acknowledged_at=str(item.get("acknowledged_at") or ""),
+                acknowledged_by=payload.acknowledged_by,
+                authorized_target=payload.authorized_target,
+            )
         return item
 
     @app.get("/api/runs")
@@ -143,6 +170,20 @@ def create_app(*, db_path: Path | str = db.DEFAULT_DB_PATH) -> FastAPI:
         run_id = f"run:{uuid.uuid4().hex}"
         request = payload.model_dump()
         with db.get_connection(app.state.db_path) as connection:
+            if payload.mode == "run":
+                if not payload.workspace_id:
+                    raise HTTPException(
+                        status_code=400,
+                        detail="workspace_id is required for run mode",
+                    )
+                workspace_row = db.get_workspace(connection, payload.workspace_id)
+                if workspace_row is None:
+                    raise HTTPException(status_code=404, detail="workspace not found")
+                if not bool(workspace_row.get("roe_acknowledged")):
+                    raise HTTPException(
+                        status_code=403,
+                        detail="workspace ROE acknowledgement is required before run mode",
+                    )
             item = db.create_tool_run(
                 connection,
                 run_id=run_id,

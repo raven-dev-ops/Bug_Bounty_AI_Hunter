@@ -55,7 +55,11 @@ export function AppShell({ items, children }: AppShellProps) {
   }, []);
 
   const currentItem = useMemo(
-    () => items.find((item) => item.path === location.pathname) ?? items[0],
+    () =>
+      items.find(
+        (item) =>
+          item.path === location.pathname || location.pathname.startsWith(`${item.path}/`),
+      ) ?? items[0],
     [items, location.pathname],
   );
 
