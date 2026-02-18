@@ -16,6 +16,11 @@ export const navItems: NavItem[] = [
     description: "Program, operations, and reporting metric dashboards.",
   },
   {
+    path: "/scope-map",
+    title: "Scope Map",
+    description: "Graph overlays for findings, tasks, and active surfaces.",
+  },
+  {
     path: "/feed",
     title: "Bounty Feed",
     description: "Incoming opportunities and triage queue.",
