@@ -201,6 +201,7 @@ docker run --rm bbhai
 - Program schema and registry examples live in `schemas/program.schema.json` and `examples/program_example.json`.
 - Issue templates include bug, feature, security, research, and epic scaffolds in `.github/ISSUE_TEMPLATE`.
 - Triage rules and milestone guidance are documented in `docs/PROJECT_MANAGEMENT.md`.
+- Starter labels/issues can be bootstrapped with `GITHUB_REPO=<owner>/<repo> scripts/bootstrap_issues.sh`.
 - Standard report templates live in `templates/reporting/standard/`.
 - PDF exports use `templates/reporting/pandoc_header.tex` and `templates/reporting/fontconfig.conf`.
 - Set `BBHAI_PANDOC_PDF_ENGINE=tectonic` to use Tectonic for Pandoc PDF output.
