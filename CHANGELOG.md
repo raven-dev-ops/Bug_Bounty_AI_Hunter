@@ -3,6 +3,7 @@
 All notable changes to this project will be documented here.
 
 ## Unreleased
+- Added analytics/task/notification v1 delivery: metrics compute + snapshot APIs and dashboard page, task board API/UI with auto-link rules from findings, and notification dispatch support for Slack/SMTP wired into the notifications center (issues #196, #197, #198, #199).
 - Added connector integration layer in Command Center API: Bugcrowd program/submission sync with per-IP rate budgets and ETag/If-None-Match caching, Bugcrowd and GitHub webhook receivers with signature verification, GitHub issue-to-task sync, and Intigriti/YesWeHack connector sync endpoints backed by existing parser fixtures (issues #188, #189, #190, #191, #192, #193, #194, #195).
 - Added command-center CI coverage: frontend lint/typecheck/unit tests/build in GitHub Actions plus backend API/script-runner unit tests covering ROE run gating, allowlist enforcement, and docs path traversal checks (issues #186, #187).
 - Added Command Center tooling/reporting/logging/docs features: tools catalog + safe runner endpoint/UI, findings DB CRUD/import/export UI, report composer and issue draft export actions, logs page, notifications center, and in-app docs search/page rendering (issues #177, #178, #179, #180, #181, #182, #183, #184, #185).

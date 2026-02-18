@@ -168,6 +168,50 @@ paths:
       responses:
         "200":
           description: Task list
+    post:
+      summary: Create a task
+      requestBody:
+        required: true
+      responses:
+        "200":
+          description: Created task
+  /api/tasks/board:
+    get:
+      summary: List tasks grouped into board columns
+      responses:
+        "200":
+          description: Task board columns
+  /api/tasks/auto-link:
+    post:
+      summary: Create tasks for findings that do not have linked tasks
+      responses:
+        "200":
+          description: Automation summary
+  /api/tasks/{task_id}:
+    patch:
+      summary: Update task fields
+      parameters:
+        - in: path
+          name: task_id
+          required: true
+          schema: { type: string }
+      responses:
+        "200":
+          description: Updated task
+        "404":
+          description: Task not found
+    delete:
+      summary: Delete task
+      parameters:
+        - in: path
+          name: task_id
+          required: true
+          schema: { type: string }
+      responses:
+        "200":
+          description: Task deleted
+        "404":
+          description: Task not found
   /api/connectors/bugcrowd/programs/sync:
     post:
       summary: Sync Bugcrowd programs (API token optional; registry fallback if absent)
@@ -336,6 +380,14 @@ paths:
       responses:
         "200":
           description: Created notification
+  /api/notifications/send:
+    post:
+      summary: Dispatch notification via Slack or SMTP
+      requestBody:
+        required: true
+      responses:
+        "200":
+          description: Dispatch result
   /api/notifications/{notification_id}/read:
     post:
       summary: Mark a notification read/unread
@@ -377,6 +429,27 @@ paths:
           description: Markdown page content
         "404":
           description: Page not found
+  /api/metrics/compute:
+    post:
+      summary: Compute operational metric snapshots
+      requestBody:
+        required: true
+      responses:
+        "200":
+          description: Computed metrics
+  /api/metrics/snapshots:
+    get:
+      summary: List saved metric snapshots
+      parameters:
+        - in: query
+          name: scope
+          schema: { type: string }
+        - in: query
+          name: limit
+          schema: { type: integer, minimum: 1, maximum: 1000 }
+      responses:
+        "200":
+          description: Snapshot list
 components:
   schemas:
     ProgramRow:

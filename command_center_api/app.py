@@ -8,7 +8,15 @@ from typing import Any
 from fastapi import FastAPI, HTTPException, Query, Request
 from pydantic import BaseModel, Field
 
-from command_center_api import db, docs_search, ingest, integrations, tools, workspace
+from command_center_api import (
+    db,
+    docs_search,
+    ingest,
+    integrations,
+    notify_channels,
+    tools,
+    workspace,
+)
 
 
 class FindingInput(BaseModel):
@@ -106,6 +114,38 @@ class GithubSyncInput(BaseModel):
     token: str | None = None
     state: str = "open"
     limit: int = Field(default=100, ge=1, le=500)
+
+
+class TaskInput(BaseModel):
+    title: str = Field(min_length=1)
+    status: str = Field(default="open")
+    linked_program_id: str | None = None
+    linked_finding_id: str | None = None
+
+
+class TaskUpdateInput(BaseModel):
+    title: str | None = None
+    status: str | None = None
+    linked_program_id: str | None = None
+    linked_finding_id: str | None = None
+
+
+class NotificationSendInput(BaseModel):
+    channel: str = Field(min_length=1)
+    title: str = Field(min_length=1)
+    body: str = Field(min_length=1)
+    slack_webhook_url: str | None = None
+    smtp_host: str | None = None
+    smtp_port: int = Field(default=587, ge=1, le=65535)
+    smtp_from: str | None = None
+    smtp_to: str | None = None
+    smtp_username: str | None = None
+    smtp_password: str | None = None
+    smtp_use_tls: bool = True
+
+
+class MetricsComputeInput(BaseModel):
+    scope: str = "global"
 
 
 def create_app(*, db_path: Path | str = db.DEFAULT_DB_PATH) -> FastAPI:
@@ -382,6 +422,77 @@ def create_app(*, db_path: Path | str = db.DEFAULT_DB_PATH) -> FastAPI:
         with db.get_connection(app.state.db_path) as connection:
             items = db.list_tasks(connection, limit=limit)
         return {"items": items, "count": len(items)}
+
+    @app.get("/api/tasks/board")
+    def task_board(limit: int = Query(default=500, ge=1, le=1000)) -> dict[str, Any]:
+        with db.get_connection(app.state.db_path) as connection:
+            items = db.list_tasks(connection, limit=limit)
+        columns = {"open": [], "in_progress": [], "blocked": [], "done": []}
+        for task in items:
+            status = str(task.get("status") or "open").strip().lower()
+            if status not in columns:
+                status = "open"
+            columns[status].append(task)
+        return {"columns": columns, "count": len(items)}
+
+    @app.post("/api/tasks")
+    def create_task(payload: TaskInput) -> dict[str, Any]:
+        task_id = f"task:{uuid.uuid4().hex}"
+        with db.get_connection(app.state.db_path) as connection:
+            item = db.upsert_task(
+                connection,
+                {
+                    "id": task_id,
+                    "title": payload.title,
+                    "status": payload.status,
+                    "linked_program_id": payload.linked_program_id,
+                    "linked_finding_id": payload.linked_finding_id,
+                },
+            )
+        return item
+
+    @app.patch("/api/tasks/{task_id}")
+    def update_task(task_id: str, payload: TaskUpdateInput) -> dict[str, Any]:
+        with db.get_connection(app.state.db_path) as connection:
+            existing = db.get_task(connection, task_id)
+            if existing is None:
+                raise HTTPException(status_code=404, detail="task not found")
+            next_task = dict(existing)
+            patch_data = payload.model_dump(exclude_none=True)
+            next_task.update(patch_data)
+            item = db.upsert_task(connection, next_task)
+        return item
+
+    @app.delete("/api/tasks/{task_id}")
+    def delete_task(task_id: str) -> dict[str, Any]:
+        with db.get_connection(app.state.db_path) as connection:
+            deleted = db.delete_task(connection, task_id)
+        if not deleted:
+            raise HTTPException(status_code=404, detail="task not found")
+        return {"ok": True}
+
+    @app.post("/api/tasks/auto-link")
+    def auto_link_tasks(limit: int = Query(default=200, ge=1, le=1000)) -> dict[str, Any]:
+        created = 0
+        with db.get_connection(app.state.db_path) as connection:
+            findings = db.list_findings(connection, limit=limit)
+            tasks = db.list_tasks(connection, limit=5000)
+            task_ids = {item["id"] for item in tasks}
+            for finding in findings:
+                task_id = f"task:finding:{finding['id']}"
+                if task_id in task_ids:
+                    continue
+                db.upsert_task(
+                    connection,
+                    {
+                        "id": task_id,
+                        "title": f"Review finding: {finding['title']}",
+                        "status": "open",
+                        "linked_finding_id": finding["id"],
+                    },
+                )
+                created += 1
+        return {"ok": True, "created": created}
 
     @app.post("/api/connectors/bugcrowd/programs/sync")
     def sync_bugcrowd_programs(payload: BugcrowdProgramSyncInput, request: Request) -> dict[str, Any]:
@@ -687,6 +798,53 @@ def create_app(*, db_path: Path | str = db.DEFAULT_DB_PATH) -> FastAPI:
             )
         return item
 
+    @app.post("/api/notifications/send")
+    def send_notification(payload: NotificationSendInput) -> dict[str, Any]:
+        channel = payload.channel.strip().lower()
+        if channel == "slack":
+            webhook_url = payload.slack_webhook_url or os.getenv("SLACK_WEBHOOK_URL")
+            if not webhook_url:
+                raise HTTPException(status_code=400, detail="slack webhook url is required")
+            result = notify_channels.send_slack(
+                webhook_url=webhook_url,
+                title=payload.title,
+                body=payload.body,
+            )
+        elif channel in {"smtp", "email"}:
+            smtp_host = payload.smtp_host or os.getenv("SMTP_HOST")
+            smtp_from = payload.smtp_from or os.getenv("SMTP_FROM")
+            smtp_to = payload.smtp_to or os.getenv("SMTP_TO")
+            smtp_username = payload.smtp_username or os.getenv("SMTP_USERNAME")
+            smtp_password = payload.smtp_password or os.getenv("SMTP_PASSWORD")
+            if not smtp_host or not smtp_from or not smtp_to:
+                raise HTTPException(
+                    status_code=400,
+                    detail="smtp_host, smtp_from, and smtp_to are required",
+                )
+            result = notify_channels.send_smtp(
+                host=smtp_host,
+                port=payload.smtp_port,
+                from_email=smtp_from,
+                to_email=smtp_to,
+                title=payload.title,
+                body=payload.body,
+                username=smtp_username,
+                password=smtp_password,
+                use_tls=payload.smtp_use_tls,
+            )
+        else:
+            raise HTTPException(status_code=400, detail="unsupported notification channel")
+
+        with db.get_connection(app.state.db_path) as connection:
+            db.create_notification(
+                connection,
+                notification_id=f"notification:{uuid.uuid4().hex}",
+                channel=channel,
+                title=payload.title,
+                body=payload.body,
+            )
+        return {"ok": True, "channel": channel, "result": result}
+
     @app.post("/api/notifications/{notification_id}/read")
     def set_notification_read(
         notification_id: str,
@@ -701,6 +859,51 @@ def create_app(*, db_path: Path | str = db.DEFAULT_DB_PATH) -> FastAPI:
         if item is None:
             raise HTTPException(status_code=404, detail="notification not found")
         return item
+
+    @app.post("/api/metrics/compute")
+    def compute_metrics(payload: MetricsComputeInput) -> dict[str, Any]:
+        metrics: dict[str, float] = {}
+        with db.get_connection(app.state.db_path) as connection:
+            metrics["program_count"] = float(
+                connection.execute("SELECT COUNT(*) AS n FROM programs").fetchone()["n"]
+            )
+            metrics["finding_count"] = float(
+                connection.execute("SELECT COUNT(*) AS n FROM findings").fetchone()["n"]
+            )
+            metrics["workspace_count"] = float(
+                connection.execute("SELECT COUNT(*) AS n FROM workspaces").fetchone()["n"]
+            )
+            metrics["task_count"] = float(
+                connection.execute("SELECT COUNT(*) AS n FROM tasks").fetchone()["n"]
+            )
+            metrics["run_count"] = float(
+                connection.execute("SELECT COUNT(*) AS n FROM tool_runs").fetchone()["n"]
+            )
+            metrics["notification_count"] = float(
+                connection.execute("SELECT COUNT(*) AS n FROM notifications").fetchone()["n"]
+            )
+
+            snapshot_items = []
+            for metric_name, metric_value in metrics.items():
+                snapshot_items.append(
+                    db.add_metric_snapshot(
+                        connection,
+                        snapshot_id=f"metric:{uuid.uuid4().hex}",
+                        metric_name=metric_name,
+                        metric_value=metric_value,
+                        scope=payload.scope,
+                    )
+                )
+        return {"scope": payload.scope, "metrics": metrics, "snapshots": snapshot_items}
+
+    @app.get("/api/metrics/snapshots")
+    def list_metrics_snapshots(
+        scope: str = "global",
+        limit: int = Query(default=200, ge=1, le=1000),
+    ) -> dict[str, Any]:
+        with db.get_connection(app.state.db_path) as connection:
+            items = db.list_metric_snapshots(connection, scope=scope, limit=limit)
+        return {"items": items, "count": len(items)}
 
     @app.get("/api/docs/search")
     def search_docs(

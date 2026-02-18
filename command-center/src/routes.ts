@@ -11,6 +11,11 @@ export const navItems: NavItem[] = [
     description: "Live pipeline pulse and mission status.",
   },
   {
+    path: "/analytics",
+    title: "Analytics",
+    description: "Program, operations, and reporting metric dashboards.",
+  },
+  {
     path: "/feed",
     title: "Bounty Feed",
     description: "Incoming opportunities and triage queue.",
@@ -19,6 +24,11 @@ export const navItems: NavItem[] = [
     path: "/workspaces",
     title: "Workspaces",
     description: "Engagement launch points and ROE checkpoints.",
+  },
+  {
+    path: "/tasks",
+    title: "Task Board",
+    description: "Kanban workflows and finding-linked automation.",
   },
   {
     path: "/tools",

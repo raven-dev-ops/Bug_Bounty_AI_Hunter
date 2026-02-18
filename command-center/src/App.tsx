@@ -1,4 +1,5 @@
 import { Navigate, Route, Routes } from "react-router-dom";
+import { AnalyticsPage } from "./pages/AnalyticsPage";
 import { BountyDetailPage } from "./pages/BountyDetailPage";
 import { BountyFeedPage } from "./pages/BountyFeedPage";
 import { DocsPage } from "./pages/DocsPage";
@@ -7,6 +8,7 @@ import { LogsPage } from "./pages/LogsPage";
 import { NotificationsPage } from "./pages/NotificationsPage";
 import { PagePlaceholder } from "./pages/PagePlaceholder";
 import { ReportsPage } from "./pages/ReportsPage";
+import { TaskBoardPage } from "./pages/TaskBoardPage";
 import { ToolsHubPage } from "./pages/ToolsHubPage";
 import { WorkspacesPage } from "./pages/WorkspacesPage";
 import { navItems } from "./routes";
@@ -26,9 +28,11 @@ export function App() {
             />
           }
         />
+        <Route path="/analytics" element={<AnalyticsPage />} />
         <Route path="/feed" element={<BountyFeedPage />} />
         <Route path="/feed/:programId" element={<BountyDetailPage />} />
         <Route path="/workspaces" element={<WorkspacesPage />} />
+        <Route path="/tasks" element={<TaskBoardPage />} />
         <Route path="/tools" element={<ToolsHubPage />} />
         <Route path="/findings" element={<FindingsDbPage />} />
         <Route path="/reports" element={<ReportsPage />} />

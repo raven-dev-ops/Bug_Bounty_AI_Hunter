@@ -20,6 +20,10 @@ This app scaffolds issue delivery for:
 - #185 Help/Docs embedding
 - #186 Frontend CI pipeline
 - #187 Backend CI pipeline
+- #196 Analytics dashboards v1
+- #197 Metrics compute job
+- #198 Task board v1
+- #199 Notifications v1
 
 ## Stack
 - React + TypeScript (Vite)
@@ -48,3 +52,6 @@ This app scaffolds issue delivery for:
 - Notifications center with placeholder channel settings and read state controls
 - In-app docs search and markdown page renderer backed by API endpoints
 - Frontend lint/typecheck/unit tests wired into CI (`npm run lint`, `npm run test`, `npm run build`)
+- Analytics page wired to metrics compute/snapshot APIs
+- Task board page wired to task CRUD + auto-link automation APIs
+- Notification dispatch supports Slack webhook and SMTP submission flows

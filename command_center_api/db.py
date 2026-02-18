@@ -741,6 +741,18 @@ def upsert_task(connection: sqlite3.Connection, task: dict[str, Any]) -> dict[st
     return _row_to_dict(row)
 
 
+def get_task(connection: sqlite3.Connection, task_id: str) -> dict[str, Any] | None:
+    row = connection.execute("SELECT * FROM tasks WHERE id = ?", (task_id,)).fetchone()
+    if row is None:
+        return None
+    return _row_to_dict(row)
+
+
+def delete_task(connection: sqlite3.Connection, task_id: str) -> bool:
+    cursor = connection.execute("DELETE FROM tasks WHERE id = ?", (task_id,))
+    return cursor.rowcount > 0
+
+
 def list_tasks(connection: sqlite3.Connection, *, limit: int = 200) -> list[dict[str, Any]]:
     safe_limit = max(1, min(1000, int(limit)))
     rows = connection.execute(
@@ -750,6 +762,46 @@ def list_tasks(connection: sqlite3.Connection, *, limit: int = 200) -> list[dict
         LIMIT ?
         """,
         (safe_limit,),
+    ).fetchall()
+    return [_row_to_dict(row) for row in rows]
+
+
+def add_metric_snapshot(
+    connection: sqlite3.Connection,
+    *,
+    snapshot_id: str,
+    metric_name: str,
+    metric_value: float,
+    scope: str,
+) -> dict[str, Any]:
+    connection.execute(
+        """
+        INSERT INTO metrics_snapshots (id, metric_name, metric_value, scope, captured_at)
+        VALUES (?, ?, ?, ?, ?)
+        """,
+        (snapshot_id, metric_name, float(metric_value), scope, utc_now()),
+    )
+    row = connection.execute("SELECT * FROM metrics_snapshots WHERE id = ?", (snapshot_id,)).fetchone()
+    if row is None:
+        raise RuntimeError("failed to add metric snapshot")
+    return _row_to_dict(row)
+
+
+def list_metric_snapshots(
+    connection: sqlite3.Connection,
+    *,
+    scope: str = "global",
+    limit: int = 200,
+) -> list[dict[str, Any]]:
+    safe_limit = max(1, min(1000, int(limit)))
+    rows = connection.execute(
+        """
+        SELECT * FROM metrics_snapshots
+        WHERE scope = ?
+        ORDER BY captured_at DESC
+        LIMIT ?
+        """,
+        (scope, safe_limit),
     ).fetchall()
     return [_row_to_dict(row) for row in rows]
 
