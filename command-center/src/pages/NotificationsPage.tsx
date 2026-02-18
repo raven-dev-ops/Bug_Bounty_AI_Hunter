@@ -2,6 +2,7 @@ import { FormEvent, useEffect, useState } from "react";
 import {
   createNotification,
   listNotifications,
+  sendNotification,
   setNotificationRead,
   type NotificationRow,
 } from "../api/client";
@@ -13,6 +14,8 @@ export function NotificationsPage() {
   const [body, setBody] = useState("");
   const [slackWebhook, setSlackWebhook] = useState("");
   const [smtpHost, setSmtpHost] = useState("");
+  const [smtpFrom, setSmtpFrom] = useState("command-center@example.local");
+  const [smtpTo, setSmtpTo] = useState("operator@example.local");
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
 
@@ -44,6 +47,28 @@ export function NotificationsPage() {
       await refreshNotifications();
     } catch (reason: unknown) {
       const text = reason instanceof Error ? reason.message : "Failed to create notification";
+      setError(text);
+    }
+  }
+
+  async function onDispatch() {
+    setError("");
+    setMessage("");
+    try {
+      await sendNotification({
+        channel,
+        title: title.trim(),
+        body: body.trim(),
+        slack_webhook_url: slackWebhook || undefined,
+        smtp_host: smtpHost || undefined,
+        smtp_port: 587,
+        smtp_from: smtpFrom || undefined,
+        smtp_to: smtpTo || undefined,
+      });
+      setMessage(`Dispatched ${channel} notification.`);
+      await refreshNotifications();
+    } catch (reason: unknown) {
+      const text = reason instanceof Error ? reason.message : "Failed to dispatch notification";
       setError(text);
     }
   }
@@ -104,12 +129,23 @@ export function NotificationsPage() {
             required
           />
         </label>
-        <button
-          type="submit"
-          className="rounded-lg border border-accent bg-accent/15 px-3 py-2 text-xs font-semibold text-text hover:bg-accent/25"
-        >
-          Add notification
-        </button>
+        <div className="flex gap-2">
+          <button
+            type="submit"
+            className="rounded-lg border border-accent bg-accent/15 px-3 py-2 text-xs font-semibold text-text hover:bg-accent/25"
+          >
+            Add notification
+          </button>
+          <button
+            type="button"
+            className="rounded-lg border border-border bg-bg/40 px-3 py-2 text-xs text-text hover:border-accent"
+            onClick={() => {
+              void onDispatch();
+            }}
+          >
+            Dispatch now
+          </button>
+        </div>
       </form>
 
       <div className="grid gap-4 lg:grid-cols-[1fr,1fr]">
@@ -131,6 +167,24 @@ export function NotificationsPage() {
               value={smtpHost}
               onChange={(event) => setSmtpHost(event.target.value)}
               placeholder="smtp.example.com"
+            />
+          </label>
+          <label className="mt-3 block space-y-1">
+            <span className="text-xs text-muted">SMTP from</span>
+            <input
+              className="w-full rounded-lg border border-border bg-bg/30 px-3 py-2 text-sm text-text"
+              value={smtpFrom}
+              onChange={(event) => setSmtpFrom(event.target.value)}
+              placeholder="command-center@example.local"
+            />
+          </label>
+          <label className="mt-3 block space-y-1">
+            <span className="text-xs text-muted">SMTP to</span>
+            <input
+              className="w-full rounded-lg border border-border bg-bg/30 px-3 py-2 text-sm text-text"
+              value={smtpTo}
+              onChange={(event) => setSmtpTo(event.target.value)}
+              placeholder="operator@example.local"
             />
           </label>
           <p className="mt-3 text-xs text-muted">

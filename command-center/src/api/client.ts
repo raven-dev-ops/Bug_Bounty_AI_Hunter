@@ -72,6 +72,24 @@ export type NotificationRow = {
   created_at: string;
 };
 
+export type TaskRow = {
+  id: string;
+  title: string;
+  status: string;
+  linked_program_id: string | null;
+  linked_finding_id: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
+export type MetricSnapshotRow = {
+  id: string;
+  metric_name: string;
+  metric_value: number;
+  scope: string;
+  captured_at: string;
+};
+
 export type DocSearchResult = {
   path: string;
   title: string;
@@ -108,6 +126,21 @@ type NotificationListResponse = {
   count: number;
 };
 
+type TaskListResponse = {
+  items: TaskRow[];
+  count: number;
+};
+
+type TaskBoardResponse = {
+  columns: Record<string, TaskRow[]>;
+  count: number;
+};
+
+type MetricSnapshotResponse = {
+  items: MetricSnapshotRow[];
+  count: number;
+};
+
 type DocsSearchResponse = {
   items: DocSearchResult[];
   count: number;
@@ -128,6 +161,12 @@ type ReportRunResponse = {
   run: ToolRunRow;
   output_dir: string;
   files: string[];
+};
+
+type MetricsComputeResponse = {
+  scope: string;
+  metrics: Record<string, number>;
+  snapshots: MetricSnapshotRow[];
 };
 
 type ListProgramParams = {
@@ -351,6 +390,27 @@ export async function listNotifications(
   return data.items;
 }
 
+export async function sendNotification(payload: {
+  channel: string;
+  title: string;
+  body: string;
+  slack_webhook_url?: string;
+  smtp_host?: string;
+  smtp_port?: number;
+  smtp_from?: string;
+  smtp_to?: string;
+  smtp_username?: string;
+  smtp_password?: string;
+  smtp_use_tls?: boolean;
+}): Promise<{ ok: boolean; channel: string }> {
+  const response = await fetch(`${API_BASE_URL}/api/notifications/send`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+  return parseJsonResponse<{ ok: boolean; channel: string }>(response);
+}
+
 export async function createNotification(payload: {
   channel: string;
   title: string;
@@ -375,6 +435,85 @@ export async function setNotificationRead(
     body: JSON.stringify({ read }),
   });
   return parseJsonResponse<NotificationRow>(response);
+}
+
+export async function listTasks(limit = 500): Promise<TaskRow[]> {
+  const response = await fetch(`${API_BASE_URL}/api/tasks?limit=${limit}`);
+  const data = await parseJsonResponse<TaskListResponse>(response);
+  return data.items;
+}
+
+export async function getTaskBoard(limit = 500): Promise<Record<string, TaskRow[]>> {
+  const response = await fetch(`${API_BASE_URL}/api/tasks/board?limit=${limit}`);
+  const data = await parseJsonResponse<TaskBoardResponse>(response);
+  return data.columns;
+}
+
+export async function createTask(payload: {
+  title: string;
+  status?: string;
+  linked_program_id?: string;
+  linked_finding_id?: string;
+}): Promise<TaskRow> {
+  const response = await fetch(`${API_BASE_URL}/api/tasks`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+  return parseJsonResponse<TaskRow>(response);
+}
+
+export async function updateTask(
+  taskId: string,
+  payload: {
+    title?: string;
+    status?: string;
+    linked_program_id?: string;
+    linked_finding_id?: string;
+  },
+): Promise<TaskRow> {
+  const safeId = encodeURIComponent(taskId);
+  const response = await fetch(`${API_BASE_URL}/api/tasks/${safeId}`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+  return parseJsonResponse<TaskRow>(response);
+}
+
+export async function deleteTask(taskId: string): Promise<void> {
+  const safeId = encodeURIComponent(taskId);
+  const response = await fetch(`${API_BASE_URL}/api/tasks/${safeId}`, {
+    method: "DELETE",
+  });
+  await parseJsonResponse<{ ok: boolean }>(response);
+}
+
+export async function autoLinkTasks(): Promise<number> {
+  const response = await fetch(`${API_BASE_URL}/api/tasks/auto-link`, {
+    method: "POST",
+  });
+  const data = await parseJsonResponse<{ ok: boolean; created: number }>(response);
+  return data.created;
+}
+
+export async function computeMetrics(scope = "global"): Promise<MetricsComputeResponse> {
+  const response = await fetch(`${API_BASE_URL}/api/metrics/compute`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ scope }),
+  });
+  return parseJsonResponse<MetricsComputeResponse>(response);
+}
+
+export async function listMetricSnapshots(
+  scope = "global",
+  limit = 200,
+): Promise<MetricSnapshotRow[]> {
+  const query = new URLSearchParams({ scope, limit: String(limit) });
+  const response = await fetch(`${API_BASE_URL}/api/metrics/snapshots?${query.toString()}`);
+  const data = await parseJsonResponse<MetricSnapshotResponse>(response);
+  return data.items;
 }
 
 export async function searchDocs(query: string, limit = 30): Promise<DocSearchResult[]> {

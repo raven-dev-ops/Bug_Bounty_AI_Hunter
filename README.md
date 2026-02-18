@@ -124,6 +124,8 @@ npm run test
 - Findings DB UI with CRUD and JSON import/export.
 - Report Composer actions for report bundle and issue draft exports.
 - Logs, notifications, and docs-search pages for operator workflows.
+- Analytics dashboard page with computed metrics and snapshot history.
+- Task board page with Kanban lanes and finding-linked task automation.
 
 ## Command Center Backend API (MVP Baseline)
 ```bash
@@ -139,6 +141,7 @@ python -m scripts.command_center_api --host 127.0.0.1 --port 8787 --db data/comm
 - Tool execution endpoint runs approved scripts with captured logs and notification events.
 - Docs endpoints provide markdown search and page retrieval for in-app Help/Docs views.
 - Connector endpoints support Bugcrowd, GitHub, Intigriti, and YesWeHack sync flows with webhook/audit coverage and connector-run tracking.
+- Metrics endpoints compute/store snapshot series, task endpoints support board workflows, and notifications can dispatch via Slack/SMTP.
 
 ## How To Use
 - Start with `docs/ROE.md` and confirm written authorization.

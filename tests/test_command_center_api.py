@@ -93,6 +93,44 @@ class TestCommandCenterApi(unittest.TestCase):
         findings = exported.json()["findings"]
         self.assertTrue(any(item.get("id") == "finding-001" for item in findings))
 
+    def test_task_auto_link_from_findings(self):
+        self.client.post(
+            "/api/findings/import",
+            json={
+                "source": "unit-test",
+                "findings": [{"id": "finding-auto-001", "title": "Auto link me"}],
+            },
+        )
+        linked = self.client.post("/api/tasks/auto-link")
+        self.assertEqual(linked.status_code, 200)
+        self.assertGreaterEqual(linked.json()["created"], 1)
+
+        board = self.client.get("/api/tasks/board")
+        self.assertEqual(board.status_code, 200)
+        open_tasks = board.json()["columns"]["open"]
+        self.assertTrue(any(task.get("linked_finding_id") == "finding-auto-001" for task in open_tasks))
+
+    def test_metrics_compute_and_snapshot_listing(self):
+        computed = self.client.post("/api/metrics/compute", json={"scope": "global"})
+        self.assertEqual(computed.status_code, 200)
+        self.assertIn("program_count", computed.json()["metrics"])
+
+        snapshots = self.client.get("/api/metrics/snapshots", params={"scope": "global"})
+        self.assertEqual(snapshots.status_code, 200)
+        self.assertGreaterEqual(snapshots.json()["count"], 1)
+
+    def test_notifications_send_rejects_unsupported_channel(self):
+        response = self.client.post(
+            "/api/notifications/send",
+            json={
+                "channel": "pager",
+                "title": "Unsupported",
+                "body": "Unsupported channel",
+            },
+        )
+        self.assertEqual(response.status_code, 400)
+        self.assertIn("unsupported", response.json()["detail"])
+
 
 class TestCommandCenterTools(unittest.TestCase):
     def test_run_tool_executes_allowlisted_module(self):
