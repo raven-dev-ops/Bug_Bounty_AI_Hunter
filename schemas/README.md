@@ -34,3 +34,4 @@ This folder contains JSON Schema definitions for core data types:
 - `scoring_calibration.schema.json`
 - `scoring_calibration_report.schema.json`
 - `report_completeness_review.schema.json`
+- `workflow_tracker.schema.json`

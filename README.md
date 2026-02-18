@@ -31,6 +31,7 @@ advice. Only test systems where you have explicit authorization.
 - `docs/knowledge/` (MkDocs-published knowledge pages)
 - `docs/ARCHITECTURE.md`
 - `docs/ADR_COMMAND_CENTER_ARCHITECTURE.md`
+- `docs/COMMAND_CENTER_TRIAGE.md`
 - `docs/PIPELINE.md`
 - `docs/TRIAGE.md`
 - `docs/SEVERITY_MODEL.md`
@@ -76,6 +77,8 @@ advice. Only test systems where you have explicit authorization.
 - Preferred: run `python -m http.server 8000` and open `http://localhost:8000/dashboard.html`.
 - If you open `dashboard.html` via `file://`, use "Import repo folder" (Chrome/Edge) to load data.
 - Bounties include a Level (P0-P4) lens/filter and a "Most Wanted" carousel (official icons when sponsor websites are set in Sponsor Profiles).
+- Docs are browsable as a "forum" (categories from `mkdocs.yml`).
+- Workflow includes a live tracker backed by `data/workflow_tracker.json` (optional local overrides can be exported).
 
 ## Repository layout
 - `dashboard.html` and `dashboard/` - local interactive repo overview (static HTML/CSS/JS)

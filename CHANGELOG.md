@@ -6,8 +6,10 @@ All notable changes to this project will be documented here.
 - Streamlined CI to reduce redundant checks: linting, docs/link validation, and dependency audit now run once on Python 3.11, while the 3.10-3.12 matrix focuses on unit tests (coverage stays on 3.11).
 - Added `docs/ADR_COMMAND_CENTER_ARCHITECTURE.md` to document issue #164 with a staged SPA + API + worker architecture mapped to existing schemas and scripts.
 - Seeded GitHub issues (#164-#206) for the command-center redesign backlog.
+- Added `docs/COMMAND_CENTER_TRIAGE.md` to complete triage acceptance criteria for command-center backlog issues (#164-#206).
 - Added `dashboard.html` plus `dashboard/` assets for a local interactive repo overview (knowledge, tools, bounties, sponsor profiles, leaderboards, registry, artifacts).
 - Enhanced the dashboard bounties view with a "Most Wanted" carousel, sponsor website icon support, and Level (P0-P4) tagging/filtering.
+- Simplified the dashboard navigation into page-style views and added a Docs "forum" view (from `mkdocs.yml`) plus a live workflow tracker (from `data/workflow_tracker.json`).
 - Completed unfinished docs/templates: filled `docs/RELEASE_NOTES_TEMPLATE.md`, added missing template READMEs (`templates/reporting/README.md`, `templates/platforms/README.md`), refreshed engagement workspace skeleton templates, and promoted curated knowledge items to `reviewed` with regenerated indexes.
 - Normalized generated Markdown/JSON writers to emit LF line endings (reduces CRLF churn on Windows).
 - Updated `CONTEXT.md` to reflect current repo structure, generated files, and local checks.
