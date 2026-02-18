@@ -14,11 +14,36 @@
 body {
   margin: 0;
   min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
   background:
     radial-gradient(circle at 12% 8%, rgb(var(--cc-accent) / 0.22), transparent 42%),
     radial-gradient(circle at 86% 12%, rgb(var(--cc-accent-strong) / 0.16), transparent 36%),
     rgb(var(--cc-bg));
   color: rgb(var(--cc-text));
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: -35vmax;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    conic-gradient(
+      from 140deg at 60% 48%,
+      rgb(var(--cc-accent-strong) / 0.14),
+      transparent 40%,
+      rgb(var(--cc-accent) / 0.14) 55%,
+      transparent 78%
+    );
+  filter: blur(64px);
+  animation: aura-drift 18s linear infinite;
+}
+
+#root {
+  position: relative;
+  z-index: 1;
 }
 
 @keyframes shell-enter {
@@ -32,6 +57,93 @@ body {
   }
 }
 
+@keyframes content-enter {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes aura-drift {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .animate-shell-enter {
-  animation: shell-enter 240ms ease-out both;
+  animation: shell-enter 280ms ease-out both;
+}
+
+section.animate-shell-enter > :not(header) {
+  animation: content-enter 360ms ease-out both;
+}
+
+section.animate-shell-enter > :nth-child(2) {
+  animation-delay: 35ms;
+}
+
+section.animate-shell-enter > :nth-child(3) {
+  animation-delay: 70ms;
+}
+
+section.animate-shell-enter > :nth-child(4) {
+  animation-delay: 100ms;
+}
+
+section.animate-shell-enter > header h1 {
+  background: linear-gradient(
+    120deg,
+    rgb(var(--cc-accent-strong)),
+    rgb(var(--cc-text)) 46%,
+    rgb(var(--cc-accent))
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  letter-spacing: 0.01em;
+}
+
+section.animate-shell-enter > header p:first-child {
+  color: rgb(var(--cc-accent-strong));
+}
+
+.rounded-2xl.border,
+.rounded-xl.border,
+.rounded-lg.border {
+  transition:
+    transform 180ms ease,
+    border-color 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.rounded-2xl.border:hover,
+.rounded-xl.border:hover,
+.rounded-lg.border:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgb(0 0 0 / 0.22);
+}
+
+::selection {
+  background: rgb(var(--cc-accent) / 0.3);
+  color: rgb(var(--cc-text));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-shell-enter,
+  section.animate-shell-enter > :not(header),
+  body::before,
+  .rounded-2xl.border,
+  .rounded-xl.border,
+  .rounded-lg.border {
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+  }
 }

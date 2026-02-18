@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import type { ReactNode } from "react";
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import { clearApiSession, ensureApiSession } from "../api/client";
 import { CommandPalette } from "../components/CommandPalette";
 import type { NavItem } from "../routes";
 
@@ -18,8 +19,11 @@ type AppShellProps = {
 
 export function AppShell({ items, children }: AppShellProps) {
   const location = useLocation();
+  const navigate = useNavigate();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [paletteOpen, setPaletteOpen] = useState(false);
+  const [sessionState, setSessionState] = useState<"checking" | "ready" | "error">("checking");
+  const [sessionError, setSessionError] = useState("");
   const [theme, setTheme] = useState<ThemeName>(() => {
     if (typeof window === "undefined") {
       return "amber-dark";
@@ -54,6 +58,92 @@ export function AppShell({ items, children }: AppShellProps) {
     return () => window.removeEventListener("keydown", onKeyDown);
   }, []);
 
+  useEffect(() => {
+    let active = true;
+    setSessionState("checking");
+    setSessionError("");
+    ensureApiSession()
+      .then((token) => {
+        if (!active) {
+          return;
+        }
+        if (token) {
+          setSessionState("ready");
+          return;
+        }
+        setSessionState("error");
+        setSessionError("Session bootstrap failed.");
+      })
+      .catch((reason: unknown) => {
+        if (!active) {
+          return;
+        }
+        const message = reason instanceof Error ? reason.message : "Session bootstrap failed";
+        setSessionState("error");
+        setSessionError(message);
+      });
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    function isEditableTarget(target: EventTarget | null): boolean {
+      if (!(target instanceof HTMLElement)) {
+        return false;
+      }
+      const tag = target.tagName.toLowerCase();
+      return (
+        tag === "input" ||
+        tag === "textarea" ||
+        target.isContentEditable ||
+        target.getAttribute("role") === "textbox"
+      );
+    }
+
+    function onKeyDown(event: KeyboardEvent) {
+      if (isEditableTarget(event.target)) {
+        return;
+      }
+      if (!event.altKey || event.ctrlKey || event.metaKey) {
+        return;
+      }
+      if (!/^[1-9]$/.test(event.key)) {
+        return;
+      }
+      const index = Number(event.key) - 1;
+      const item = items[index];
+      if (!item) {
+        return;
+      }
+      event.preventDefault();
+      navigate(item.path);
+    }
+
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [items, navigate]);
+
+  function reconnectSession() {
+    setSessionState("checking");
+    setSessionError("");
+    clearApiSession();
+    ensureApiSession(true)
+      .then((token) => {
+        if (token) {
+          setSessionState("ready");
+          return;
+        }
+        setSessionState("error");
+        setSessionError("Session bootstrap failed.");
+      })
+      .catch((reason: unknown) => {
+        const message = reason instanceof Error ? reason.message : "Session bootstrap failed";
+        setSessionState("error");
+        setSessionError(message);
+      });
+  }
+
   const currentItem = useMemo(
     () =>
       items.find(
@@ -75,7 +165,9 @@ export function AppShell({ items, children }: AppShellProps) {
           <div className="rounded-2xl border border-border bg-bg/60 p-4">
             <p className="text-xs uppercase tracking-[0.22em] text-muted">Bug Bounty</p>
             <h1 className="mt-2 text-xl font-semibold text-accentstrong">Command Center</h1>
-            <p className="mt-1 text-xs text-muted">React shell scaffold for operator workflows.</p>
+            <p className="mt-1 text-xs text-muted">
+              Operator cockpit for triage, execution controls, and reporting workflows.
+            </p>
           </div>
 
           <nav className="mt-5 space-y-2">
@@ -121,7 +213,27 @@ export function AppShell({ items, children }: AppShellProps) {
                 className="rounded-lg border border-border bg-bg/50 px-3 py-2 text-xs font-semibold text-muted hover:text-text"
                 onClick={() => setPaletteOpen(true)}
               >
-                Cmd Palette
+                Command Palette
+              </button>
+
+              <button
+                type="button"
+                className={[
+                  "rounded-lg border px-3 py-2 text-xs font-semibold",
+                  sessionState === "ready"
+                    ? "border-emerald-500/40 bg-emerald-500/10 text-emerald-200"
+                    : sessionState === "checking"
+                      ? "border-amber-500/40 bg-amber-500/10 text-amber-200"
+                      : "border-red-500/40 bg-red-500/10 text-red-200",
+                ].join(" ")}
+                onClick={reconnectSession}
+                title={sessionError || "Refresh API session"}
+              >
+                {sessionState === "ready"
+                  ? "Session Ready"
+                  : sessionState === "checking"
+                    ? "Session Sync"
+                    : "Session Error"}
               </button>
 
               <button

@@ -17,7 +17,7 @@ export function PagePlaceholder({ title, description }: PagePlaceholderProps) {
   return (
     <section className="space-y-6 animate-shell-enter">
       <header className="space-y-2">
-        <p className="text-xs uppercase tracking-[0.24em] text-muted">Command Center MVP</p>
+        <p className="text-xs uppercase tracking-[0.24em] text-muted">Command Center</p>
         <h1 className="text-3xl font-semibold text-text">{title}</h1>
         <p className="max-w-3xl text-sm text-muted">{description}</p>
       </header>
@@ -25,13 +25,13 @@ export function PagePlaceholder({ title, description }: PagePlaceholderProps) {
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
         <Tile>
           <p className="text-xs uppercase tracking-[0.18em] text-muted">Status</p>
-          <p className="mt-3 text-lg font-semibold text-accent">Scaffold complete</p>
-          <p className="mt-2 text-sm text-muted">Route, layout shell, and theme tokens are active.</p>
+          <p className="mt-3 text-lg font-semibold text-accent">Operational baseline online</p>
+          <p className="mt-2 text-sm text-muted">Routing, shell actions, and API session bootstrap are active.</p>
         </Tile>
         <Tile>
-          <p className="text-xs uppercase tracking-[0.18em] text-muted">Next build step</p>
-          <p className="mt-3 text-lg font-semibold text-text">Wire API clients</p>
-          <p className="mt-2 text-sm text-muted">Attach page modules to backend resources by milestone.</p>
+          <p className="text-xs uppercase tracking-[0.18em] text-muted">Workflow</p>
+          <p className="mt-3 text-lg font-semibold text-text">Drive tasks through the board</p>
+          <p className="mt-2 text-sm text-muted">Use linked findings, runs, and reports to keep delivery traceable.</p>
         </Tile>
         <Tile>
           <p className="text-xs uppercase tracking-[0.18em] text-muted">Guardrails</p>

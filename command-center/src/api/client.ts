@@ -256,6 +256,176 @@ type IssueDraftPayload = {
   timeout_seconds?: number;
 };
 
+const ACCESS_TOKEN_KEY = "command-center-access-token";
+const DEFAULT_ORG_ID = import.meta.env.VITE_COMMAND_CENTER_ORG_ID ?? "org:command-center-local";
+const DEFAULT_OIDC_SUB = import.meta.env.VITE_COMMAND_CENTER_OIDC_SUB ?? "command-center-ui-admin";
+const DEFAULT_OIDC_EMAIL =
+  import.meta.env.VITE_COMMAND_CENTER_OIDC_EMAIL ?? "operator@command-center.local";
+const DEFAULT_OIDC_NAME =
+  import.meta.env.VITE_COMMAND_CENTER_OIDC_NAME ?? "Command Center Operator";
+const STATIC_ACCESS_TOKEN = import.meta.env.VITE_COMMAND_CENTER_ACCESS_TOKEN ?? "";
+
+const rawFetch: typeof globalThis.fetch = globalThis.fetch.bind(globalThis);
+let sessionBootstrapPromise: Promise<string | null> | null = null;
+
+function base64UrlEncode(value: string): string {
+  const bytes = new TextEncoder().encode(value);
+  let binary = "";
+  for (const byte of bytes) {
+    binary += String.fromCharCode(byte);
+  }
+  return btoa(binary).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/g, "");
+}
+
+function buildUnsignedIdToken(): string {
+  const header = base64UrlEncode(JSON.stringify({ alg: "none", typ: "JWT" }));
+  const payload = base64UrlEncode(
+    JSON.stringify({
+      sub: DEFAULT_OIDC_SUB,
+      email: DEFAULT_OIDC_EMAIL,
+      name: DEFAULT_OIDC_NAME,
+      exp: Math.floor(Date.now() / 1000) + 3600,
+    }),
+  );
+  return `${header}.${payload}.sig`;
+}
+
+function readStoredToken(): string {
+  if (STATIC_ACCESS_TOKEN) {
+    return STATIC_ACCESS_TOKEN;
+  }
+  if (typeof window === "undefined") {
+    return "";
+  }
+  try {
+    return window.localStorage.getItem(ACCESS_TOKEN_KEY) ?? "";
+  } catch {
+    return "";
+  }
+}
+
+function writeStoredToken(token: string): void {
+  if (!token || STATIC_ACCESS_TOKEN) {
+    return;
+  }
+  if (typeof window === "undefined") {
+    return;
+  }
+  try {
+    window.localStorage.setItem(ACCESS_TOKEN_KEY, token);
+  } catch {
+    // Ignore storage write errors (private mode / blocked storage).
+  }
+}
+
+function clearStoredToken(): void {
+  if (STATIC_ACCESS_TOKEN || typeof window === "undefined") {
+    return;
+  }
+  try {
+    window.localStorage.removeItem(ACCESS_TOKEN_KEY);
+  } catch {
+    // Ignore storage write errors (private mode / blocked storage).
+  }
+}
+
+async function bootstrapSessionToken(): Promise<string | null> {
+  const orgPayload = JSON.stringify({
+    id: DEFAULT_ORG_ID,
+    name: "Command Center Local Org",
+  });
+  const principalPayload = JSON.stringify({
+    id: `oidc:${DEFAULT_OIDC_SUB}`,
+    email: DEFAULT_OIDC_EMAIL,
+    display_name: DEFAULT_OIDC_NAME,
+    oidc_sub: DEFAULT_OIDC_SUB,
+    org_id: DEFAULT_ORG_ID,
+    role: "admin",
+  });
+
+  // First-run bootstrap path for a new local DB; these calls may return 401 after bootstrap.
+  await rawFetch(`${API_BASE_URL}/api/auth/orgs`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: orgPayload,
+  }).catch(() => null);
+  await rawFetch(`${API_BASE_URL}/api/auth/principals`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: principalPayload,
+  }).catch(() => null);
+
+  const exchangeResponse = await rawFetch(`${API_BASE_URL}/api/auth/oidc/token`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      id_token: buildUnsignedIdToken(),
+      org_id: DEFAULT_ORG_ID,
+    }),
+  });
+  if (!exchangeResponse.ok) {
+    return null;
+  }
+  const data = (await exchangeResponse.json()) as { token?: { access_token?: string } };
+  const token = data.token?.access_token;
+  if (typeof token !== "string" || token.trim().length === 0) {
+    return null;
+  }
+  writeStoredToken(token);
+  return token;
+}
+
+export async function ensureApiSession(forceRefresh = false): Promise<string | null> {
+  if (!forceRefresh) {
+    const existingToken = readStoredToken();
+    if (existingToken) {
+      return existingToken;
+    }
+  }
+  if (sessionBootstrapPromise) {
+    return sessionBootstrapPromise;
+  }
+  const currentPromise = bootstrapSessionToken();
+  sessionBootstrapPromise = currentPromise;
+  try {
+    return await currentPromise;
+  } finally {
+    if (sessionBootstrapPromise === currentPromise) {
+      sessionBootstrapPromise = null;
+    }
+  }
+}
+
+export function clearApiSession(): void {
+  clearStoredToken();
+}
+
+async function authedFetch(url: string, init: RequestInit = {}): Promise<Response> {
+  const headers = new Headers(init.headers ?? {});
+  if (!headers.has("Authorization")) {
+    const token = await ensureApiSession();
+    if (token) {
+      headers.set("Authorization", `Bearer ${token}`);
+    }
+  }
+  let response = await rawFetch(url, { ...init, headers });
+  if (response.status !== 401) {
+    return response;
+  }
+
+  clearStoredToken();
+  const refreshedToken = await ensureApiSession(true);
+  if (!refreshedToken) {
+    return response;
+  }
+  const retryHeaders = new Headers(init.headers ?? {});
+  retryHeaders.set("Authorization", `Bearer ${refreshedToken}`);
+  response = await rawFetch(url, { ...init, headers: retryHeaders });
+  return response;
+}
+
+const fetch = (url: string, init?: RequestInit): Promise<Response> => authedFetch(url, init);
+
 async function parseJsonResponse<T>(response: Response): Promise<T> {
   if (!response.ok) {
     let message = `${response.status} ${response.statusText}`;
