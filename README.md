@@ -13,7 +13,6 @@ advice. Only test systems where you have explicit authorization.
 - `GUIDE.md`
 - `CONTEXT.md`
 - `dashboard.html` (local repo overview)
-- `DEEP_RESEARCH_02_COMMAND_CENTER.md` (command-center redesign notes + seeded issue table)
 - `docs/PROJECT_OUTLINE.md`
 - `docs/ROE.md`
 - `docs/BUG_BOUNTY_STARTER_WORKFLOW.md`
