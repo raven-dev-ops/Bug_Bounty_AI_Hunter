@@ -1,0 +1,95 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ravdevops.com/schemas/workflow_tracker.schema.json",
+  "title": "WorkflowTracker",
+  "type": "object",
+  "description": "Local tracker for bug bounty workflow progress.",
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "created_at": { "type": "string" },
+    "updated_at": { "type": "string" },
+    "stages": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/stage" }
+    },
+    "cases": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/case" }
+    }
+  },
+  "required": ["schema_version", "stages", "cases"],
+  "additionalProperties": true,
+  "$defs": {
+    "stage": {
+      "type": "object",
+      "properties": {
+        "key": { "type": "string" },
+        "label": { "type": "string" },
+        "description": { "type": "string" }
+      },
+      "required": ["key", "label"],
+      "additionalProperties": true
+    },
+    "timeline_event": {
+      "type": "object",
+      "properties": {
+        "at": { "type": "string" },
+        "type": { "type": "string" },
+        "stage": { "type": "string" },
+        "summary": { "type": "string" }
+      },
+      "required": ["at", "type", "summary"],
+      "additionalProperties": true
+    },
+    "link": {
+      "type": "object",
+      "properties": {
+        "label": { "type": "string" },
+        "href": { "type": "string" },
+        "path": { "type": "string" },
+        "url": { "type": "string" }
+      },
+      "required": ["label"],
+      "additionalProperties": true
+    },
+    "case": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "program": {
+          "type": "object",
+          "properties": {
+            "name": { "type": "string" },
+            "platform": { "type": "string" },
+            "url": { "type": "string" }
+          },
+          "additionalProperties": true
+        },
+        "severity": { "type": "string" },
+        "status": { "type": "string" },
+        "stage": { "type": "string" },
+        "stage_status": {
+          "type": "object",
+          "additionalProperties": { "type": "string" }
+        },
+        "created_at": { "type": "string" },
+        "updated_at": { "type": "string" },
+        "timeline": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/timeline_event" }
+        },
+        "links": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/link" }
+        }
+      },
+      "required": ["id", "title", "stage"],
+      "additionalProperties": true
+    }
+  }
+}
+

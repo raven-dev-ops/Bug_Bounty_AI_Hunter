@@ -19,7 +19,7 @@
 
   const state = {
     mode: "auto", // auto | import
-    view: "overview", // overview | knowledge | tools | bounties | artifacts | all
+    view: "overview", // overview | docs | workflow | tools | bounties | artifacts | all
     theme: "light", // light | dark
     fileMap: new Map(), // relPath -> File
     loaded: {},
@@ -29,17 +29,23 @@
     },
     ui: {
       sponsorKey: null,
+      docsCatId: "All",
+      docsFilter: "",
+      workflowCaseId: null,
+      workflowFilter: "",
     },
   };
 
   const RESOURCES = {
     hackTypes: { path: "docs/HACK_TYPES.md", kind: "md" },
     knowledgeIndex: { path: "docs/KNOWLEDGE_INDEX.md", kind: "md" },
+    mkdocsConfig: { path: "mkdocs.yml", kind: "yml" },
     scriptsReadme: { path: "scripts/README.md", kind: "md" },
     bugcrowdBoard: { path: "bounty_board/bugcrowd/INDEX.md", kind: "md" },
     bugcrowdVdp: { path: "bounty_board/bugcrowd_vdp/INDEX.md", kind: "md" },
     programRegistry: { path: "data/program_registry.json", kind: "json" },
     findingsDb: { path: "data/findings_db.json", kind: "json" },
+    workflowTracker: { path: "data/workflow_tracker.json", kind: "json" },
     roadmap: { path: "ROADMAP.md", kind: "md" },
   };
 
@@ -747,7 +753,8 @@
 
   const VIEW_DEFAULT_ANCHOR = {
     overview: "home",
-    knowledge: "hack-types",
+    docs: "docs-forum",
+    workflow: "workflow-tracker",
     tools: "cli",
     bounties: "bounty-lens",
     artifacts: "artifacts",
@@ -757,7 +764,8 @@
   function isValidView(view) {
     return (
       view === "overview" ||
-      view === "knowledge" ||
+      view === "docs" ||
+      view === "workflow" ||
       view === "tools" ||
       view === "bounties" ||
       view === "artifacts" ||
@@ -775,7 +783,8 @@
   function loadStoredView() {
     try {
       const v = localStorage.getItem("bbhai:view") || "";
-      return isValidView(v) ? v : null;
+      const mapped = v === "knowledge" ? "docs" : v;
+      return isValidView(mapped) ? mapped : null;
     } catch {
       return null;
     }
@@ -798,6 +807,16 @@
     document.documentElement.dataset.view = state.view;
   }
 
+  function applyNavActive() {
+    $all("nav.mainnav a[data-nav-view]").forEach((a) => {
+      const v = a.getAttribute("data-nav-view");
+      const active = !!v && v === state.view;
+      a.classList.toggle("active", active);
+      if (active) a.setAttribute("aria-current", "page");
+      else a.removeAttribute("aria-current");
+    });
+  }
+
   function setView(view, opts = {}) {
     const next = isValidView(view) ? view : "overview";
     state.view = next;
@@ -807,6 +826,7 @@
     if (sel) sel.value = next;
     setCounters();
     applyViewVisibility();
+    applyNavActive();
   }
 
   function gotoView(view) {
@@ -1143,6 +1163,265 @@
     )}</div>`;
   }
 
+  function extractMkdocsNavLines(ymlText) {
+    const lines = String(ymlText || "").split(/\r?\n/);
+    const idx = lines.findIndex((l) => l.trim() === "nav:");
+    if (idx === -1) return [];
+    const out = [];
+    for (let i = idx + 1; i < lines.length; i++) {
+      const line = lines[i];
+      if (!line.trim()) continue;
+      if (!/^\s/.test(line)) break;
+      out.push(line);
+    }
+    return out;
+  }
+
+  function parseMkdocsNav(ymlText) {
+    const navLines = extractMkdocsNavLines(ymlText);
+    const root = { kind: "category", title: "root", children: [] };
+    const stack = [{ indent: -1, node: root }];
+
+    for (const line of navLines) {
+      const m = line.match(/^(\s*)-\s+(.*)$/);
+      if (!m) continue;
+      const indent = m[1].length;
+      const body = m[2];
+      const idx = body.indexOf(":");
+      if (idx === -1) continue;
+      const title = body.slice(0, idx).trim();
+      const rest = body.slice(idx + 1).trim();
+      if (!title) continue;
+
+      const node =
+        rest === ""
+          ? { kind: "category", title, children: [] }
+          : { kind: "page", title, path: rest };
+
+      while (stack.length > 1 && indent <= stack[stack.length - 1].indent) stack.pop();
+      const parent = stack[stack.length - 1].node;
+      parent.children.push(node);
+      if (node.kind === "category") stack.push({ indent, node });
+    }
+
+    return root;
+  }
+
+  function normalizeDocPath(relPath) {
+    const p = String(relPath || "").trim();
+    if (!p) return "";
+    if (p.startsWith("docs/")) return p;
+    return `docs/${p}`;
+  }
+
+  function countNavPages(node) {
+    if (!node) return 0;
+    if (node.kind === "page") return 1;
+    if (!Array.isArray(node.children)) return 0;
+    return node.children.reduce((sum, child) => sum + countNavPages(child), 0);
+  }
+
+  function buildDocsForumModel(ymlText) {
+    const nav = parseMkdocsNav(ymlText);
+    const categories = [];
+    const pages = [];
+    const catById = new Map();
+
+    function visit(node, catPath, depth) {
+      if (!node) return;
+      if (node.kind === "page") {
+        pages.push({
+          title: node.title,
+          relPath: String(node.path || ""),
+          docPath: normalizeDocPath(node.path),
+          catPath: catPath || "",
+        });
+        return;
+      }
+      if (node.kind !== "category") return;
+      const id = catPath ? `${catPath} / ${node.title}` : node.title;
+      catById.set(id, node);
+      categories.push({
+        id,
+        title: node.title,
+        depth: depth || 0,
+        parentId: catPath || null,
+        topicCount: countNavPages(node),
+      });
+      for (const child of node.children || []) visit(child, id, (depth || 0) + 1);
+    }
+
+    for (const child of nav.children || []) {
+      if (child.kind === "category") visit(child, "", 0);
+      else if (child.kind === "page") {
+        pages.push({
+          title: child.title,
+          relPath: String(child.path || ""),
+          docPath: normalizeDocPath(child.path),
+          catPath: "",
+        });
+      }
+    }
+
+    const rootDocs = [
+      { title: "README", path: "README.md" },
+      { title: "ROADMAP", path: "ROADMAP.md" },
+      { title: "CHANGELOG", path: "CHANGELOG.md" },
+      { title: "CONTEXT", path: "CONTEXT.md" },
+      { title: "CONTRIBUTING", path: "CONTRIBUTING.md" },
+      { title: "SECURITY", path: "SECURITY.md" },
+      { title: "GUIDE (root)", path: "GUIDE.md" },
+      { title: "BUGCROWD (root)", path: "BUGCROWD.md" },
+    ];
+    categories.unshift({
+      id: "Repo",
+      title: "Repo",
+      depth: 0,
+      parentId: null,
+      topicCount: rootDocs.length,
+    });
+    for (const d of rootDocs) {
+      pages.push({
+        title: d.title,
+        relPath: d.path,
+        docPath: d.path,
+        catPath: "Repo",
+      });
+    }
+
+    return { categories, pages, catById };
+  }
+
+  function renderDocsForumUi() {
+    const model = state.loaded.docsForumModel;
+    const catsWrap = $id("docsForumCats");
+    const topicsWrap = $id("docsForumTopics");
+    const countEl = $id("docsForumCount");
+    if (!catsWrap || !topicsWrap || !countEl) return;
+
+    if (!model) {
+      catsWrap.classList.remove("muted");
+      topicsWrap.classList.remove("muted");
+      catsWrap.innerHTML = `<p class="muted">MkDocs nav not loaded. Import the repo folder or run a local server.</p>`;
+      topicsWrap.innerHTML = `<p class="muted">No docs to show yet.</p>`;
+      countEl.textContent = "0";
+      return;
+    }
+
+    const active = String(state.ui.docsCatId || "All");
+    const q = String(state.ui.docsFilter || "").trim().toLowerCase();
+
+    const catButtons = [];
+    const allActive = active === "All";
+    const totalTopics = model.pages.length;
+    catButtons.push(
+      `<button class="forum-board${allActive ? " active" : ""}" data-cat-id="All"><span class="board-title">All</span><span class="board-meta">${esc(
+        String(totalTopics)
+      )} topics</span></button>`
+    );
+    for (const c of model.categories) {
+      const isActive = active === c.id;
+      const pad = 10 + Math.min(5, Math.max(0, c.depth)) * 14;
+      catButtons.push(
+        `<button class="forum-board${isActive ? " active" : ""}" data-cat-id="${esc(
+          c.id
+        )}" style="padding-left:${pad}px"><span class="board-title">${esc(
+          c.title
+        )}</span><span class="board-meta">${esc(String(c.topicCount))} topics</span></button>`
+      );
+    }
+    catsWrap.classList.remove("muted");
+    catsWrap.innerHTML = `<div class="forum-boards">${catButtons.join("")}</div>`;
+
+    let pages = model.pages;
+    if (q) {
+      pages = pages.filter((p) => {
+        return (
+          String(p.title || "").toLowerCase().includes(q) ||
+          String(p.relPath || "").toLowerCase().includes(q) ||
+          String(p.catPath || "").toLowerCase().includes(q)
+        );
+      });
+    } else if (!allActive) {
+      const prefix = `${active} /`;
+      pages = pages.filter((p) => p.catPath === active || p.catPath.startsWith(prefix));
+    }
+
+    countEl.textContent = String(pages.length);
+    topicsWrap.classList.remove("muted");
+    if (pages.length === 0) {
+      topicsWrap.innerHTML = `<p class="muted">No matching docs.</p>`;
+      return;
+    }
+
+    const topicCards = pages.map((p) => {
+      const crumb = p.catPath ? p.catPath : "Root";
+      return `<button class="forum-topic" data-doc-path="${esc(p.docPath)}" data-doc-title="${esc(
+        p.title
+      )}">
+        <div class="topic-title">${esc(p.title)}</div>
+        <div class="topic-meta"><span class="pilltag neutral">${esc(
+          crumb
+        )}</span> <code>${esc(p.relPath)}</code></div>
+      </button>`;
+    });
+    topicsWrap.innerHTML = `<div class="forum-topics">${topicCards.join("")}</div>`;
+  }
+
+  function renderDocsForum(ymlText) {
+    const wrap = $id("docsForumCats");
+    if (wrap) wrap.classList.remove("muted");
+    const topics = $id("docsForumTopics");
+    if (topics) topics.classList.remove("muted");
+
+    const text = String(ymlText || "").trim();
+    if (!text) {
+      state.loaded.docsForumModel = null;
+      renderDocsForumUi();
+      return;
+    }
+    try {
+      state.loaded.docsForumModel = buildDocsForumModel(text);
+    } catch {
+      state.loaded.docsForumModel = null;
+    }
+    renderDocsForumUi();
+  }
+
+  function wireDocsForum() {
+    const input = $id("docsForumFilter");
+    if (input && input.dataset.wired !== "1") {
+      input.dataset.wired = "1";
+      input.addEventListener("input", () => {
+        state.ui.docsFilter = String(input.value || "");
+        renderDocsForumUi();
+      });
+    }
+
+    const cats = $id("docsForumCats");
+    if (cats && cats.dataset.wired !== "1") {
+      cats.dataset.wired = "1";
+      cats.addEventListener("click", (e) => {
+        const btn = e.target && e.target.closest ? e.target.closest("button[data-cat-id]") : null;
+        if (!btn) return;
+        state.ui.docsCatId = btn.getAttribute("data-cat-id") || "All";
+        renderDocsForumUi();
+      });
+    }
+
+    const topics = $id("docsForumTopics");
+    if (topics && topics.dataset.wired !== "1") {
+      topics.dataset.wired = "1";
+      topics.addEventListener("click", (e) => {
+        const btn = e.target && e.target.closest ? e.target.closest("button[data-doc-path]") : null;
+        if (!btn) return;
+        const path = btn.getAttribute("data-doc-path") || "";
+        const title = btn.getAttribute("data-doc-title") || path;
+        if (path) openFileModal(title, path);
+      });
+    }
+  }
+
   function renderScripts(mdText) {
     const lines = String(mdText || "").split(/\\r?\\n/);
     const items = [];
@@ -1164,6 +1443,405 @@
       rows,
       "Scripts"
     )}</div>`;
+  }
+
+  const WORKFLOW_TRACKER_STORAGE_KEY = "bbhai:workflowTracker";
+
+  function cloneJson(value) {
+    try {
+      return JSON.parse(JSON.stringify(value));
+    } catch {
+      return null;
+    }
+  }
+
+  function loadStoredWorkflowTracker() {
+    try {
+      const raw = localStorage.getItem(WORKFLOW_TRACKER_STORAGE_KEY);
+      if (!raw) return null;
+      const parsed = JSON.parse(raw);
+      return parsed && typeof parsed === "object" ? parsed : null;
+    } catch {
+      return null;
+    }
+  }
+
+  function saveStoredWorkflowTracker(tracker) {
+    try {
+      localStorage.setItem(WORKFLOW_TRACKER_STORAGE_KEY, JSON.stringify(tracker, null, 2));
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  function clearStoredWorkflowTracker() {
+    try {
+      localStorage.removeItem(WORKFLOW_TRACKER_STORAGE_KEY);
+    } catch {
+      // ignore
+    }
+  }
+
+  function nowIso() {
+    try {
+      return new Date().toISOString();
+    } catch {
+      return "";
+    }
+  }
+
+  async function copyText(text) {
+    const t = String(text || "");
+    try {
+      if (navigator.clipboard && typeof navigator.clipboard.writeText === "function") {
+        await navigator.clipboard.writeText(t);
+        return true;
+      }
+    } catch {
+      // fall through
+    }
+
+    try {
+      const ta = document.createElement("textarea");
+      ta.value = t;
+      ta.setAttribute("readonly", "readonly");
+      ta.style.position = "fixed";
+      ta.style.left = "-1000px";
+      ta.style.top = "-1000px";
+      document.body.appendChild(ta);
+      ta.select();
+      const ok = document.execCommand("copy");
+      document.body.removeChild(ta);
+      return !!ok;
+    } catch {
+      return false;
+    }
+  }
+
+  function normalizeWorkflowTracker(tracker) {
+    const t = tracker && typeof tracker === "object" ? tracker : {};
+    if (!Array.isArray(t.stages) || t.stages.length === 0) {
+      t.stages = [
+        { key: "discovery", label: "Discovery" },
+        { key: "validation", label: "Validation" },
+        { key: "reporting", label: "Reporting" },
+        { key: "qa", label: "QA" },
+        { key: "publishing", label: "Publishing" },
+        { key: "closed", label: "Closed" },
+      ];
+    }
+    if (!Array.isArray(t.cases)) t.cases = [];
+    for (const c of t.cases) {
+      if (!c || typeof c !== "object") continue;
+      if (!Array.isArray(c.timeline)) c.timeline = [];
+      if (!Array.isArray(c.links)) c.links = [];
+      if (!c.status) c.status = "active";
+      if (!c.stage) c.stage = String(t.stages[0]?.key || "discovery");
+    }
+    return t;
+  }
+
+  function stageLabelFor(tracker, key) {
+    const k = String(key || "");
+    for (const s of tracker.stages || []) {
+      if (String(s.key || "") === k) return String(s.label || s.key || k);
+    }
+    return k || "n/a";
+  }
+
+  function stageIndexFor(tracker, key) {
+    const k = String(key || "");
+    const stages = tracker.stages || [];
+    for (let i = 0; i < stages.length; i++) {
+      if (String(stages[i].key || "") === k) return i;
+    }
+    return 0;
+  }
+
+  function workflowStatusClass(status) {
+    const s = String(status || "").toLowerCase();
+    if (s === "closed") return "pilltag ok";
+    if (s === "blocked") return "pilltag warn";
+    if (s === "paused") return "pilltag warn";
+    return "pilltag neutral";
+  }
+
+  function renderWorkflowTrackerUi() {
+    const fileTracker = state.loaded.workflowTrackerFile || null;
+    const stored = loadStoredWorkflowTracker();
+    const base = stored || (fileTracker ? cloneJson(fileTracker) : null);
+    const tracker = base ? normalizeWorkflowTracker(base) : null;
+    state.loaded.workflowTrackerActive = tracker;
+    state.ui.workflowUsingLocal = !!stored;
+
+    const casesWrap = $id("workflowCasesWrap");
+    const detailWrap = $id("workflowDetailWrap");
+    const countEl = $id("workflowCaseCount");
+    const filterEl = $id("workflowCaseFilter");
+    if (!casesWrap || !detailWrap || !countEl) return;
+
+    if (filterEl) filterEl.value = String(state.ui.workflowFilter || "");
+
+    casesWrap.classList.remove("muted");
+    detailWrap.classList.remove("muted");
+
+    if (!tracker) {
+      casesWrap.innerHTML =
+        '<p class="muted">Tracker not loaded. Add <code>data/workflow_tracker.json</code> or use Import/server mode.</p>';
+      detailWrap.innerHTML = '<p class="muted">No tracker data.</p>';
+      countEl.textContent = "0";
+      return;
+    }
+
+    const q = String(state.ui.workflowFilter || "").trim().toLowerCase();
+    let cases = tracker.cases || [];
+    if (q) {
+      cases = cases.filter((c) => {
+        const hay = `${c.id || ""} ${c.title || ""} ${(c.program && c.program.name) || ""}`.toLowerCase();
+        return hay.includes(q);
+      });
+    }
+
+    countEl.textContent = String(cases.length);
+    if (cases.length === 0) {
+      casesWrap.innerHTML = '<p class="muted">No cases.</p>';
+      detailWrap.innerHTML = '<p class="muted">No case selected.</p>';
+      return;
+    }
+
+    const selectedId = String(state.ui.workflowCaseId || "");
+    const selected =
+      cases.find((c) => String(c.id || "") === selectedId) || cases[0] || null;
+    if (selected && String(selected.id || "") !== selectedId) {
+      state.ui.workflowCaseId = String(selected.id || "");
+    }
+
+    const listHtml = cases
+      .map((c) => {
+        const id = String(c.id || "");
+        const active = selected && String(selected.id || "") === id;
+        const program = c.program && c.program.name ? String(c.program.name) : "n/a";
+        const stageLabel = stageLabelFor(tracker, c.stage);
+        const updated = c.updated_at ? String(c.updated_at) : "";
+        const statusCls = workflowStatusClass(c.status);
+        return `<button class="case-row${active ? " active" : ""}" data-case-id="${esc(id)}">
+          <div class="case-title">${esc(c.title || id || "Untitled")}</div>
+          <div class="case-meta">
+            <span class="${statusCls}">${esc(String(c.status || "active"))}</span>
+            <span class="pilltag">${esc(stageLabel)}</span>
+            <span class="muted">${esc(program)}</span>
+            ${updated ? `<span class="hint">${esc(updated)}</span>` : ""}
+          </div>
+        </button>`;
+      })
+      .join("");
+    casesWrap.innerHTML = `<div class="case-list">${listHtml}</div>`;
+
+    if (!selected) {
+      detailWrap.innerHTML = '<p class="muted">No case selected.</p>';
+      return;
+    }
+
+    const localNote = state.ui.workflowUsingLocal ? "Local override active." : "Loaded from file.";
+    const headerBadges = [
+      `<span class="pilltag">${esc(String(selected.id || ""))}</span>`,
+      `<span class="${workflowStatusClass(selected.status)}">${esc(String(selected.status || ""))}</span>`,
+      `<span class="pilltag neutral">${esc(stageLabelFor(tracker, selected.stage))}</span>`,
+    ].join(" ");
+
+    const stageIdx = stageIndexFor(tracker, selected.stage);
+    const stepsHtml = (tracker.stages || [])
+      .map((s, idx) => {
+        const key = String(s.key || "");
+        const label = String(s.label || key);
+        const status =
+          selected.stage_status && typeof selected.stage_status === "object"
+            ? String(selected.stage_status[key] || "")
+            : idx < stageIdx
+            ? "done"
+            : idx === stageIdx
+            ? "in_progress"
+            : "todo";
+        return `<button class="stage-step ${esc(status)}" data-stage-key="${esc(key)}">${esc(
+          label
+        )}</button>`;
+      })
+      .join("");
+
+    const links = Array.isArray(selected.links) ? selected.links : [];
+    const linksHtml =
+      links.length === 0
+        ? '<p class="muted">No links.</p>'
+        : `<div class="linklist">${links
+            .map((l) => {
+              const label = String((l && l.label) || "link");
+              const href = String((l && (l.href || l.path || l.url)) || "");
+              const safeHref = href ? esc(href) : "";
+              const title = href ? esc(href) : "";
+              return href
+                ? `<a class="linkrow" href="${safeHref}" title="${title}"><span>${esc(
+                    label
+                  )}</span><code>${esc(href)}</code></a>`
+                : `<div class="linkrow"><span>${esc(label)}</span><code>n/a</code></div>`;
+            })
+            .join("")}</div>`;
+
+    const events = Array.isArray(selected.timeline) ? [...selected.timeline] : [];
+    events.sort((a, b) => {
+      const da = new Date(a && (a.at || a.at_utc || "")).getTime() || 0;
+      const db = new Date(b && (b.at || b.at_utc || "")).getTime() || 0;
+      return da - db;
+    });
+    const eventHtml =
+      events.length === 0
+        ? '<p class="muted">No timeline events.</p>'
+        : `<div class="timeline">${events
+            .map((ev) => {
+              const at = ev && (ev.at || ev.at_utc) ? new Date(ev.at || ev.at_utc) : null;
+              const dateText = at && !Number.isNaN(at.getTime()) ? formatDateTime(at) : "n/a";
+              const type = String((ev && ev.type) || "event");
+              const stage = ev && ev.stage ? stageLabelFor(tracker, ev.stage) : "";
+              const summary = String((ev && ev.summary) || "");
+              const title = stage ? `${type}: ${stage}` : type;
+              const badge = stage ? `<span class="pilltag">${esc(stage)}</span>` : "";
+              return `<div class="event">
+                <div class="event-head">
+                  <div class="event-title">${esc(title)} ${badge}</div>
+                  <div class="event-date">${esc(dateText)}</div>
+                </div>
+                <div class="muted">${esc(summary)}</div>
+              </div>`;
+            })
+            .join("")}</div>`;
+
+    detailWrap.innerHTML = `
+      <div class="workflow-head">
+        <h3>${esc(selected.title || "Untitled case")}</h3>
+        <div class="statusline">${headerBadges}</div>
+        <p class="muted">${esc(localNote)}</p>
+      </div>
+      <div class="stagebar" role="group" aria-label="Workflow stages">
+        ${stepsHtml}
+      </div>
+      <div class="split">
+        <div class="panel">
+          <h4>Links</h4>
+          ${linksHtml}
+        </div>
+        <div class="panel">
+          <h4>Add note</h4>
+          <textarea id="workflowNoteText" class="note" placeholder="Add a timeline note..."></textarea>
+          <div class="statusline">
+            <button class="btn primary" id="workflowAddNoteBtn">Add note</button>
+          </div>
+        </div>
+      </div>
+      <h4>Timeline</h4>
+      ${eventHtml}
+    `;
+  }
+
+  function renderWorkflowTracker(fileTrackerJson) {
+    state.loaded.workflowTrackerFile = fileTrackerJson;
+    renderWorkflowTrackerUi();
+  }
+
+  function wireWorkflowTracker() {
+    const filter = $id("workflowCaseFilter");
+    if (filter && filter.dataset.wired !== "1") {
+      filter.dataset.wired = "1";
+      filter.addEventListener("input", () => {
+        state.ui.workflowFilter = String(filter.value || "");
+        renderWorkflowTrackerUi();
+      });
+    }
+
+    const list = $id("workflowCasesWrap");
+    if (list && list.dataset.wired !== "1") {
+      list.dataset.wired = "1";
+      list.addEventListener("click", (e) => {
+        const btn = e.target && e.target.closest ? e.target.closest("button[data-case-id]") : null;
+        if (!btn) return;
+        state.ui.workflowCaseId = btn.getAttribute("data-case-id") || null;
+        renderWorkflowTrackerUi();
+      });
+    }
+
+    const detail = $id("workflowDetailWrap");
+    if (detail && detail.dataset.wired !== "1") {
+      detail.dataset.wired = "1";
+      detail.addEventListener("click", (e) => {
+        const stageBtn =
+          e.target && e.target.closest ? e.target.closest("button[data-stage-key]") : null;
+        if (stageBtn) {
+          const tracker = state.loaded.workflowTrackerActive;
+          if (!tracker) return;
+          const caseId = String(state.ui.workflowCaseId || "");
+          const c = (tracker.cases || []).find((x) => String(x.id || "") === caseId);
+          if (!c) return;
+
+          const nextStage = stageBtn.getAttribute("data-stage-key") || "";
+          if (!nextStage || String(c.stage || "") === nextStage) return;
+
+          c.stage = nextStage;
+          c.updated_at = nowIso();
+          tracker.updated_at = nowIso();
+          c.timeline = Array.isArray(c.timeline) ? c.timeline : [];
+          c.timeline.push({
+            at: nowIso(),
+            type: "stage",
+            stage: nextStage,
+            summary: `Stage moved to ${stageLabelFor(tracker, nextStage)}.`,
+          });
+          saveStoredWorkflowTracker(tracker);
+          renderWorkflowTrackerUi();
+          return;
+        }
+
+        const addBtn = e.target && e.target.closest ? e.target.closest("#workflowAddNoteBtn") : null;
+        if (addBtn) {
+          const tracker = state.loaded.workflowTrackerActive;
+          if (!tracker) return;
+          const caseId = String(state.ui.workflowCaseId || "");
+          const c = (tracker.cases || []).find((x) => String(x.id || "") === caseId);
+          if (!c) return;
+          const ta = $id("workflowNoteText");
+          const note = ta ? String(ta.value || "").trim() : "";
+          if (!note) return;
+          c.timeline = Array.isArray(c.timeline) ? c.timeline : [];
+          c.timeline.push({ at: nowIso(), type: "note", summary: note });
+          c.updated_at = nowIso();
+          tracker.updated_at = nowIso();
+          if (ta) ta.value = "";
+          saveStoredWorkflowTracker(tracker);
+          renderWorkflowTrackerUi();
+        }
+      });
+    }
+
+    const exportBtn = $id("workflowExportBtn");
+    if (exportBtn && exportBtn.dataset.wired !== "1") {
+      exportBtn.dataset.wired = "1";
+      exportBtn.addEventListener("click", async () => {
+        const tracker = state.loaded.workflowTrackerActive;
+        if (!tracker) return;
+        const ok = await copyText(JSON.stringify(tracker, null, 2));
+        setBanner(ok ? "ok" : "warn", ok ? "Copied tracker JSON." : "Copy failed.");
+      });
+    }
+
+    const resetBtn = $id("workflowResetBtn");
+    if (resetBtn && resetBtn.dataset.wired !== "1") {
+      resetBtn.dataset.wired = "1";
+      resetBtn.addEventListener("click", () => {
+        const ok = window.confirm("Clear local workflow tracker override for this dashboard?");
+        if (!ok) return;
+        clearStoredWorkflowTracker();
+        renderWorkflowTrackerUi();
+        setBanner("ok", "Cleared workflow tracker override.");
+      });
+    }
   }
 
   function parseBugcrowdBoard(mdText, baseDir) {
@@ -3407,6 +4085,12 @@
       renderKnowledgeIndex(state.loaded.knowledgeIndexMd);
       wireKnowledgeFilters();
     }
+    if (state.loaded.mkdocsYml) {
+      renderDocsForum(state.loaded.mkdocsYml);
+      wireDocsForum();
+    } else {
+      renderDocsForum("");
+    }
     if (state.loaded.scriptsReadmeMd) {
       renderScripts(state.loaded.scriptsReadmeMd);
       wireScriptFilter(state.loaded.scripts || []);
@@ -3435,6 +4119,8 @@
     if (state.loaded.findingsDbJson) {
       renderFindings(state.loaded.findingsDbJson);
     }
+    renderWorkflowTracker(state.loaded.workflowTrackerJson || null);
+    wireWorkflowTracker();
     if (state.loaded.roadmapMd) {
       renderRoadmap(state.loaded.roadmapMd);
     }
@@ -3482,11 +4168,13 @@
 
     await loadOne("hackTypesMd", RESOURCES.hackTypes);
     await loadOne("knowledgeIndexMd", RESOURCES.knowledgeIndex);
+    await loadOne("mkdocsYml", RESOURCES.mkdocsConfig);
     await loadOne("scriptsReadmeMd", RESOURCES.scriptsReadme);
     await loadOne("bugcrowdBoardMd", RESOURCES.bugcrowdBoard);
     await loadOne("bugcrowdVdpMd", RESOURCES.bugcrowdVdp);
     await loadOne("programRegistryJson", RESOURCES.programRegistry);
     await loadOne("findingsDbJson", RESOURCES.findingsDb);
+    await loadOne("workflowTrackerJson", RESOURCES.workflowTracker);
     await loadOne("roadmapMd", RESOURCES.roadmap);
 
     try {

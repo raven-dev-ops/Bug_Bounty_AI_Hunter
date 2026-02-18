@@ -74,6 +74,7 @@ nav:
       - Bugcrowd SOP: BUGCROWD.md
       - Pre-Report Guide: GUIDE.md
       - Architecture: ARCHITECTURE.md
+      - Command Center Triage: COMMAND_CENTER_TRIAGE.md
       - Components: COMPONENTS.md
       - Component Contract: COMPONENT_CONTRACT.md
       - Component Manifest: COMPONENT_MANIFEST.md

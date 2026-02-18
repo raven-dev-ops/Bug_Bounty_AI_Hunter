@@ -22,89 +22,18 @@
         </button>
 
         <nav class="mainnav" id="mainNav" aria-label="Primary">
-          <details class="drop">
-            <summary>Overview</summary>
-            <div class="menu">
-              <a href="#home">Home <span class="hint">#home</span></a>
-              <a href="#status">Status <span class="hint">#status</span></a>
-              <a href="#glance">Glance <span class="hint">#glance</span></a>
-              <a href="#repo">Repo Map <span class="hint">#repo</span></a>
-              <a href="#workflows">Lifecycle <span class="hint">#workflows</span></a>
-              <a href="#generated"
-                >Generated <span class="hint">#generated</span></a
-              >
-              <a href="#roadmap">Roadmap <span class="hint">#roadmap</span></a>
-            </div>
-          </details>
-
-          <details class="drop">
-            <summary>Knowledge</summary>
-            <div class="menu">
-              <a href="#hack-types"
-                >Hack Types <span class="hint">docs/HACK_TYPES.md</span></a
-              >
-              <a href="#knowledge-index"
-                >Index <span class="hint">docs/KNOWLEDGE_INDEX.md</span></a
-              >
-              <a href="knowledge/INDEX.md"
-                >knowledge/INDEX <span class="hint">source</span></a
-              >
-            </div>
-          </details>
-
-          <details class="drop">
-            <summary>Tools</summary>
-            <div class="menu">
-              <a href="#cli">CLI <span class="hint">python -m bbhai</span></a>
-              <a href="#scripts"
-                >Scripts <span class="hint">scripts/README.md</span></a
-              >
-              <a href="#templates">Templates <span class="hint">templates</span></a>
-              <a href="#validation">Validation <span class="hint">CI parity</span></a>
-            </div>
-          </details>
-
-          <details class="drop">
-            <summary>Bounties</summary>
-            <div class="menu">
-              <a href="#most-wanted"
-                >Most Wanted <span class="hint">carousel</span></a
-              >
-              <a href="#bounty-lens"
-                >Lens <span class="hint">categories + sponsors</span></a
-              >
-              <a href="#bounty-profiles"
-                >Profiles <span class="hint">sponsors</span></a
-              >
-              <a href="#bounty-charts">Charts <span class="hint">pie</span></a>
-              <a href="#bounty-timeline"
-                >Timeline <span class="hint">freshness</span></a
-              >
-              <a href="#leaderboards"
-                >Leaderboards <span class="hint">top lists</span></a
-              >
-              <a href="#bounty-sources"
-                >Sources <span class="hint">raw tables</span></a
-              >
-              <a href="#program-registry"
-                >Registry <span class="hint">data/program_registry.json</span></a
-              >
-              <a href="#platform-plans"
-                >BugBounty.com <span class="hint">planned</span></a
-              >
-            </div>
-          </details>
-
-          <details class="drop">
-            <summary>Artifacts</summary>
-            <div class="menu">
-              <a href="#artifacts">Outputs <span class="hint">examples/outputs</span></a>
-              <a href="#exports">Exports <span class="hint">examples/exports</span></a>
-              <a href="#findings">Findings <span class="hint">data/findings_db.json</span></a>
-            </div>
-          </details>
-
-          <!-- RPG layer is intentionally hidden for now. -->
+          <a class="navlink" href="#home" data-nav-view="overview">Overview</a>
+          <a class="navlink" href="#docs-forum" data-nav-view="docs">Docs</a>
+          <a class="navlink" href="#workflow-tracker" data-nav-view="workflow"
+            >Workflow</a
+          >
+          <a class="navlink" href="#cli" data-nav-view="tools">Tools</a>
+          <a class="navlink" href="#bounty-lens" data-nav-view="bounties"
+            >Bounties</a
+          >
+          <a class="navlink" href="#artifacts" data-nav-view="artifacts"
+            >Artifacts</a
+          >
         </nav>
 
         <div class="actions">
@@ -116,7 +45,8 @@
           />
           <select id="viewSelect" aria-label="Focus view">
             <option value="overview">Overview</option>
-            <option value="knowledge">Knowledge</option>
+            <option value="docs">Docs</option>
+            <option value="workflow">Workflow</option>
             <option value="tools">Tools</option>
             <option value="bounties">Bounties</option>
             <option value="artifacts">Artifacts</option>
@@ -130,7 +60,7 @@
     </header>
 
     <main id="home">
-      <section class="hero" data-page="all">
+      <section class="hero" data-page="overview">
         <h1>Bug_Bounty_Hunter_AI</h1>
         <p class="muted">
           Local dashboard to browse the repo. Authorized testing only.
@@ -221,7 +151,7 @@
         <div id="cliCheatsheet" class="panel muted">Waiting for data...</div>
       </section>
 
-      <section id="hack-types" data-page="knowledge">
+      <section id="hack-types" data-page="docs">
         <h2>Hack Types</h2>
         <div class="toolbar">
           <input id="hackFilter" placeholder="Filter..." aria-label="Filter hack types" />
@@ -230,7 +160,7 @@
         <div id="hackTypesTableWrap" class="panel muted">Waiting for data...</div>
       </section>
 
-      <section id="knowledge-index" data-page="knowledge">
+      <section id="knowledge-index" data-page="docs">
         <h2>Knowledge Index</h2>
         <div class="toolbar">
           <input
@@ -247,6 +177,65 @@
           <span class="muted">Items: <span id="knowledgeCount">0</span></span>
         </div>
         <div id="knowledgeIndexWrap" class="panel muted">Waiting for data...</div>
+      </section>
+
+      <section id="docs-forum" data-page="docs">
+        <h2>Docs Forum</h2>
+        <p class="muted">
+          Browse docs like a forum. Categories come from <code>mkdocs.yml</code>.
+          Click a topic to open it.
+        </p>
+
+        <div class="forum-layout">
+          <aside class="forum-side">
+            <div class="toolbar">
+              <input
+                id="docsForumFilter"
+                placeholder="Search docs..."
+                aria-label="Search docs"
+              />
+              <span class="muted">Topics: <span id="docsForumCount">0</span></span>
+            </div>
+            <div id="docsForumCats" class="panel muted">Waiting for data...</div>
+          </aside>
+          <div class="forum-main">
+            <div id="docsForumTopics" class="panel muted">Waiting for data...</div>
+          </div>
+        </div>
+      </section>
+
+      <section id="workflow-tracker" data-page="workflow">
+        <h2>Workflow Tracker</h2>
+        <p class="muted">
+          Live progress tracker for bug bounty workflows (stages, QA, publishing).
+          Source: <code>data/workflow_tracker.json</code> (with optional local
+          overrides in your browser).
+        </p>
+
+        <div class="tracker-actions statusline">
+          <button class="btn" id="workflowExportBtn">Copy tracker JSON</button>
+          <button class="btn" id="workflowResetBtn">Reset local override</button>
+        </div>
+
+        <div class="tracker-layout">
+          <aside class="tracker-side">
+            <div class="toolbar">
+              <input
+                id="workflowCaseFilter"
+                placeholder="Filter cases..."
+                aria-label="Filter workflow cases"
+              />
+              <span class="muted">Cases: <span id="workflowCaseCount">0</span></span>
+            </div>
+            <div id="workflowCasesWrap" class="panel muted">Waiting for data...</div>
+          </aside>
+
+          <div class="tracker-main">
+            <div id="workflowDetailWrap" class="panel muted">
+              Select a case.
+            </div>
+          </div>
+        </div>
       </section>
 
       <section id="scripts" data-page="tools">
