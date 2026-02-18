@@ -1,0 +1,37 @@
+@import "./tokens.css";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  font-family: "Space Grotesk", "Avenir Next", "Segoe UI", sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 12% 8%, rgb(var(--cc-accent) / 0.22), transparent 42%),
+    radial-gradient(circle at 86% 12%, rgb(var(--cc-accent-strong) / 0.16), transparent 36%),
+    rgb(var(--cc-bg));
+  color: rgb(var(--cc-text));
+}
+
+@keyframes shell-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-shell-enter {
+  animation: shell-enter 240ms ease-out both;
+}
