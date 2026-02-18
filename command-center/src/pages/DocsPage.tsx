@@ -84,13 +84,17 @@ export function DocsPage() {
                 <p className="mt-1 text-xs text-muted">{item.snippet}</p>
               </button>
             ))}
-            {results.length === 0 ? <p className="text-sm text-muted">Run a search to see doc matches.</p> : null}
+            {results.length === 0 ? (
+              <p className="cc-empty-state text-sm">Run a search to see doc matches.</p>
+            ) : null}
           </div>
         </div>
 
         <div className="rounded-2xl border border-border bg-surface/85 p-4">
           <p className="text-xs uppercase tracking-[0.18em] text-muted">Doc page</p>
-          <p className="mt-2 text-xs text-muted">{activePath || "No page selected"}</p>
+          <p className="mt-2 text-xs text-muted">
+            {activePath || <span className="cc-empty-state inline-block">No page selected</span>}
+          </p>
           <pre className="mt-3 max-h-[520px] overflow-auto rounded-lg border border-border bg-bg/40 p-3 text-xs text-muted">
             {content || "Select a result to view markdown content."}
           </pre>

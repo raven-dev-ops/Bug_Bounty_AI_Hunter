@@ -1,6 +1,20 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { getRunLog, listRuns, type ToolRunRow } from "../api/client";
 
+function statusTone(status: string): string {
+  const safe = status.toLowerCase();
+  if (safe === "completed") {
+    return "text-emerald-300";
+  }
+  if (safe === "running") {
+    return "text-sky-300";
+  }
+  if (safe === "failed" || safe === "timeout") {
+    return "text-red-300";
+  }
+  return "text-amber-300";
+}
+
 export function LogsPage() {
   const [runs, setRuns] = useState<ToolRunRow[]>([]);
   const [query, setQuery] = useState("");
@@ -96,11 +110,13 @@ export function LogsPage() {
               >
                 <p className="text-sm font-semibold text-text">{run.tool}</p>
                 <p className="text-xs text-muted">
-                  {run.id} | {run.mode} | {run.status} | exit {run.exit_code ?? "-"}
+                  {run.id} | <span className="cc-pill">{run.mode}</span> |{" "}
+                  <span className={statusTone(run.status)}>{run.status}</span> | exit{" "}
+                  {run.exit_code ?? "-"}
                 </p>
               </button>
             ))}
-            {filteredRuns.length === 0 ? <p className="text-sm text-muted">No runs found.</p> : null}
+            {filteredRuns.length === 0 ? <p className="cc-empty-state text-sm">No runs found.</p> : null}
           </div>
         </div>
 

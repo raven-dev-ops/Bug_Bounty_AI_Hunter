@@ -166,7 +166,7 @@ export function TaskBoardPage() {
                 </div>
               ))}
               {(board[column] ?? []).length === 0 ? (
-                <p className="text-xs text-muted">No tasks.</p>
+                <p className="cc-empty-state text-xs">No tasks.</p>
               ) : null}
             </div>
           </div>

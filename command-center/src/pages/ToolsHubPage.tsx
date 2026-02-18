@@ -10,6 +10,20 @@ import {
   type WorkspaceRow,
 } from "../api/client";
 
+function statusTone(status: string): string {
+  const safe = status.toLowerCase();
+  if (safe === "completed") {
+    return "text-emerald-300";
+  }
+  if (safe === "running") {
+    return "text-sky-300";
+  }
+  if (safe === "failed" || safe === "timeout") {
+    return "text-red-300";
+  }
+  return "text-amber-300";
+}
+
 function parseArgs(input: string): string[] {
   return input
     .split(/\s+/)
@@ -232,11 +246,13 @@ export function ToolsHubPage() {
               >
                 <p className="text-sm font-semibold text-text">{run.tool}</p>
                 <p className="text-xs text-muted">
-                  {run.id} | {run.mode} | {run.status} | exit {run.exit_code ?? "-"}
+                  {run.id} | <span className="cc-pill">{run.mode}</span> |{" "}
+                  <span className={statusTone(run.status)}>{run.status}</span> | exit{" "}
+                  {run.exit_code ?? "-"}
                 </p>
               </button>
             ))}
-            {runs.length === 0 ? <p className="text-sm text-muted">No runs yet.</p> : null}
+            {runs.length === 0 ? <p className="cc-empty-state text-sm">No runs yet.</p> : null}
           </div>
         </div>
         <div className="rounded-2xl border border-border bg-surface/85 p-4">

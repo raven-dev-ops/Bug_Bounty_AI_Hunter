@@ -274,7 +274,7 @@ export function BountyFeedPage() {
 
         <div className="flex flex-wrap gap-2">
           {savedViews.length === 0 ? (
-            <p className="text-xs text-muted">No saved views yet.</p>
+            <p className="cc-empty-state text-xs">No saved views yet.</p>
           ) : null}
           {savedViews.map((view) => (
             <div key={view.id} className="flex items-center gap-2 rounded-lg border border-border bg-bg/30 px-2 py-1">
@@ -299,7 +299,7 @@ export function BountyFeedPage() {
       </div>
 
       {error ? <p className="text-sm text-red-300">{error}</p> : null}
-      {loading ? <p className="text-sm text-muted">Loading programs...</p> : null}
+      {loading ? <p className="cc-empty-state text-sm">Loading programs...</p> : null}
 
       <div className="overflow-x-auto rounded-2xl border border-border bg-surface/85">
         <table className="min-w-full border-collapse text-left text-sm">
@@ -314,13 +314,17 @@ export function BountyFeedPage() {
           </thead>
           <tbody>
             {filteredPrograms.map((program) => (
-              <tr key={program.id} className="border-b border-border/70">
+              <tr key={program.id} className="cc-table-row border-b border-border/70">
                 <td className="px-4 py-3">
                   <p className="font-semibold text-text">{program.name}</p>
                   <p className="text-xs text-muted">{program.id}</p>
                 </td>
-                <td className="px-4 py-3 text-muted">{program.platform ?? "-"}</td>
-                <td className="px-4 py-3 text-muted">{program.source ?? "-"}</td>
+                <td className="px-4 py-3 text-muted">
+                  <span className="cc-pill">{program.platform ?? "-"}</span>
+                </td>
+                <td className="px-4 py-3 text-muted">
+                  <span className="cc-pill">{program.source ?? "-"}</span>
+                </td>
                 <td className="px-4 py-3 text-muted">{program.updated_at}</td>
                 <td className="px-4 py-3">
                   <Link
@@ -335,7 +339,7 @@ export function BountyFeedPage() {
             {!loading && filteredPrograms.length === 0 ? (
               <tr>
                 <td colSpan={5} className="px-4 py-6 text-sm text-muted">
-                  No programs match the current filter set.
+                  <span className="cc-empty-state inline-block">No programs match the current filter set.</span>
                 </td>
               </tr>
             ) : null}

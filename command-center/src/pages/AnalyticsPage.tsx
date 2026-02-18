@@ -94,7 +94,7 @@ export function AnalyticsPage() {
             </div>
           ))}
           {groupedHistory.length === 0 ? (
-            <p className="text-sm text-muted">No snapshots available yet.</p>
+            <p className="cc-empty-state text-sm">No snapshots available yet.</p>
           ) : null}
         </div>
       </div>

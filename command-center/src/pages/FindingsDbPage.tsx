@@ -245,7 +245,7 @@ export function FindingsDbPage() {
                 </div>
               </div>
             ))}
-            {findings.length === 0 ? <p className="text-sm text-muted">No findings saved.</p> : null}
+            {findings.length === 0 ? <p className="cc-empty-state text-sm">No findings saved.</p> : null}
           </div>
         </div>
 

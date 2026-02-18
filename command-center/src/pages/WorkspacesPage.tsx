@@ -175,7 +175,7 @@ export function WorkspacesPage() {
       </form>
 
       {error ? <p className="text-sm text-red-300">{error}</p> : null}
-      {loading ? <p className="text-sm text-muted">Loading workspaces...</p> : null}
+      {loading ? <p className="cc-empty-state text-sm">Loading workspaces...</p> : null}
 
       <div className="grid gap-4 lg:grid-cols-[1.5fr,1fr]">
         <div className="rounded-2xl border border-border bg-surface/85 p-4">
@@ -195,10 +195,14 @@ export function WorkspacesPage() {
               >
                 <p className="text-sm font-semibold text-text">{item.name}</p>
                 <p className="text-xs text-muted">{item.id}</p>
-                <p className="mt-1 text-xs text-muted">{formatAckStatus(item)}</p>
+                <p className="mt-1 text-xs text-muted">
+                  <span className="cc-pill">{formatAckStatus(item)}</span>
+                </p>
               </button>
             ))}
-            {workspaces.length === 0 ? <p className="text-sm text-muted">No workspaces created yet.</p> : null}
+            {workspaces.length === 0 ? (
+              <p className="cc-empty-state text-sm">No workspaces created yet.</p>
+            ) : null}
           </div>
         </div>
 

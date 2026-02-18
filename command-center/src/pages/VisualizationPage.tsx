@@ -117,6 +117,8 @@ export function VisualizationPage() {
         </label>
       </div>
 
+      {loading ? <p className="cc-empty-state text-sm">Loading scope graph and overlays...</p> : null}
+
       {data ? (
         <>
           <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
@@ -159,13 +161,23 @@ export function VisualizationPage() {
                 {filteredNodes.map((node) => (
                   <g key={node.id}>
                     <circle cx={node.x} cy={node.y} r={2} fill={nodeColor(node)} />
-                    <text x={node.x + 1.5} y={node.y - 1.2} fontSize="2.4" fill="var(--color-text)">
+                    <text
+                      x={node.x + 1.5}
+                      y={node.y - 1.2}
+                      fontSize="2.4"
+                      fill="rgb(var(--cc-text))"
+                    >
                       {node.label.slice(0, 24)}
                     </text>
                   </g>
                 ))}
               </svg>
             </div>
+            {filteredNodes.length === 0 ? (
+              <p className="cc-empty-state mt-3 text-sm">
+                No nodes match this filter. Try switching back to <strong>all</strong>.
+              </p>
+            ) : null}
           </div>
 
           <div className="grid gap-4 lg:grid-cols-2">
@@ -178,6 +190,9 @@ export function VisualizationPage() {
                     <span className="font-semibold">{count}</span>
                   </li>
                 ))}
+                {Object.keys(data.overlays.severity_counts).length === 0 ? (
+                  <li className="cc-empty-state text-sm">No severity data yet.</li>
+                ) : null}
               </ul>
             </div>
 
@@ -195,13 +210,16 @@ export function VisualizationPage() {
                     <span className="font-semibold">{entry.value}</span>
                   </li>
                 ))}
+                {data.overlays.timeline.length === 0 ? (
+                  <li className="cc-empty-state text-sm">No metric timeline points yet.</li>
+                ) : null}
               </ul>
             </div>
           </div>
         </>
       ) : null}
 
-      {error ? <p className="text-sm text-red-300">{error}</p> : null}
+      {error ? <p className="cc-empty-state text-sm text-red-300">{error}</p> : null}
     </section>
   );
 }

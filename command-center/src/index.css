@@ -130,6 +130,93 @@ section.animate-shell-enter > header p:first-child {
   box-shadow: 0 8px 20px rgb(0 0 0 / 0.22);
 }
 
+button[class*="rounded-"],
+a[class*="rounded-"] {
+  transition:
+    transform 140ms ease,
+    filter 140ms ease,
+    border-color 140ms ease,
+    background-color 140ms ease,
+    color 140ms ease;
+}
+
+button[class*="rounded-"]:active,
+a[class*="rounded-"]:active {
+  transform: translateY(1px) scale(0.992);
+  filter: saturate(1.08);
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid rgb(var(--cc-accent) / 0.72);
+  outline-offset: 2px;
+}
+
+table tbody tr {
+  transition: background-color 150ms ease;
+}
+
+table tbody tr:hover {
+  background-color: rgb(var(--cc-accent) / 0.08);
+}
+
+table tbody tr td:first-child {
+  position: relative;
+}
+
+table tbody tr td:first-child::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: transparent;
+  transition: background-color 150ms ease;
+}
+
+table tbody tr:hover td:first-child::before {
+  background: rgb(var(--cc-accent) / 0.8);
+}
+
+@keyframes empty-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgb(var(--cc-accent) / 0.14);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgb(var(--cc-accent) / 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgb(var(--cc-accent) / 0);
+  }
+}
+
+.cc-empty-state {
+  border: 1px dashed rgb(var(--cc-border));
+  border-radius: 0.75rem;
+  padding: 0.7rem 0.9rem;
+  background: linear-gradient(
+    140deg,
+    rgb(var(--cc-accent) / 0.08),
+    rgb(var(--cc-bg) / 0.34) 48%,
+    rgb(var(--cc-accent-strong) / 0.08)
+  );
+  color: rgb(var(--cc-muted));
+  animation: empty-pulse 2.8s ease-out infinite;
+}
+
+.cc-pill {
+  border: 1px solid rgb(var(--cc-border));
+  border-radius: 999px;
+  padding: 0.2rem 0.55rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.02em;
+  background: rgb(var(--cc-bg) / 0.42);
+}
+
 ::selection {
   background: rgb(var(--cc-accent) / 0.3);
   color: rgb(var(--cc-text));
@@ -141,7 +228,10 @@ section.animate-shell-enter > header p:first-child {
   body::before,
   .rounded-2xl.border,
   .rounded-xl.border,
-  .rounded-lg.border {
+  .rounded-lg.border,
+  .cc-empty-state,
+  button[class*="rounded-"],
+  a[class*="rounded-"] {
     animation: none !important;
     transition: none !important;
     transform: none !important;

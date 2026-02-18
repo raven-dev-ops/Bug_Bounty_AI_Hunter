@@ -111,7 +111,7 @@ export function BountyDetailPage() {
   }
 
   if (loading) {
-    return <p className="text-sm text-muted">Loading program details...</p>;
+    return <p className="cc-empty-state text-sm">Loading program details...</p>;
   }
 
   if (error) {
@@ -126,7 +126,7 @@ export function BountyDetailPage() {
   }
 
   if (!program) {
-    return <p className="text-sm text-muted">Program not found.</p>;
+    return <p className="cc-empty-state text-sm">Program not found.</p>;
   }
 
   return (
@@ -143,15 +143,21 @@ export function BountyDetailPage() {
           <dl className="mt-3 space-y-2 text-sm">
             <div className="flex justify-between gap-3">
               <dt className="text-muted">Platform</dt>
-              <dd className="text-text">{program.platform ?? "-"}</dd>
+                <dd className="text-text">
+                  <span className="cc-pill">{program.platform ?? "-"}</span>
+                </dd>
             </div>
             <div className="flex justify-between gap-3">
               <dt className="text-muted">Handle</dt>
-              <dd className="text-text">{program.handle ?? "-"}</dd>
+                <dd className="text-text">
+                  <span className="cc-pill">{program.handle ?? "-"}</span>
+                </dd>
             </div>
             <div className="flex justify-between gap-3">
               <dt className="text-muted">Source</dt>
-              <dd className="text-text">{program.source ?? "-"}</dd>
+                <dd className="text-text">
+                  <span className="cc-pill">{program.source ?? "-"}</span>
+                </dd>
             </div>
             <div className="flex justify-between gap-3">
               <dt className="text-muted">Policy URL</dt>
@@ -183,7 +189,9 @@ export function BountyDetailPage() {
                 {entry}
               </li>
             ))}
-            {conflicts.length === 0 ? <li className="text-emerald-300">No conflicts detected.</li> : null}
+            {conflicts.length === 0 ? (
+              <li className="cc-empty-state text-emerald-300">No conflicts detected.</li>
+            ) : null}
           </ul>
         </div>
       </div>

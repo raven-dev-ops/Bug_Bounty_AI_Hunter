@@ -209,7 +209,9 @@ export function NotificationsPage() {
                 </button>
               </div>
             ))}
-            {notifications.length === 0 ? <p className="text-sm text-muted">No notifications available.</p> : null}
+            {notifications.length === 0 ? (
+              <p className="cc-empty-state text-sm">No notifications available.</p>
+            ) : null}
           </div>
         </div>
       </div>
