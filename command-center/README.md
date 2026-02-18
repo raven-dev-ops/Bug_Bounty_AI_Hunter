@@ -18,6 +18,8 @@ This app scaffolds issue delivery for:
 - #183 Logs page MVP
 - #184 Notifications center MVP
 - #185 Help/Docs embedding
+- #186 Frontend CI pipeline
+- #187 Backend CI pipeline
 
 ## Stack
 - React + TypeScript (Vite)
@@ -28,6 +30,8 @@ This app scaffolds issue delivery for:
 1. `cd command-center`
 2. `npm install`
 3. `npm run dev`
+4. `npm run lint`
+5. `npm run test`
 
 ## Current scope
 - Route shell plus implemented Feed/Detail/Workspace pages
@@ -43,3 +47,4 @@ This app scaffolds issue delivery for:
 - Logs view for searchable tool runs and log tails
 - Notifications center with placeholder channel settings and read state controls
 - In-app docs search and markdown page renderer backed by API endpoints
+- Frontend lint/typecheck/unit tests wired into CI (`npm run lint`, `npm run test`, `npm run build`)

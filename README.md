@@ -113,6 +113,8 @@ python -m pip install -e .[dev]
 cd command-center
 npm install
 npm run dev
+npm run lint
+npm run test
 ```
 - Feed and workflow pages now include:
 - Bounty Feed table with filters/sorting and local saved views.

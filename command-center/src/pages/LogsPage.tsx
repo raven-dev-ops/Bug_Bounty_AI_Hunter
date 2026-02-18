@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { getRunLog, listRuns, type ToolRunRow } from "../api/client";
 
 export function LogsPage() {
@@ -8,20 +8,20 @@ export function LogsPage() {
   const [logContent, setLogContent] = useState("");
   const [error, setError] = useState("");
 
-  async function refreshRuns() {
+  const refreshRuns = useCallback(async () => {
     const items = await listRuns();
     setRuns(items);
-    if (!selectedRunId && items.length > 0) {
-      setSelectedRunId(items[0].id);
+    if (items.length > 0) {
+      setSelectedRunId((current) => current || items[0].id);
     }
-  }
+  }, []);
 
   useEffect(() => {
     refreshRuns().catch((reason: unknown) => {
       const text = reason instanceof Error ? reason.message : "Failed to load runs";
       setError(text);
     });
-  }, []);
+  }, [refreshRuns]);
 
   useEffect(() => {
     if (!selectedRunId) {

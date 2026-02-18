@@ -3,6 +3,7 @@
 All notable changes to this project will be documented here.
 
 ## Unreleased
+- Added command-center CI coverage: frontend lint/typecheck/unit tests/build in GitHub Actions plus backend API/script-runner unit tests covering ROE run gating, allowlist enforcement, and docs path traversal checks (issues #186, #187).
 - Added Command Center tooling/reporting/logging/docs features: tools catalog + safe runner endpoint/UI, findings DB CRUD/import/export UI, report composer and issue draft export actions, logs page, notifications center, and in-app docs search/page rendering (issues #177, #178, #179, #180, #181, #182, #183, #184, #185).
 - Added Command Center feed/detail/workspace flows: Bounty Feed table with local saved views, Bounty Detail provenance/conflict panel, workspace scaffolding with `ROE_ACK.yaml` and `pipeline_config.yaml`, and ROE acknowledgement run-gating in the backend API (issues #172, #173, #174, #175, #176).
 - Added Command Center backend MVP baseline with FastAPI endpoints, SQLite persistence schema, and artifact ingestion from `data/program_registry.json`, `data/findings_db.json`, and `bounty_board/` (issues #168, #169, #170, #171).
