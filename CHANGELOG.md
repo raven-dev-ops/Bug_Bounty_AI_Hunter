@@ -3,6 +3,9 @@
 All notable changes to this project will be documented here.
 
 ## Unreleased
+- Fixed CI breakages by adding `httpx` to dev dependencies for FastAPI
+  TestClient-based tests and upgrading FastAPI to `0.121.0` to resolve
+  Starlette audit findings in the quality pipeline.
 - Added Command Center auth/e2e delivery: frontend auth now supports real OIDC PKCE sign-in/sign-out with `/auth/callback`, API CORS support for local frontend hosts, Playwright smoke tests, visual regression snapshots, and CI coverage for e2e/visual checks on Windows.
 - Delivered Command Center v2 platform/security layer: org/team RBAC APIs, OIDC session governance endpoints, secret provider integration + rotation planning, expanded compliance/audit exports, plugin discovery SDK surface, queue worker controls with retry/idempotency behavior, and an interactive scope-map visualization page/API (issues #200, #201, #202, #203, #204, #205, #206).
 - Added analytics/task/notification v1 delivery: metrics compute + snapshot APIs and dashboard page, task board API/UI with auto-link rules from findings, and notification dispatch support for Slack/SMTP wired into the notifications center (issues #196, #197, #198, #199).
