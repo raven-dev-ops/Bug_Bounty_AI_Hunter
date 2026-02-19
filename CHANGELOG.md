@@ -3,6 +3,11 @@
 All notable changes to this project will be documented here.
 
 ## Unreleased
+- Hardened command-center security controls: added explicit CI workflow
+  permissions, moved tool execution to a request-file runner, constrained
+  ingest/docs/plugins/report/compliance paths to safe roots, validated Slack
+  webhook hosts, sanitized plugin load error payloads, and filtered dashboard
+  image sources to address open code-scanning findings.
 - Added root README UI snapshot previews for Command Center Playwright visual
   baselines so repo visitors can view current desktop/mobile screens directly.
 - Fixed CI breakages by adding `httpx` to dev dependencies for FastAPI

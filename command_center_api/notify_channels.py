@@ -6,6 +6,22 @@ import ssl
 import urllib.request
 from email.message import EmailMessage
 from typing import Any
+from urllib.parse import urlparse
+
+
+ALLOWED_SLACK_WEBHOOK_HOSTS = {"hooks.slack.com", "hooks.slack-gov.com"}
+
+
+def _validate_slack_webhook_url(webhook_url: str) -> str:
+    parsed = urlparse(webhook_url.strip())
+    if parsed.scheme != "https":
+        raise ValueError("slack webhook url must use https")
+    host = (parsed.hostname or "").lower()
+    if host not in ALLOWED_SLACK_WEBHOOK_HOSTS:
+        raise ValueError("slack webhook host is not allowed")
+    if not parsed.path.startswith("/services/"):
+        raise ValueError("invalid slack webhook path")
+    return parsed.geturl()
 
 
 def send_slack(
@@ -15,9 +31,10 @@ def send_slack(
     body: str,
     timeout_seconds: int = 15,
 ) -> dict[str, Any]:
+    safe_webhook_url = _validate_slack_webhook_url(webhook_url)
     payload = {"text": f"*{title}*\n{body}"}
     request = urllib.request.Request(
-        webhook_url,
+        safe_webhook_url,
         data=json.dumps(payload).encode("utf-8"),
         headers={"Content-Type": "application/json"},
         method="POST",

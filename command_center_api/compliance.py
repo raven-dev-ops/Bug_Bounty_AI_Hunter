@@ -5,6 +5,28 @@ import json
 from pathlib import Path
 from typing import Any
 
+REPO_ROOT = Path(__file__).resolve().parent.parent
+OUTPUT_ROOT = (REPO_ROOT / "output").resolve()
+
+
+def _resolve_output_dir(output_dir: Path | str) -> Path:
+    candidate = Path(output_dir)
+    if candidate.is_absolute():
+        candidate = Path(candidate.name)
+    if not candidate.parts:
+        candidate = Path("compliance")
+    elif candidate.parts[0].lower() == "output":
+        candidate = (
+            Path(*candidate.parts[1:])
+            if len(candidate.parts) > 1
+            else Path("compliance")
+        )
+    resolved = (OUTPUT_ROOT / candidate).resolve()
+    if not resolved.is_relative_to(OUTPUT_ROOT):
+        raise ValueError("output_dir must be within output/")
+    return resolved
+
+
 def _query_rows(connection: Any, query: str) -> list[dict[str, Any]]:
     rows = connection.execute(query).fetchall()
     return [{key: row[key] for key in row.keys()} for row in rows]
@@ -12,7 +34,9 @@ def _query_rows(connection: Any, query: str) -> list[dict[str, Any]]:
 
 def _write_json(path: Path, payload: Any) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8", newline="\n")
+    path.write_text(
+        json.dumps(payload, indent=2) + "\n", encoding="utf-8", newline="\n"
+    )
 
 
 def _write_csv(path: Path, rows: list[dict[str, Any]]) -> None:
@@ -33,7 +57,7 @@ def export_compliance_bundle(
     connection: Any,
     output_dir: Path | str = Path("output/compliance"),
 ) -> dict[str, Any]:
-    root = Path(output_dir)
+    root = _resolve_output_dir(output_dir)
     bundle_queries = {
         "audit_events": "SELECT * FROM audit_events ORDER BY created_at DESC",
         "connector_runs": "SELECT * FROM connector_runs ORDER BY started_at DESC",
@@ -54,7 +78,9 @@ def export_compliance_bundle(
         "workspaces": "SELECT * FROM workspaces ORDER BY updated_at DESC",
         "tasks": "SELECT * FROM tasks ORDER BY updated_at DESC",
     }
-    bundle = {key: _query_rows(connection, query) for key, query in bundle_queries.items()}
+    bundle = {
+        key: _query_rows(connection, query) for key, query in bundle_queries.items()
+    }
 
     json_path = root / "compliance_export.json"
     _write_json(

@@ -6,6 +6,8 @@ from typing import Any
 
 
 PLUGIN_DIR = Path("plugins")
+REPO_ROOT = Path(__file__).resolve().parent.parent
+PLUGIN_ROOT = (REPO_ROOT / "plugins").resolve()
 
 
 def _load_python_module(path: Path) -> Any:
@@ -18,8 +20,19 @@ def _load_python_module(path: Path) -> Any:
     return module
 
 
+def _resolve_plugin_dir(plugin_dir: Path | str) -> Path:
+    candidate = Path(plugin_dir)
+    if candidate.is_absolute():
+        resolved = candidate.resolve()
+    else:
+        resolved = (REPO_ROOT / candidate).resolve()
+    if not resolved.is_relative_to(PLUGIN_ROOT):
+        raise ValueError("plugin_dir must be within plugins/")
+    return resolved
+
+
 def discover_plugins(*, plugin_dir: Path | str = PLUGIN_DIR) -> list[dict[str, Any]]:
-    root = Path(plugin_dir)
+    root = _resolve_plugin_dir(plugin_dir)
     if not root.exists():
         return []
     results: list[dict[str, Any]] = []
@@ -33,7 +46,8 @@ def discover_plugins(*, plugin_dir: Path | str = PLUGIN_DIR) -> list[dict[str, A
                 {
                     "name": candidate.stem,
                     "status": "error",
-                    "error": str(exc),
+                    "error": "failed to load plugin",
+                    "error_type": exc.__class__.__name__,
                 }
             )
             continue

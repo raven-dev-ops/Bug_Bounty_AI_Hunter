@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import json
+import re
 import subprocess
 import sys
 from datetime import datetime, timezone
@@ -8,8 +10,10 @@ from typing import Any
 
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
-DEFAULT_LOG_ROOT = Path("output/command_center/logs")
+DEFAULT_LOG_ROOT = REPO_ROOT / "output/command_center/logs"
 DEFAULT_TIMEOUT_SECONDS = 600
+RUNNER_MODULE = "command_center_api.tool_runner"
+RUN_ID_SAFE_PATTERN = re.compile(r"[^a-zA-Z0-9._-]+")
 
 TOOL_CATALOG: list[dict[str, str]] = [
     {
@@ -83,10 +87,22 @@ def _sanitize_args(args: list[str]) -> list[str]:
     return safe_args
 
 
-def build_tool_command(tool_id: str, args: list[str]) -> list[str]:
+def _safe_run_id(run_id: str) -> str:
+    safe = RUN_ID_SAFE_PATTERN.sub("-", run_id).strip("-")
+    return safe or "run"
+
+
+def build_tool_command(
+    tool_id: str, args: list[str], *, request_path: Path
+) -> list[str]:
     if tool_id not in ALLOWED_TOOLS:
         raise ValueError(f"tool not allowed: {tool_id}")
-    return [sys.executable, "-m", tool_id, *_sanitize_args(args)]
+    payload = {
+        "tool_id": tool_id,
+        "args": _sanitize_args(args),
+    }
+    request_path.write_text(json.dumps(payload), encoding="utf-8", newline="\n")
+    return [sys.executable, "-m", RUNNER_MODULE, "--request", request_path.as_posix()]
 
 
 def run_tool(
@@ -97,11 +113,17 @@ def run_tool(
     timeout_seconds: int = DEFAULT_TIMEOUT_SECONDS,
     log_root: Path | str = DEFAULT_LOG_ROOT,
 ) -> dict[str, Any]:
-    command = build_tool_command(tool_id, args)
     timeout = max(1, int(timeout_seconds))
+    safe_run_id = _safe_run_id(run_id)
     logs_dir = Path(log_root)
+    if not logs_dir.is_absolute():
+        logs_dir = (REPO_ROOT / logs_dir).resolve()
+    else:
+        logs_dir = logs_dir.resolve()
     logs_dir.mkdir(parents=True, exist_ok=True)
-    log_path = logs_dir / f"{run_id}.log"
+    request_path = logs_dir / f"{safe_run_id}.request.json"
+    command = build_tool_command(tool_id, args, request_path=request_path)
+    log_path = logs_dir / f"{safe_run_id}.log"
 
     started_at = utc_now()
     status = "failed"
@@ -136,6 +158,7 @@ def run_tool(
         f"finished_at: {finished_at}\n"
         f"status: {status}\n"
         f"exit_code: {'' if exit_code is None else exit_code}\n"
+        f"request: {request_path.as_posix()}\n"
         f"command: {' '.join(command)}\n\n"
         f"## STDOUT\n{stdout}\n\n"
         f"## STDERR\n{stderr}\n"

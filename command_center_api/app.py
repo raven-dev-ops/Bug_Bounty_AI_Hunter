@@ -25,6 +25,9 @@ from command_center_api import (
     workspace,
 )
 
+REPO_ROOT = Path(__file__).resolve().parent.parent
+SAFE_OUTPUT_ROOT = (REPO_ROOT / "output").resolve()
+
 
 class FindingInput(BaseModel):
     id: str = Field(min_length=1)
@@ -261,7 +264,9 @@ def create_app(*, db_path: Path | str = db.DEFAULT_DB_PATH) -> FastAPI:
 
     def _count_rows(table: str) -> int:
         with db.get_connection(app.state.db_path) as connection:
-            return int(connection.execute(f"SELECT COUNT(*) AS n FROM {table}").fetchone()["n"])
+            return int(
+                connection.execute(f"SELECT COUNT(*) AS n FROM {table}").fetchone()["n"]
+            )
 
     def _bootstrap_mode() -> bool:
         return _count_rows("principals") == 0
@@ -380,7 +385,9 @@ def create_app(*, db_path: Path | str = db.DEFAULT_DB_PATH) -> FastAPI:
                     log_path=None,
                 )
             if row is None:
-                raise HTTPException(status_code=500, detail="failed to update tool run") from exc
+                raise HTTPException(
+                    status_code=500, detail="failed to update tool run"
+                ) from exc
             raise HTTPException(status_code=400, detail=str(exc)) from exc
 
         with db.get_connection(app.state.db_path) as connection:
@@ -439,8 +446,32 @@ def create_app(*, db_path: Path | str = db.DEFAULT_DB_PATH) -> FastAPI:
                 summary=summary,
             )
         if finished is None:
-            raise HTTPException(status_code=500, detail="failed to finalize connector run")
+            raise HTTPException(
+                status_code=500, detail="failed to finalize connector run"
+            )
         return {"run": finished, "summary": summary}
+
+    def _resolve_output_dir(raw_value: str, *, default_subdir: str) -> Path:
+        value = str(raw_value or "").strip()
+        candidate = Path(value) if value else Path(default_subdir)
+        if candidate.is_absolute():
+            candidate = Path(candidate.name)
+        parts = [part for part in candidate.parts if part]
+        if parts and parts[0].lower() == "output":
+            parts = parts[1:]
+        if not parts:
+            fallback_parts = [
+                part
+                for part in Path(default_subdir).parts
+                if part and part.lower() != "output"
+            ]
+            parts = fallback_parts or ["command_center"]
+        resolved = (SAFE_OUTPUT_ROOT / Path(*parts)).resolve()
+        if not resolved.is_relative_to(SAFE_OUTPUT_ROOT):
+            raise HTTPException(
+                status_code=400, detail="output_dir must be within output/"
+            )
+        return resolved
 
     @app.get("/health")
     def health() -> dict[str, str]:
@@ -454,12 +485,15 @@ def create_app(*, db_path: Path | str = db.DEFAULT_DB_PATH) -> FastAPI:
         bounty_board_root: str = "bounty_board",
     ) -> dict[str, Any]:
         context = _require_roles(request, {"admin"})
-        counts = ingest.ingest_existing_artifacts(
-            db_path=app.state.db_path,
-            program_registry_path=program_registry_path,
-            findings_db_path=findings_db_path,
-            bounty_board_root=bounty_board_root,
-        )
+        try:
+            counts = ingest.ingest_existing_artifacts(
+                db_path=app.state.db_path,
+                program_registry_path=program_registry_path,
+                findings_db_path=findings_db_path,
+                bounty_board_root=bounty_board_root,
+            )
+        except ValueError as exc:
+            raise HTTPException(status_code=400, detail=str(exc)) from exc
         with db.get_connection(app.state.db_path) as connection:
             _audit_event(
                 connection,
@@ -486,7 +520,9 @@ def create_app(*, db_path: Path | str = db.DEFAULT_DB_PATH) -> FastAPI:
         return item
 
     @app.get("/api/auth/orgs")
-    def list_orgs(request: Request, limit: int = Query(default=200, ge=1, le=1000)) -> dict[str, Any]:
+    def list_orgs(
+        request: Request, limit: int = Query(default=200, ge=1, le=1000)
+    ) -> dict[str, Any]:
         _require_roles(request, {"viewer", "operator", "admin"})
         with db.get_connection(app.state.db_path) as connection:
             items = db.list_organizations(connection, limit=limit)
@@ -504,8 +540,13 @@ def create_app(*, db_path: Path | str = db.DEFAULT_DB_PATH) -> FastAPI:
                 (payload.org_id,),
             ).fetchone()
             if org is None:
-                org_name = payload.org_id.replace("org:", "").replace("_", " ").strip() or payload.org_id
-                db.upsert_organization(connection, org_id=payload.org_id, name=org_name.title())
+                org_name = (
+                    payload.org_id.replace("org:", "").replace("_", " ").strip()
+                    or payload.org_id
+                )
+                db.upsert_organization(
+                    connection, org_id=payload.org_id, name=org_name.title()
+                )
             principal = db.upsert_principal(
                 connection,
                 principal_id=principal_id,
@@ -525,12 +566,18 @@ def create_app(*, db_path: Path | str = db.DEFAULT_DB_PATH) -> FastAPI:
                 connection,
                 event_type="auth.principal.create",
                 actor=_actor_from_context(context),
-                payload={"principal_id": principal_id, "org_id": payload.org_id, "role": payload.role},
+                payload={
+                    "principal_id": principal_id,
+                    "org_id": payload.org_id,
+                    "role": payload.role,
+                },
             )
         return principal
 
     @app.get("/api/auth/principals")
-    def list_principals(request: Request, limit: int = Query(default=200, ge=1, le=1000)) -> dict[str, Any]:
+    def list_principals(
+        request: Request, limit: int = Query(default=200, ge=1, le=1000)
+    ) -> dict[str, Any]:
         _require_roles(request, {"admin"})
         with db.get_connection(app.state.db_path) as connection:
             items = db.list_principals(connection, limit=limit)
@@ -595,7 +642,11 @@ def create_app(*, db_path: Path | str = db.DEFAULT_DB_PATH) -> FastAPI:
                 connection,
                 event_type="auth.team.create",
                 actor=_actor_from_context(context),
-                payload={"team_id": item["id"], "org_id": payload.org_id, "name": payload.name},
+                payload={
+                    "team_id": item["id"],
+                    "org_id": payload.org_id,
+                    "name": payload.name,
+                },
             )
         return item
 
@@ -666,7 +717,9 @@ def create_app(*, db_path: Path | str = db.DEFAULT_DB_PATH) -> FastAPI:
             raise HTTPException(status_code=400, detail=str(exc)) from exc
         subject = str(claims.get("sub"))
         email = str(claims.get("email") or "") or None
-        display_name = str(claims.get("name") or claims.get("preferred_username") or "") or None
+        display_name = (
+            str(claims.get("name") or claims.get("preferred_username") or "") or None
+        )
         principal_id = f"oidc:{subject}"
         with db.get_connection(app.state.db_path) as connection:
             org = connection.execute(
@@ -677,7 +730,9 @@ def create_app(*, db_path: Path | str = db.DEFAULT_DB_PATH) -> FastAPI:
                 db.upsert_organization(
                     connection,
                     org_id=payload.org_id,
-                    name=(payload.org_id.replace("org:", "") or payload.org_id).replace("_", " ").title(),
+                    name=(payload.org_id.replace("org:", "") or payload.org_id)
+                    .replace("_", " ")
+                    .title(),
                 )
             db.upsert_principal(
                 connection,
@@ -798,10 +853,14 @@ def create_app(*, db_path: Path | str = db.DEFAULT_DB_PATH) -> FastAPI:
         return {"findings": [item["raw_json"] for item in items], "count": len(items)}
 
     @app.post("/api/findings/import")
-    def import_findings(payload: FindingsImportInput, request: Request) -> dict[str, Any]:
+    def import_findings(
+        payload: FindingsImportInput, request: Request
+    ) -> dict[str, Any]:
         context = _require_roles(request, {"operator", "admin"})
         with db.get_connection(app.state.db_path) as connection:
-            count = db.upsert_findings(connection, payload.findings, source=payload.source)
+            count = db.upsert_findings(
+                connection, payload.findings, source=payload.source
+            )
             _audit_event(
                 connection,
                 event_type="findings.import",
@@ -811,7 +870,9 @@ def create_app(*, db_path: Path | str = db.DEFAULT_DB_PATH) -> FastAPI:
         return {"ok": True, "count": count}
 
     @app.post("/api/findings")
-    def create_or_update_finding(payload: FindingInput, request: Request) -> dict[str, Any]:
+    def create_or_update_finding(
+        payload: FindingInput, request: Request
+    ) -> dict[str, Any]:
         context = _require_roles(request, {"operator", "admin"})
         finding = payload.model_dump()
         finding.update(payload.extra)
@@ -920,14 +981,18 @@ def create_app(*, db_path: Path | str = db.DEFAULT_DB_PATH) -> FastAPI:
         return item
 
     @app.get("/api/tasks")
-    def list_tasks(request: Request, limit: int = Query(default=200, ge=1, le=1000)) -> dict[str, Any]:
+    def list_tasks(
+        request: Request, limit: int = Query(default=200, ge=1, le=1000)
+    ) -> dict[str, Any]:
         _require_roles(request, {"viewer", "operator", "admin"})
         with db.get_connection(app.state.db_path) as connection:
             items = db.list_tasks(connection, limit=limit)
         return {"items": items, "count": len(items)}
 
     @app.get("/api/tasks/board")
-    def task_board(request: Request, limit: int = Query(default=500, ge=1, le=1000)) -> dict[str, Any]:
+    def task_board(
+        request: Request, limit: int = Query(default=500, ge=1, le=1000)
+    ) -> dict[str, Any]:
         _require_roles(request, {"viewer", "operator", "admin"})
         with db.get_connection(app.state.db_path) as connection:
             items = db.list_tasks(connection, limit=limit)
@@ -963,7 +1028,9 @@ def create_app(*, db_path: Path | str = db.DEFAULT_DB_PATH) -> FastAPI:
         return item
 
     @app.patch("/api/tasks/{task_id}")
-    def update_task(task_id: str, payload: TaskUpdateInput, request: Request) -> dict[str, Any]:
+    def update_task(
+        task_id: str, payload: TaskUpdateInput, request: Request
+    ) -> dict[str, Any]:
         context = _require_roles(request, {"operator", "admin"})
         with db.get_connection(app.state.db_path) as connection:
             existing = db.get_task(connection, task_id)
@@ -998,7 +1065,9 @@ def create_app(*, db_path: Path | str = db.DEFAULT_DB_PATH) -> FastAPI:
         return {"ok": True}
 
     @app.post("/api/tasks/auto-link")
-    def auto_link_tasks(request: Request, limit: int = Query(default=200, ge=1, le=1000)) -> dict[str, Any]:
+    def auto_link_tasks(
+        request: Request, limit: int = Query(default=200, ge=1, le=1000)
+    ) -> dict[str, Any]:
         context = _require_roles(request, {"operator", "admin"})
         created = 0
         with db.get_connection(app.state.db_path) as connection:
@@ -1029,7 +1098,9 @@ def create_app(*, db_path: Path | str = db.DEFAULT_DB_PATH) -> FastAPI:
         return {"ok": True, "created": created}
 
     @app.post("/api/connectors/bugcrowd/programs/sync")
-    def sync_bugcrowd_programs(payload: BugcrowdProgramSyncInput, request: Request) -> dict[str, Any]:
+    def sync_bugcrowd_programs(
+        payload: BugcrowdProgramSyncInput, request: Request
+    ) -> dict[str, Any]:
         _require_roles(request, {"operator", "admin"})
         client_ip = request.client.host if request.client else "unknown"
         return _run_connector_job(
@@ -1043,7 +1114,9 @@ def create_app(*, db_path: Path | str = db.DEFAULT_DB_PATH) -> FastAPI:
         )
 
     @app.post("/api/connectors/bugcrowd/submissions/sync")
-    def sync_bugcrowd_submissions(payload: BugcrowdSubmissionSyncInput, request: Request) -> dict[str, Any]:
+    def sync_bugcrowd_submissions(
+        payload: BugcrowdSubmissionSyncInput, request: Request
+    ) -> dict[str, Any]:
         _require_roles(request, {"operator", "admin"})
         client_ip = request.client.host if request.client else "unknown"
         return _run_connector_job(
@@ -1072,8 +1145,12 @@ def create_app(*, db_path: Path | str = db.DEFAULT_DB_PATH) -> FastAPI:
 
         payload = await request.json()
         if not isinstance(payload, dict):
-            raise HTTPException(status_code=400, detail="webhook payload must be a JSON object")
-        event_type = str(payload.get("event_type") or payload.get("event") or "bugcrowd.webhook")
+            raise HTTPException(
+                status_code=400, detail="webhook payload must be a JSON object"
+            )
+        event_type = str(
+            payload.get("event_type") or payload.get("event") or "bugcrowd.webhook"
+        )
         submission = payload.get("submission")
         status_updates = 0
         with db.get_connection(app.state.db_path) as connection:
@@ -1086,7 +1163,9 @@ def create_app(*, db_path: Path | str = db.DEFAULT_DB_PATH) -> FastAPI:
             )
             if isinstance(submission, dict):
                 submission_id = str(submission.get("id") or "").strip()
-                status = str(submission.get("status") or submission.get("state") or "unknown").strip()
+                status = str(
+                    submission.get("status") or submission.get("state") or "unknown"
+                ).strip()
                 if submission_id:
                     db.add_submission_status_event(
                         connection,
@@ -1107,7 +1186,9 @@ def create_app(*, db_path: Path | str = db.DEFAULT_DB_PATH) -> FastAPI:
         return {"ok": True, "event_type": event_type, "status_updates": status_updates}
 
     @app.post("/api/connectors/github/issues/sync")
-    def sync_github_issues(payload: GithubSyncInput, request: Request) -> dict[str, Any]:
+    def sync_github_issues(
+        payload: GithubSyncInput, request: Request
+    ) -> dict[str, Any]:
         _require_roles(request, {"operator", "admin"})
         return _run_connector_job(
             connector_name="github_issues",
@@ -1134,7 +1215,9 @@ def create_app(*, db_path: Path | str = db.DEFAULT_DB_PATH) -> FastAPI:
 
         payload = await request.json()
         if not isinstance(payload, dict):
-            raise HTTPException(status_code=400, detail="webhook payload must be a JSON object")
+            raise HTTPException(
+                status_code=400, detail="webhook payload must be a JSON object"
+            )
         event_type = request.headers.get("x-github-event", "github.webhook")
         issue = payload.get("issue")
         task_id = ""
@@ -1237,7 +1320,9 @@ def create_app(*, db_path: Path | str = db.DEFAULT_DB_PATH) -> FastAPI:
         if item is None:
             raise HTTPException(status_code=404, detail="run not found")
         log_path = str(item.get("log_path") or "").strip()
-        content = tools.read_log_tail(log_path, tail_lines=tail_lines) if log_path else ""
+        content = (
+            tools.read_log_tail(log_path, tail_lines=tail_lines) if log_path else ""
+        )
         return {"run_id": run_id, "log_path": log_path, "content": content}
 
     @app.post("/api/runs")
@@ -1287,15 +1372,21 @@ def create_app(*, db_path: Path | str = db.DEFAULT_DB_PATH) -> FastAPI:
         return run
 
     @app.post("/api/reports/bundle")
-    def generate_report_bundle(payload: ReportBundleInput, request: Request) -> dict[str, Any]:
+    def generate_report_bundle(
+        payload: ReportBundleInput, request: Request
+    ) -> dict[str, Any]:
         _require_roles(request, {"operator", "admin"})
+        output_dir = _resolve_output_dir(
+            payload.output_dir,
+            default_subdir="command_center/report_bundle",
+        )
         args = [
             "--findings",
             payload.findings_path,
             "--target-profile",
             payload.target_profile_path,
             "--output-dir",
-            payload.output_dir,
+            output_dir.as_posix(),
         ]
         if payload.evidence_path:
             args.extend(["--evidence", payload.evidence_path])
@@ -1308,22 +1399,31 @@ def create_app(*, db_path: Path | str = db.DEFAULT_DB_PATH) -> FastAPI:
             workspace_id=payload.workspace_id,
             timeout_seconds=payload.timeout_seconds,
         )
-        output_dir = Path(payload.output_dir)
         files = []
         if output_dir.exists():
-            files = [path.as_posix() for path in sorted(output_dir.glob("*")) if path.is_file()]
+            files = [
+                path.as_posix()
+                for path in sorted(output_dir.glob("*"))
+                if path.is_file()
+            ]
         return {"run": run, "output_dir": output_dir.as_posix(), "files": files}
 
     @app.post("/api/reports/issue-drafts")
-    def generate_issue_drafts(payload: IssueDraftInput, request: Request) -> dict[str, Any]:
+    def generate_issue_drafts(
+        payload: IssueDraftInput, request: Request
+    ) -> dict[str, Any]:
         _require_roles(request, {"operator", "admin"})
+        output_dir = _resolve_output_dir(
+            payload.output_dir,
+            default_subdir="command_center/issue_drafts",
+        )
         args = [
             "--findings",
             payload.findings_path,
             "--target-profile",
             payload.target_profile_path,
             "--output-dir",
-            payload.output_dir,
+            output_dir.as_posix(),
             "--platform",
             payload.platform,
         ]
@@ -1336,10 +1436,13 @@ def create_app(*, db_path: Path | str = db.DEFAULT_DB_PATH) -> FastAPI:
             workspace_id=payload.workspace_id,
             timeout_seconds=payload.timeout_seconds,
         )
-        output_dir = Path(payload.output_dir)
         files = []
         if output_dir.exists():
-            files = [path.as_posix() for path in sorted(output_dir.glob("*")) if path.is_file()]
+            files = [
+                path.as_posix()
+                for path in sorted(output_dir.glob("*"))
+                if path.is_file()
+            ]
         return {"run": run, "output_dir": output_dir.as_posix(), "files": files}
 
     @app.get("/api/notifications")
@@ -1350,11 +1453,15 @@ def create_app(*, db_path: Path | str = db.DEFAULT_DB_PATH) -> FastAPI:
     ) -> dict[str, Any]:
         _require_roles(request, {"viewer", "operator", "admin"})
         with db.get_connection(app.state.db_path) as connection:
-            items = db.list_notifications(connection, limit=limit, unread_only=unread_only)
+            items = db.list_notifications(
+                connection, limit=limit, unread_only=unread_only
+            )
         return {"items": items, "count": len(items)}
 
     @app.post("/api/notifications")
-    def create_notification(payload: NotificationInput, request: Request) -> dict[str, Any]:
+    def create_notification(
+        payload: NotificationInput, request: Request
+    ) -> dict[str, Any]:
         context = _require_roles(request, {"operator", "admin"})
         with db.get_connection(app.state.db_path) as connection:
             item = db.create_notification(
@@ -1373,18 +1480,25 @@ def create_app(*, db_path: Path | str = db.DEFAULT_DB_PATH) -> FastAPI:
         return item
 
     @app.post("/api/notifications/send")
-    def send_notification(payload: NotificationSendInput, request: Request) -> dict[str, Any]:
+    def send_notification(
+        payload: NotificationSendInput, request: Request
+    ) -> dict[str, Any]:
         context = _require_roles(request, {"operator", "admin"})
         channel = payload.channel.strip().lower()
         if channel == "slack":
             webhook_url = payload.slack_webhook_url or os.getenv("SLACK_WEBHOOK_URL")
             if not webhook_url:
-                raise HTTPException(status_code=400, detail="slack webhook url is required")
-            result = notify_channels.send_slack(
-                webhook_url=webhook_url,
-                title=payload.title,
-                body=payload.body,
-            )
+                raise HTTPException(
+                    status_code=400, detail="slack webhook url is required"
+                )
+            try:
+                result = notify_channels.send_slack(
+                    webhook_url=webhook_url,
+                    title=payload.title,
+                    body=payload.body,
+                )
+            except ValueError as exc:
+                raise HTTPException(status_code=400, detail=str(exc)) from exc
         elif channel in {"smtp", "email"}:
             smtp_host = payload.smtp_host or os.getenv("SMTP_HOST")
             smtp_from = payload.smtp_from or os.getenv("SMTP_FROM")
@@ -1408,7 +1522,9 @@ def create_app(*, db_path: Path | str = db.DEFAULT_DB_PATH) -> FastAPI:
                 use_tls=payload.smtp_use_tls,
             )
         else:
-            raise HTTPException(status_code=400, detail="unsupported notification channel")
+            raise HTTPException(
+                status_code=400, detail="unsupported notification channel"
+            )
 
         with db.get_connection(app.state.db_path) as connection:
             item = db.create_notification(
@@ -1444,7 +1560,9 @@ def create_app(*, db_path: Path | str = db.DEFAULT_DB_PATH) -> FastAPI:
         return item
 
     @app.post("/api/metrics/compute")
-    def compute_metrics(payload: MetricsComputeInput, request: Request) -> dict[str, Any]:
+    def compute_metrics(
+        payload: MetricsComputeInput, request: Request
+    ) -> dict[str, Any]:
         context = _require_roles(request, {"operator", "admin"})
         metrics: dict[str, float] = {}
         with db.get_connection(app.state.db_path) as connection:
@@ -1455,16 +1573,22 @@ def create_app(*, db_path: Path | str = db.DEFAULT_DB_PATH) -> FastAPI:
                 connection.execute("SELECT COUNT(*) AS n FROM findings").fetchone()["n"]
             )
             metrics["workspace_count"] = float(
-                connection.execute("SELECT COUNT(*) AS n FROM workspaces").fetchone()["n"]
+                connection.execute("SELECT COUNT(*) AS n FROM workspaces").fetchone()[
+                    "n"
+                ]
             )
             metrics["task_count"] = float(
                 connection.execute("SELECT COUNT(*) AS n FROM tasks").fetchone()["n"]
             )
             metrics["run_count"] = float(
-                connection.execute("SELECT COUNT(*) AS n FROM tool_runs").fetchone()["n"]
+                connection.execute("SELECT COUNT(*) AS n FROM tool_runs").fetchone()[
+                    "n"
+                ]
             )
             metrics["notification_count"] = float(
-                connection.execute("SELECT COUNT(*) AS n FROM notifications").fetchone()["n"]
+                connection.execute(
+                    "SELECT COUNT(*) AS n FROM notifications"
+                ).fetchone()["n"]
             )
 
             snapshot_items = []
@@ -1519,7 +1643,9 @@ def create_app(*, db_path: Path | str = db.DEFAULT_DB_PATH) -> FastAPI:
     def resolve_secret(payload: SecretResolveInput, request: Request) -> dict[str, Any]:
         _require_roles(request, {"admin"})
         try:
-            value = secrets_store.resolve_secret(payload.ref, file_path=payload.file_path)
+            value = secrets_store.resolve_secret(
+                payload.ref, file_path=payload.file_path
+            )
         except KeyError as exc:
             raise HTTPException(status_code=404, detail=str(exc)) from exc
         response: dict[str, Any] = {
@@ -1533,24 +1659,34 @@ def create_app(*, db_path: Path | str = db.DEFAULT_DB_PATH) -> FastAPI:
         return response
 
     @app.post("/api/secrets/rotation-plan")
-    def build_secret_rotation_plan(payload: SecretRotationPlanInput, request: Request) -> dict[str, Any]:
+    def build_secret_rotation_plan(
+        payload: SecretRotationPlanInput, request: Request
+    ) -> dict[str, Any]:
         _require_roles(request, {"admin"})
         plan = secrets_store.build_rotation_plan(payload.items)
         return {"items": plan, "count": len(plan)}
 
     @app.post("/api/compliance/export")
-    def export_compliance_bundle(payload: ComplianceExportInput, request: Request) -> dict[str, Any]:
+    def export_compliance_bundle(
+        payload: ComplianceExportInput, request: Request
+    ) -> dict[str, Any]:
         context = _require_roles(request, {"admin"})
+        output_dir = _resolve_output_dir(
+            payload.output_dir, default_subdir="compliance"
+        )
         with db.get_connection(app.state.db_path) as connection:
-            result = compliance.export_compliance_bundle(
-                connection=connection,
-                output_dir=payload.output_dir,
-            )
+            try:
+                result = compliance.export_compliance_bundle(
+                    connection=connection,
+                    output_dir=output_dir,
+                )
+            except ValueError as exc:
+                raise HTTPException(status_code=400, detail=str(exc)) from exc
             _audit_event(
                 connection,
                 event_type="compliance.export",
                 actor=str(context["principal"]["id"]),
-                payload={"output_dir": payload.output_dir},
+                payload={"output_dir": output_dir.as_posix()},
             )
         return result
 
@@ -1570,10 +1706,18 @@ def create_app(*, db_path: Path | str = db.DEFAULT_DB_PATH) -> FastAPI:
         plugin_dir: str = "plugins",
     ) -> dict[str, Any]:
         _require_roles(request, {"viewer", "operator", "admin"})
-        items = plugin_sdk.discover_plugins(plugin_dir=plugin_dir)
+        try:
+            items = plugin_sdk.discover_plugins(plugin_dir=plugin_dir)
+        except ValueError as exc:
+            raise HTTPException(status_code=400, detail=str(exc)) from exc
         loaded = sum(1 for item in items if item.get("status") == "loaded")
         errors = [item for item in items if item.get("status") == "error"]
-        return {"items": items, "count": len(items), "loaded": loaded, "errors": len(errors)}
+        return {
+            "items": items,
+            "count": len(items),
+            "loaded": loaded,
+            "errors": len(errors),
+        }
 
     @app.post("/api/jobs")
     def enqueue_job(payload: JobEnqueueInput, request: Request) -> dict[str, Any]:
@@ -1596,7 +1740,9 @@ def create_app(*, db_path: Path | str = db.DEFAULT_DB_PATH) -> FastAPI:
         return item
 
     @app.get("/api/jobs")
-    def list_jobs(request: Request, limit: int = Query(default=200, ge=1, le=1000)) -> dict[str, Any]:
+    def list_jobs(
+        request: Request, limit: int = Query(default=200, ge=1, le=1000)
+    ) -> dict[str, Any]:
         _require_roles(request, {"viewer", "operator", "admin"})
         with db.get_connection(app.state.db_path) as connection:
             items = db.list_jobs(connection, limit=limit)

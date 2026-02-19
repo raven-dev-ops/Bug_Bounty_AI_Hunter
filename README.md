@@ -154,7 +154,10 @@ python -m scripts.command_center_api --host 127.0.0.1 --port 8787 --db data/comm
 - Workspace creation endpoint scaffolds engagement files plus `ROE_ACK.yaml` and `pipeline_config.yaml`.
 - Run-mode tool records require a workspace with recorded ROE acknowledgement.
 - Tool execution endpoint runs approved scripts with captured logs and notification events.
+- Tool execution now uses a request-file runner so user arguments are not passed directly on subprocess command lines.
 - Docs endpoints provide markdown search and page retrieval for in-app Help/Docs views.
+- Ingest/docs/plugins/report/compliance file paths are constrained to safe repository output roots.
+- Slack notification delivery validates allowed HTTPS webhook hosts before sending.
 - Connector endpoints support Bugcrowd, GitHub, Intigriti, and YesWeHack sync flows with webhook/audit coverage and connector-run tracking.
 - Metrics endpoints compute/store snapshot series, task endpoints support board workflows, and notifications can dispatch via Slack/SMTP.
 

@@ -632,6 +632,19 @@
     }
   }
 
+  function sanitizeImageSrc(value) {
+    const raw = String(value || "").trim();
+    if (!raw) return "";
+    if (raw.startsWith("/")) return raw;
+    try {
+      const parsed = new URL(raw, window.location.href);
+      if (parsed.protocol !== "http:" && parsed.protocol !== "https:") return "";
+      return parsed.href;
+    } catch {
+      return "";
+    }
+  }
+
   function wireImgFallback(root) {
     const ctx = root || document;
     $all("img[data-srcs]", ctx).forEach((img) => {
@@ -639,7 +652,7 @@
       img.dataset.wired = "1";
 
       const getSrcs = () =>
-        parseJsonArray(img.getAttribute("data-srcs")).map((s) => String(s || "").trim()).filter(Boolean);
+        parseJsonArray(img.getAttribute("data-srcs")).map(sanitizeImageSrc).filter(Boolean);
 
       const srcs = getSrcs();
       if (srcs.length && !img.getAttribute("src")) {

@@ -4,7 +4,7 @@ from pathlib import Path
 from typing import Any
 
 
-DOCS_ROOT = Path("docs")
+DOCS_ROOT = (Path(__file__).resolve().parent.parent / "docs").resolve()
 
 
 def _safe_relative_path(path: Path) -> str:
@@ -47,17 +47,25 @@ def search_docs(query: str, *, limit: int = 25) -> list[dict[str, Any]]:
 
 
 def read_doc_page(relative_path: str) -> dict[str, str]:
-    relative = Path(relative_path)
+    requested = str(relative_path or "").strip()
+    if not requested:
+        raise ValueError("doc page not found")
+    relative = Path(requested)
     if relative.is_absolute():
         raise ValueError("absolute paths are not allowed")
-    full_path = (DOCS_ROOT / relative).resolve()
-    docs_root = DOCS_ROOT.resolve()
-    if docs_root not in full_path.parents and full_path != docs_root:
+    if any(part in {"", ".", ".."} for part in relative.parts):
         raise ValueError("path escapes docs root")
-    if not full_path.exists() or full_path.suffix.lower() != ".md":
+    full_path = (DOCS_ROOT / relative).resolve()
+    if not full_path.is_relative_to(DOCS_ROOT):
+        raise ValueError("path escapes docs root")
+    if (
+        not full_path.exists()
+        or not full_path.is_file()
+        or full_path.suffix.lower() != ".md"
+    ):
         raise ValueError("doc page not found")
     content = full_path.read_text(encoding="utf-8", errors="replace")
     return {
-        "path": _safe_relative_path(full_path.relative_to(docs_root)),
+        "path": _safe_relative_path(full_path.relative_to(DOCS_ROOT)),
         "content": content,
     }
