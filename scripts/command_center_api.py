@@ -5,7 +5,9 @@ import uvicorn
 
 
 def main(argv=None):
-    parser = argparse.ArgumentParser(description="Run the Command Center FastAPI backend.")
+    parser = argparse.ArgumentParser(
+        description="Run the Command Center FastAPI backend."
+    )
     parser.add_argument("--host", default="127.0.0.1")
     parser.add_argument("--port", default=8787, type=int)
     parser.add_argument("--db", default="data/command_center.db")
@@ -18,4 +20,3 @@ def main(argv=None):
 
 if __name__ == "__main__":
     main()
-

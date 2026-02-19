@@ -65,7 +65,9 @@ class TestCommandCenterIntegrations(unittest.TestCase):
         token_response = self.client.post(
             "/api/auth/oidc/token",
             json={
-                "id_token": _make_id_token(sub="bootstrap-admin", email="admin@test.local"),
+                "id_token": _make_id_token(
+                    sub="bootstrap-admin", email="admin@test.local"
+                ),
                 "org_id": "org:test",
             },
         )
@@ -141,7 +143,9 @@ class TestCommandCenterIntegrations(unittest.TestCase):
             "x-hub-signature-256": _signature("github-secret", raw),
             "x-github-event": "issues",
         }
-        response = self.client.post("/api/connectors/github/webhook", content=raw, headers=headers)
+        response = self.client.post(
+            "/api/connectors/github/webhook", content=raw, headers=headers
+        )
         self.assertEqual(response.status_code, 200)
         task_id = response.json()["task_id"]
         self.assertTrue(task_id.startswith("github:example/repo:42"))

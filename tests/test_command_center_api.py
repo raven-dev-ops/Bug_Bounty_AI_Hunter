@@ -59,7 +59,9 @@ class TestCommandCenterApi(unittest.TestCase):
         token_response = self.client.post(
             "/api/auth/oidc/token",
             json={
-                "id_token": _make_id_token(sub="bootstrap-admin", email="admin@test.local"),
+                "id_token": _make_id_token(
+                    sub="bootstrap-admin", email="admin@test.local"
+                ),
                 "org_id": "org:test",
             },
         )
@@ -171,7 +173,12 @@ class TestCommandCenterApi(unittest.TestCase):
         board = self.client.get("/api/tasks/board", headers=self.auth_headers)
         self.assertEqual(board.status_code, 200)
         open_tasks = board.json()["columns"]["open"]
-        self.assertTrue(any(task.get("linked_finding_id") == "finding-auto-001" for task in open_tasks))
+        self.assertTrue(
+            any(
+                task.get("linked_finding_id") == "finding-auto-001"
+                for task in open_tasks
+            )
+        )
 
     def test_metrics_compute_and_snapshot_listing(self):
         computed = self.client.post(
@@ -286,11 +293,15 @@ class TestCommandCenterApi(unittest.TestCase):
         self.assertEqual(listed.status_code, 200)
         self.assertGreaterEqual(listed.json()["count"], 1)
 
-        retried = self.client.post(f"/api/jobs/{job_id}/retry", headers=self.auth_headers)
+        retried = self.client.post(
+            f"/api/jobs/{job_id}/retry", headers=self.auth_headers
+        )
         self.assertEqual(retried.status_code, 200)
         self.assertEqual(retried.json()["status"], "queued")
 
-        worker_status = self.client.get("/api/jobs/worker/status", headers=self.auth_headers)
+        worker_status = self.client.get(
+            "/api/jobs/worker/status", headers=self.auth_headers
+        )
         self.assertEqual(worker_status.status_code, 200)
         self.assertIn("running", worker_status.json())
 
@@ -302,7 +313,9 @@ class TestCommandCenterApi(unittest.TestCase):
         self.assertEqual(compliance.status_code, 200)
         self.assertTrue(Path(compliance.json()["json"]).exists())
 
-        scope_map = self.client.get("/api/visualizations/scope-map", headers=self.auth_headers)
+        scope_map = self.client.get(
+            "/api/visualizations/scope-map", headers=self.auth_headers
+        )
         self.assertEqual(scope_map.status_code, 200)
         graph = scope_map.json()["graph"]
         self.assertIn("nodes", graph)
