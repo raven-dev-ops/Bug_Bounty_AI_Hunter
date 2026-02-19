@@ -3,6 +3,7 @@
 All notable changes to this project will be documented here.
 
 ## Unreleased
+- Added Command Center auth/e2e delivery: frontend auth now supports real OIDC PKCE sign-in/sign-out with `/auth/callback`, API CORS support for local frontend hosts, Playwright smoke tests, visual regression snapshots, and CI coverage for e2e/visual checks on Windows.
 - Delivered Command Center v2 platform/security layer: org/team RBAC APIs, OIDC session governance endpoints, secret provider integration + rotation planning, expanded compliance/audit exports, plugin discovery SDK surface, queue worker controls with retry/idempotency behavior, and an interactive scope-map visualization page/API (issues #200, #201, #202, #203, #204, #205, #206).
 - Added analytics/task/notification v1 delivery: metrics compute + snapshot APIs and dashboard page, task board API/UI with auto-link rules from findings, and notification dispatch support for Slack/SMTP wired into the notifications center (issues #196, #197, #198, #199).
 - Added connector integration layer in Command Center API: Bugcrowd program/submission sync with per-IP rate budgets and ETag/If-None-Match caching, Bugcrowd and GitHub webhook receivers with signature verification, GitHub issue-to-task sync, and Intigriti/YesWeHack connector sync endpoints backed by existing parser fixtures (issues #188, #189, #190, #191, #192, #193, #194, #195).

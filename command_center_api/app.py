@@ -6,6 +6,7 @@ from pathlib import Path
 from typing import Any
 
 from fastapi import FastAPI, HTTPException, Query, Request
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
 from command_center_api import (
@@ -221,6 +222,26 @@ def create_app(*, db_path: Path | str = db.DEFAULT_DB_PATH) -> FastAPI:
             "MVP backend for command-center planning and reporting workflows. "
             "Provides REST resources for programs, findings, workspaces, tool runs, and docs search."
         ),
+    )
+    cors_env = os.getenv(
+        "CC_CORS_ORIGINS",
+        ",".join(
+            [
+                "http://127.0.0.1:4173",
+                "http://localhost:4173",
+                "http://127.0.0.1:5173",
+                "http://localhost:5173",
+            ]
+        ),
+    )
+    raw_origins = [item.strip() for item in cors_env.split(",") if item.strip()]
+    allow_origins = ["*"] if "*" in raw_origins else raw_origins
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=allow_origins,
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
     )
     app.state.db_path = Path(db_path)
     db.init_schema(app.state.db_path)

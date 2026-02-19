@@ -1,5 +1,6 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import { AnalyticsPage } from "./pages/AnalyticsPage";
+import { AuthCallbackPage } from "./pages/AuthCallbackPage";
 import { BountyDetailPage } from "./pages/BountyDetailPage";
 import { BountyFeedPage } from "./pages/BountyFeedPage";
 import { DocsPage } from "./pages/DocsPage";
@@ -15,7 +16,7 @@ import { WorkspacesPage } from "./pages/WorkspacesPage";
 import { navItems } from "./routes";
 import { AppShell } from "./shell/AppShell";
 
-export function App() {
+function ShellRoutes() {
   return (
     <AppShell items={navItems}>
       <Routes>
@@ -53,5 +54,14 @@ export function App() {
         <Route path="*" element={<Navigate to="/feed" replace />} />
       </Routes>
     </AppShell>
+  );
+}
+
+export function App() {
+  return (
+    <Routes>
+      <Route path="/auth/callback" element={<AuthCallbackPage />} />
+      <Route path="*" element={<ShellRoutes />} />
+    </Routes>
   );
 }

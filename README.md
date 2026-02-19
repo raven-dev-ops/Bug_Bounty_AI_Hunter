@@ -115,6 +115,8 @@ npm install
 npm run dev
 npm run lint
 npm run test
+npm run test:e2e:install
+npm run test:e2e
 ```
 - Feed and workflow pages now include:
 - Bounty Feed table with filters/sorting and local saved views.
@@ -126,6 +128,9 @@ npm run test
 - Logs, notifications, and docs-search pages for operator workflows.
 - Analytics dashboard page with computed metrics and snapshot history.
 - Task board page with Kanban lanes and finding-linked task automation.
+- Session auth supports `bootstrap` mode (default) and `oidc_pkce` mode with
+  explicit Sign In/Sign Out controls and `/auth/callback` handling.
+- Playwright smoke and visual suites live under `command-center/e2e/`.
 
 ## Command Center Backend API (MVP Baseline)
 ```bash
@@ -224,6 +229,8 @@ docker run --rm bbhai
 - Issue backlog is tracked in GitHub Issues.
 - Command-center backlog issues `#165`-`#206` are delivered; see `CHANGELOG.md` for implementation batches and `docs/COMMAND_CENTER_TRIAGE.md` for accepted scope history.
 - Command Center v2 platform controls now include org/team RBAC, OIDC session APIs, secret-provider resolution endpoints, compliance bundle exports, plugin discovery, job queue worker controls, and scope-map visualization APIs/UI.
+- Command Center API includes CORS middleware for local frontend hosts (`:4173`
+  and `:5173`) to support browser sessions and e2e test runs.
 - Issue labels use `prio:`, `type:`, and `area:` prefixes (see `docs/PROJECT_MANAGEMENT.md`).
 - Milestone status and backlog tracking are aligned with `ROADMAP.md` and GitHub milestones.
 - Scope assets support ports and wildcards; see `schemas/scope_asset.schema.json` and `examples/scope_assets_example.json`.
@@ -255,6 +262,8 @@ docker run --rm bbhai
   coverage reporting, generated-doc sync checks, coverage matrix checks, golden
   example re-emits, and a demo runner plan. Matrix test runs are limited to
   unit tests to avoid redundant non-test checks.
+- CI includes Playwright smoke and visual regression checks for Command Center
+  on Windows to validate committed snapshot baselines.
 - Offline connector fixtures for tests live in `tests/fixtures/connectors/`.
 - Catalog build connectors include yeswehack, intigriti, huntr, bounty-targets-data,
   disclose-io, and projectdiscovery (override with `--connectors`).

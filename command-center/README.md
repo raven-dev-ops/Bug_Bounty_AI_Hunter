@@ -36,6 +36,20 @@ This app scaffolds issue delivery for:
 3. `npm run dev`
 4. `npm run lint`
 5. `npm run test`
+6. `npm run test:e2e:install`
+7. `npm run test:e2e`
+
+## Auth modes
+- `bootstrap` (default): local bootstrap exchange for local/dev API sessions.
+- `oidc_pkce`: real OIDC code+PKCE browser flow with `/auth/callback`.
+- Configure `oidc_pkce` with:
+  - `VITE_COMMAND_CENTER_AUTH_MODE=oidc_pkce`
+  - `VITE_COMMAND_CENTER_OIDC_CLIENT_ID`
+  - `VITE_COMMAND_CENTER_OIDC_AUTHORIZATION_ENDPOINT`
+  - `VITE_COMMAND_CENTER_OIDC_TOKEN_ENDPOINT`
+  - Optional: `VITE_COMMAND_CENTER_OIDC_SCOPE`, `VITE_COMMAND_CENTER_OIDC_REDIRECT_URI`,
+    `VITE_COMMAND_CENTER_OIDC_AUDIENCE`, `VITE_COMMAND_CENTER_OIDC_END_SESSION_ENDPOINT`,
+    `VITE_COMMAND_CENTER_OIDC_POST_LOGOUT_REDIRECT_URI`
 
 ## Current scope
 - Route shell plus implemented Feed/Detail/Workspace pages
@@ -55,3 +69,5 @@ This app scaffolds issue delivery for:
 - Analytics page wired to metrics compute/snapshot APIs
 - Task board page wired to task CRUD + auto-link automation APIs
 - Notification dispatch supports Slack webhook and SMTP submission flows
+- Auth client supports `bootstrap` mode and `oidc_pkce` mode with callback handling
+- Playwright smoke + visual regression coverage lives in `e2e/`

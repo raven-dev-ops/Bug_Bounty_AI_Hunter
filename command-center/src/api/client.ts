@@ -256,7 +256,23 @@ type IssueDraftPayload = {
   timeout_seconds?: number;
 };
 
+export type ApiAuthMode = "bootstrap" | "oidc_pkce";
+
+type OidcPkceState = {
+  state: string;
+  verifier: string;
+  nonce: string;
+  returnTo: string;
+  createdAt: number;
+};
+
+type OidcSignInResult =
+  | { ok: true; returnTo: string }
+  | { ok: false; error: string };
+
 const ACCESS_TOKEN_KEY = "command-center-access-token";
+const OIDC_ID_TOKEN_KEY = "command-center-oidc-id-token";
+const OIDC_PKCE_KEY = "command-center-oidc-pkce";
 const DEFAULT_ORG_ID = import.meta.env.VITE_COMMAND_CENTER_ORG_ID ?? "org:command-center-local";
 const DEFAULT_OIDC_SUB = import.meta.env.VITE_COMMAND_CENTER_OIDC_SUB ?? "command-center-ui-admin";
 const DEFAULT_OIDC_EMAIL =
@@ -264,17 +280,133 @@ const DEFAULT_OIDC_EMAIL =
 const DEFAULT_OIDC_NAME =
   import.meta.env.VITE_COMMAND_CENTER_OIDC_NAME ?? "Command Center Operator";
 const STATIC_ACCESS_TOKEN = import.meta.env.VITE_COMMAND_CENTER_ACCESS_TOKEN ?? "";
+const OIDC_AUTH_MODE =
+  (import.meta.env.VITE_COMMAND_CENTER_AUTH_MODE as ApiAuthMode | undefined) ?? "bootstrap";
+const OIDC_AUTHORIZATION_ENDPOINT =
+  import.meta.env.VITE_COMMAND_CENTER_OIDC_AUTHORIZATION_ENDPOINT ?? "";
+const OIDC_TOKEN_ENDPOINT = import.meta.env.VITE_COMMAND_CENTER_OIDC_TOKEN_ENDPOINT ?? "";
+const OIDC_CLIENT_ID = import.meta.env.VITE_COMMAND_CENTER_OIDC_CLIENT_ID ?? "";
+const OIDC_SCOPE = import.meta.env.VITE_COMMAND_CENTER_OIDC_SCOPE ?? "openid profile email";
+const OIDC_AUDIENCE = import.meta.env.VITE_COMMAND_CENTER_OIDC_AUDIENCE ?? "";
+const OIDC_REDIRECT_URI = import.meta.env.VITE_COMMAND_CENTER_OIDC_REDIRECT_URI ?? "";
+const OIDC_END_SESSION_ENDPOINT = import.meta.env.VITE_COMMAND_CENTER_OIDC_END_SESSION_ENDPOINT ?? "";
+const OIDC_POST_LOGOUT_REDIRECT_URI =
+  import.meta.env.VITE_COMMAND_CENTER_OIDC_POST_LOGOUT_REDIRECT_URI ?? "";
 
 const rawFetch: typeof globalThis.fetch = globalThis.fetch.bind(globalThis);
 let sessionBootstrapPromise: Promise<string | null> | null = null;
 
-function base64UrlEncode(value: string): string {
-  const bytes = new TextEncoder().encode(value);
+function getApiStorage(storageType: "localStorage" | "sessionStorage"): Storage | null {
+  if (typeof window === "undefined") {
+    return null;
+  }
+  try {
+    return window[storageType];
+  } catch {
+    return null;
+  }
+}
+
+function readStorageValue(
+  storageType: "localStorage" | "sessionStorage",
+  key: string,
+): string {
+  const storage = getApiStorage(storageType);
+  if (!storage) {
+    return "";
+  }
+  try {
+    return storage.getItem(key) ?? "";
+  } catch {
+    return "";
+  }
+}
+
+function writeStorageValue(
+  storageType: "localStorage" | "sessionStorage",
+  key: string,
+  value: string,
+): void {
+  const storage = getApiStorage(storageType);
+  if (!storage) {
+    return;
+  }
+  try {
+    storage.setItem(key, value);
+  } catch {
+    // Ignore storage write errors (private mode / blocked storage).
+  }
+}
+
+function removeStorageValue(
+  storageType: "localStorage" | "sessionStorage",
+  key: string,
+): void {
+  const storage = getApiStorage(storageType);
+  if (!storage) {
+    return;
+  }
+  try {
+    storage.removeItem(key);
+  } catch {
+    // Ignore storage write errors (private mode / blocked storage).
+  }
+}
+
+function getAuthMode(): ApiAuthMode {
+  return OIDC_AUTH_MODE === "oidc_pkce" ? "oidc_pkce" : "bootstrap";
+}
+
+export function getApiAuthMode(): ApiAuthMode {
+  return getAuthMode();
+}
+
+function base64UrlEncodeBytes(value: Uint8Array): string {
   let binary = "";
-  for (const byte of bytes) {
+  for (const byte of value) {
     binary += String.fromCharCode(byte);
   }
   return btoa(binary).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/g, "");
+}
+
+function base64UrlEncode(value: string): string {
+  const bytes = new TextEncoder().encode(value);
+  return base64UrlEncodeBytes(bytes);
+}
+
+function decodeJwtPayload(token: string): Record<string, unknown> | null {
+  const parts = token.split(".");
+  if (parts.length < 2) {
+    return null;
+  }
+  const payload = parts[1].replace(/-/g, "+").replace(/_/g, "/");
+  const padding = "=".repeat((4 - (payload.length % 4)) % 4);
+  try {
+    const json = atob(payload + padding);
+    const data = JSON.parse(json) as unknown;
+    return typeof data === "object" && data ? (data as Record<string, unknown>) : null;
+  } catch {
+    return null;
+  }
+}
+
+function randomBase64Url(length = 32): string {
+  const cryptoApi = globalThis.crypto;
+  if (!cryptoApi?.getRandomValues) {
+    throw new Error("Web Crypto API is required for OIDC PKCE sign-in.");
+  }
+  const bytes = new Uint8Array(length);
+  cryptoApi.getRandomValues(bytes);
+  return base64UrlEncodeBytes(bytes);
+}
+
+async function sha256Base64Url(value: string): Promise<string> {
+  const cryptoApi = globalThis.crypto;
+  if (!cryptoApi?.subtle) {
+    throw new Error("Web Crypto API is required for OIDC PKCE sign-in.");
+  }
+  const digest = await cryptoApi.subtle.digest("SHA-256", new TextEncoder().encode(value));
+  return base64UrlEncodeBytes(new Uint8Array(digest));
 }
 
 function buildUnsignedIdToken(): string {
@@ -290,43 +422,128 @@ function buildUnsignedIdToken(): string {
   return `${header}.${payload}.sig`;
 }
 
-function readStoredToken(): string {
-  if (STATIC_ACCESS_TOKEN) {
-    return STATIC_ACCESS_TOKEN;
+function resolveOidcRedirectUri(): string {
+  if (OIDC_REDIRECT_URI.trim()) {
+    return OIDC_REDIRECT_URI.trim();
   }
   if (typeof window === "undefined") {
     return "";
   }
-  try {
-    return window.localStorage.getItem(ACCESS_TOKEN_KEY) ?? "";
-  } catch {
+  return `${window.location.origin}/auth/callback`;
+}
+
+function resolvePostLogoutRedirectUri(): string {
+  if (OIDC_POST_LOGOUT_REDIRECT_URI.trim()) {
+    return OIDC_POST_LOGOUT_REDIRECT_URI.trim();
+  }
+  if (typeof window === "undefined") {
     return "";
   }
+  return `${window.location.origin}/feed`;
+}
+
+function normalizeReturnPath(path: string | null | undefined): string {
+  const candidate = (path ?? "").trim();
+  if (!candidate) {
+    return "/feed";
+  }
+  if (candidate.startsWith("/")) {
+    return candidate;
+  }
+  if (typeof window === "undefined") {
+    return "/feed";
+  }
+  try {
+    const parsed = new URL(candidate, window.location.origin);
+    return `${parsed.pathname}${parsed.search}${parsed.hash}` || "/feed";
+  } catch {
+    return "/feed";
+  }
+}
+
+function readStoredToken(): string {
+  if (STATIC_ACCESS_TOKEN) {
+    return STATIC_ACCESS_TOKEN;
+  }
+  return readStorageValue("localStorage", ACCESS_TOKEN_KEY);
 }
 
 function writeStoredToken(token: string): void {
   if (!token || STATIC_ACCESS_TOKEN) {
     return;
   }
-  if (typeof window === "undefined") {
-    return;
-  }
-  try {
-    window.localStorage.setItem(ACCESS_TOKEN_KEY, token);
-  } catch {
-    // Ignore storage write errors (private mode / blocked storage).
-  }
+  writeStorageValue("localStorage", ACCESS_TOKEN_KEY, token);
 }
 
 function clearStoredToken(): void {
-  if (STATIC_ACCESS_TOKEN || typeof window === "undefined") {
+  if (STATIC_ACCESS_TOKEN) {
     return;
   }
-  try {
-    window.localStorage.removeItem(ACCESS_TOKEN_KEY);
-  } catch {
-    // Ignore storage write errors (private mode / blocked storage).
+  removeStorageValue("localStorage", ACCESS_TOKEN_KEY);
+}
+
+function readStoredIdToken(): string {
+  return readStorageValue("sessionStorage", OIDC_ID_TOKEN_KEY);
+}
+
+function writeStoredIdToken(idToken: string): void {
+  writeStorageValue("sessionStorage", OIDC_ID_TOKEN_KEY, idToken);
+}
+
+function clearStoredIdToken(): void {
+  removeStorageValue("sessionStorage", OIDC_ID_TOKEN_KEY);
+}
+
+function readOidcPkceState(): OidcPkceState | null {
+  const raw = readStorageValue("sessionStorage", OIDC_PKCE_KEY);
+  if (!raw) {
+    return null;
   }
+  try {
+    const parsed = JSON.parse(raw) as OidcPkceState;
+    if (
+      !parsed ||
+      typeof parsed.state !== "string" ||
+      typeof parsed.verifier !== "string" ||
+      typeof parsed.nonce !== "string" ||
+      typeof parsed.returnTo !== "string" ||
+      typeof parsed.createdAt !== "number"
+    ) {
+      return null;
+    }
+    return parsed;
+  } catch {
+    return null;
+  }
+}
+
+function writeOidcPkceState(state: OidcPkceState): void {
+  writeStorageValue("sessionStorage", OIDC_PKCE_KEY, JSON.stringify(state));
+}
+
+function clearOidcPkceState(): void {
+  removeStorageValue("sessionStorage", OIDC_PKCE_KEY);
+}
+
+async function readErrorMessage(response: Response): Promise<string> {
+  try {
+    const payload = (await response.json()) as Record<string, unknown>;
+    const detail = payload["detail"];
+    if (typeof detail === "string" && detail.trim()) {
+      return detail.trim();
+    }
+    const error = payload["error"];
+    if (typeof error === "string" && error.trim()) {
+      return error.trim();
+    }
+    const description = payload["error_description"];
+    if (typeof description === "string" && description.trim()) {
+      return description.trim();
+    }
+  } catch {
+    // Ignore JSON parse failures and fall back to HTTP status text.
+  }
+  return `${response.status} ${response.statusText}`;
 }
 
 async function bootstrapSessionToken(): Promise<string | null> {
@@ -375,12 +592,204 @@ async function bootstrapSessionToken(): Promise<string | null> {
   return token;
 }
 
+export async function startOidcSignIn(returnToPath?: string): Promise<void> {
+  if (getAuthMode() !== "oidc_pkce") {
+    return;
+  }
+  if (typeof window === "undefined") {
+    throw new Error("OIDC sign-in requires a browser environment.");
+  }
+  if (!OIDC_CLIENT_ID.trim()) {
+    throw new Error("Missing VITE_COMMAND_CENTER_OIDC_CLIENT_ID.");
+  }
+  if (!OIDC_AUTHORIZATION_ENDPOINT.trim()) {
+    throw new Error("Missing VITE_COMMAND_CENTER_OIDC_AUTHORIZATION_ENDPOINT.");
+  }
+  if (!OIDC_TOKEN_ENDPOINT.trim()) {
+    throw new Error("Missing VITE_COMMAND_CENTER_OIDC_TOKEN_ENDPOINT.");
+  }
+
+  const verifier = randomBase64Url(48);
+  const challenge = await sha256Base64Url(verifier);
+  const state = randomBase64Url(24);
+  const nonce = randomBase64Url(24);
+  const returnTo = normalizeReturnPath(returnToPath ?? window.location.pathname);
+  writeOidcPkceState({
+    state,
+    verifier,
+    nonce,
+    returnTo,
+    createdAt: Date.now(),
+  });
+
+  const params = new URLSearchParams({
+    response_type: "code",
+    client_id: OIDC_CLIENT_ID.trim(),
+    redirect_uri: resolveOidcRedirectUri(),
+    scope: OIDC_SCOPE,
+    code_challenge: challenge,
+    code_challenge_method: "S256",
+    state,
+    nonce,
+  });
+  if (OIDC_AUDIENCE.trim()) {
+    params.set("audience", OIDC_AUDIENCE.trim());
+  }
+
+  window.location.assign(`${OIDC_AUTHORIZATION_ENDPOINT.trim()}?${params.toString()}`);
+}
+
+export async function completeOidcSignInFromCallback(): Promise<OidcSignInResult> {
+  if (getAuthMode() !== "oidc_pkce") {
+    return { ok: false, error: "OIDC PKCE mode is not enabled." };
+  }
+  if (typeof window === "undefined") {
+    return { ok: false, error: "OIDC sign-in callback requires a browser environment." };
+  }
+  if (!OIDC_CLIENT_ID.trim()) {
+    return { ok: false, error: "Missing VITE_COMMAND_CENTER_OIDC_CLIENT_ID." };
+  }
+  if (!OIDC_TOKEN_ENDPOINT.trim()) {
+    return { ok: false, error: "Missing VITE_COMMAND_CENTER_OIDC_TOKEN_ENDPOINT." };
+  }
+
+  const params = new URLSearchParams(window.location.search);
+  const callbackError = params.get("error");
+  if (callbackError) {
+    clearOidcPkceState();
+    const description = params.get("error_description")?.trim();
+    return { ok: false, error: description || callbackError };
+  }
+
+  const code = params.get("code")?.trim() ?? "";
+  const state = params.get("state")?.trim() ?? "";
+  if (!code || !state) {
+    return { ok: false, error: "OIDC callback missing code or state." };
+  }
+
+  const pending = readOidcPkceState();
+  if (!pending) {
+    return { ok: false, error: "Missing OIDC PKCE state. Start sign-in again." };
+  }
+  if (pending.state !== state) {
+    clearOidcPkceState();
+    return { ok: false, error: "OIDC state mismatch. Start sign-in again." };
+  }
+
+  const tokenBody = new URLSearchParams({
+    grant_type: "authorization_code",
+    client_id: OIDC_CLIENT_ID.trim(),
+    code,
+    code_verifier: pending.verifier,
+    redirect_uri: resolveOidcRedirectUri(),
+  });
+  const tokenResponse = await rawFetch(OIDC_TOKEN_ENDPOINT.trim(), {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: tokenBody,
+  });
+  if (!tokenResponse.ok) {
+    clearOidcPkceState();
+    const message = await readErrorMessage(tokenResponse);
+    return { ok: false, error: `OIDC token exchange failed: ${message}` };
+  }
+
+  const tokenData = (await tokenResponse.json()) as { id_token?: string };
+  const idToken = tokenData.id_token?.trim() ?? "";
+  if (!idToken) {
+    clearOidcPkceState();
+    return { ok: false, error: "OIDC token response missing id_token." };
+  }
+
+  const claims = decodeJwtPayload(idToken);
+  const nonce = claims?.nonce;
+  if (typeof nonce === "string" && nonce && nonce !== pending.nonce) {
+    clearOidcPkceState();
+    return { ok: false, error: "OIDC nonce mismatch. Start sign-in again." };
+  }
+
+  const exchangeResponse = await rawFetch(`${API_BASE_URL}/api/auth/oidc/token`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      id_token: idToken,
+      org_id: DEFAULT_ORG_ID,
+    }),
+  });
+  if (!exchangeResponse.ok) {
+    clearOidcPkceState();
+    const message = await readErrorMessage(exchangeResponse);
+    return { ok: false, error: `API session exchange failed: ${message}` };
+  }
+
+  const exchangeData = (await exchangeResponse.json()) as {
+    token?: { access_token?: string };
+  };
+  const accessToken = exchangeData.token?.access_token?.trim() ?? "";
+  if (!accessToken) {
+    clearOidcPkceState();
+    return { ok: false, error: "API session exchange returned no access token." };
+  }
+
+  writeStoredToken(accessToken);
+  writeStoredIdToken(idToken);
+  clearOidcPkceState();
+  return { ok: true, returnTo: normalizeReturnPath(pending.returnTo) };
+}
+
+function buildOidcLogoutUrl(): string {
+  if (getAuthMode() !== "oidc_pkce") {
+    return "";
+  }
+  if (!OIDC_END_SESSION_ENDPOINT.trim()) {
+    return "";
+  }
+  const params = new URLSearchParams();
+  const idToken = readStoredIdToken();
+  if (idToken) {
+    params.set("id_token_hint", idToken);
+  }
+  const postLogoutRedirect = resolvePostLogoutRedirectUri();
+  if (postLogoutRedirect) {
+    params.set("post_logout_redirect_uri", postLogoutRedirect);
+  }
+  if (OIDC_CLIENT_ID.trim()) {
+    params.set("client_id", OIDC_CLIENT_ID.trim());
+  }
+  const query = params.toString();
+  const base = OIDC_END_SESSION_ENDPOINT.trim();
+  if (!query) {
+    return base;
+  }
+  return `${base}${base.includes("?") ? "&" : "?"}${query}`;
+}
+
+export async function signOutApiSession(): Promise<{ providerLogoutUrl: string | null }> {
+  const providerLogoutUrl = buildOidcLogoutUrl() || null;
+  const token = readStoredToken();
+  clearApiSession();
+
+  if (token) {
+    await rawFetch(`${API_BASE_URL}/api/auth/sessions/current`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }).catch(() => null);
+  }
+
+  return { providerLogoutUrl };
+}
+
 export async function ensureApiSession(forceRefresh = false): Promise<string | null> {
   if (!forceRefresh) {
     const existingToken = readStoredToken();
     if (existingToken) {
       return existingToken;
     }
+  }
+  if (getAuthMode() === "oidc_pkce") {
+    return readStoredToken() || null;
   }
   if (sessionBootstrapPromise) {
     return sessionBootstrapPromise;
@@ -398,6 +807,8 @@ export async function ensureApiSession(forceRefresh = false): Promise<string | n
 
 export function clearApiSession(): void {
   clearStoredToken();
+  clearStoredIdToken();
+  clearOidcPkceState();
 }
 
 async function authedFetch(url: string, init: RequestInit = {}): Promise<Response> {

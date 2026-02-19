@@ -38,3 +38,5 @@ bounty_board/bugcrowd_full/
 # Node/web build artifacts
 node_modules/
 dist/
+command-center/playwright-report/
+command-center/test-results/

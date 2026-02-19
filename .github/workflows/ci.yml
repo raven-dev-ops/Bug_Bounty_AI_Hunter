@@ -31,6 +31,38 @@ jobs:
         run: npm run build
         working-directory: command-center
 
+  frontend-e2e:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+          cache-dependency-path: command-center/package-lock.json
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+          cache: "pip"
+          cache-dependency-path: |
+            requirements.txt
+            requirements-dev.txt
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements-dev.txt
+      - name: Install frontend dependencies
+        run: npm ci
+        working-directory: command-center
+      - name: Install Playwright browser
+        run: npm run test:e2e:install
+        working-directory: command-center
+      - name: Frontend e2e and visual tests
+        run: npm run test:e2e
+        working-directory: command-center
+
   quality:
     runs-on: ubuntu-latest
     steps:

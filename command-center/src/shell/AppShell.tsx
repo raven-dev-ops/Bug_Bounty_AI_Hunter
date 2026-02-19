@@ -1,7 +1,13 @@
 import { useEffect, useMemo, useState } from "react";
 import type { ReactNode } from "react";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
-import { clearApiSession, ensureApiSession } from "../api/client";
+import {
+  clearApiSession,
+  ensureApiSession,
+  getApiAuthMode,
+  signOutApiSession,
+  startOidcSignIn,
+} from "../api/client";
 import { CommandPalette } from "../components/CommandPalette";
 import type { NavItem } from "../routes";
 
@@ -20,9 +26,12 @@ type AppShellProps = {
 export function AppShell({ items, children }: AppShellProps) {
   const location = useLocation();
   const navigate = useNavigate();
+  const authMode = getApiAuthMode();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [paletteOpen, setPaletteOpen] = useState(false);
-  const [sessionState, setSessionState] = useState<"checking" | "ready" | "error">("checking");
+  const [sessionState, setSessionState] = useState<
+    "checking" | "ready" | "signed_out" | "error"
+  >("checking");
   const [sessionError, setSessionError] = useState("");
   const [theme, setTheme] = useState<ThemeName>(() => {
     if (typeof window === "undefined") {
@@ -71,6 +80,10 @@ export function AppShell({ items, children }: AppShellProps) {
           setSessionState("ready");
           return;
         }
+        if (authMode === "oidc_pkce") {
+          setSessionState("signed_out");
+          return;
+        }
         setSessionState("error");
         setSessionError("Session bootstrap failed.");
       })
@@ -78,14 +91,19 @@ export function AppShell({ items, children }: AppShellProps) {
         if (!active) {
           return;
         }
-        const message = reason instanceof Error ? reason.message : "Session bootstrap failed";
+        const message =
+          reason instanceof Error
+            ? reason.message
+            : authMode === "oidc_pkce"
+              ? "Session initialization failed"
+              : "Session bootstrap failed";
         setSessionState("error");
         setSessionError(message);
       });
     return () => {
       active = false;
     };
-  }, []);
+  }, [authMode]);
 
   useEffect(() => {
     function isEditableTarget(target: EventTarget | null): boolean {
@@ -128,6 +146,10 @@ export function AppShell({ items, children }: AppShellProps) {
     setSessionState("checking");
     setSessionError("");
     clearApiSession();
+    if (authMode === "oidc_pkce") {
+      setSessionState("signed_out");
+      return;
+    }
     ensureApiSession(true)
       .then((token) => {
         if (token) {
@@ -142,6 +164,36 @@ export function AppShell({ items, children }: AppShellProps) {
         setSessionState("error");
         setSessionError(message);
       });
+  }
+
+  async function onSignIn() {
+    setSessionError("");
+    setSessionState("checking");
+    const returnTo = `${location.pathname}${location.search}${location.hash}`;
+    try {
+      await startOidcSignIn(returnTo);
+    } catch (reason: unknown) {
+      const message = reason instanceof Error ? reason.message : "OIDC sign-in failed.";
+      setSessionState("error");
+      setSessionError(message);
+    }
+  }
+
+  async function onSignOut() {
+    setSessionError("");
+    setSessionState("checking");
+    try {
+      const { providerLogoutUrl } = await signOutApiSession();
+      if (providerLogoutUrl && typeof window !== "undefined") {
+        window.location.assign(providerLogoutUrl);
+        return;
+      }
+      setSessionState("signed_out");
+    } catch (reason: unknown) {
+      const message = reason instanceof Error ? reason.message : "Sign out failed.";
+      setSessionState("error");
+      setSessionError(message);
+    }
   }
 
   const currentItem = useMemo(
@@ -224,17 +276,33 @@ export function AppShell({ items, children }: AppShellProps) {
                     ? "border-emerald-500/40 bg-emerald-500/10 text-emerald-200"
                     : sessionState === "checking"
                       ? "border-amber-500/40 bg-amber-500/10 text-amber-200"
+                      : sessionState === "signed_out"
+                        ? "border-slate-500/40 bg-slate-500/10 text-slate-200"
                       : "border-red-500/40 bg-red-500/10 text-red-200",
                 ].join(" ")}
-                onClick={reconnectSession}
-                title={sessionError || "Refresh API session"}
+                onClick={authMode === "bootstrap" ? reconnectSession : undefined}
+                title={sessionError || "API session status"}
               >
                 {sessionState === "ready"
                   ? "Session Ready"
                   : sessionState === "checking"
                     ? "Session Sync"
+                    : sessionState === "signed_out"
+                      ? "Signed Out"
                     : "Session Error"}
               </button>
+
+              {authMode === "oidc_pkce" ? (
+                <button
+                  type="button"
+                  className="rounded-lg border border-border bg-bg/50 px-3 py-2 text-xs font-semibold text-muted hover:text-text"
+                  onClick={() => {
+                    void (sessionState === "ready" ? onSignOut() : onSignIn());
+                  }}
+                >
+                  {sessionState === "ready" ? "Sign Out" : "Sign In"}
+                </button>
+              ) : null}
 
               <button
                 type="button"
