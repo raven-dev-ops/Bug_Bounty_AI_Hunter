@@ -623,41 +623,14 @@
     });
   }
 
-  function parseJsonArray(text) {
-    try {
-      const v = JSON.parse(String(text || ""));
-      return Array.isArray(v) ? v : [];
-    } catch {
-      return [];
-    }
-  }
-
-  function sanitizeImageSrc(value) {
-    const raw = String(value || "").trim();
-    if (!raw) return "";
-    if (raw.startsWith("/")) return raw;
-    try {
-      const parsed = new URL(raw, window.location.href);
-      if (parsed.protocol !== "http:" && parsed.protocol !== "https:") return "";
-      return parsed.href;
-    } catch {
-      return "";
-    }
-  }
-
   function wireImgFallback(root) {
     const ctx = root || document;
     $all("img[data-srcs]", ctx).forEach((img) => {
       if (img.dataset.wired === "1") return;
       img.dataset.wired = "1";
 
-      const getSrcs = () =>
-        parseJsonArray(img.getAttribute("data-srcs")).map(sanitizeImageSrc).filter(Boolean);
-
-      const srcs = getSrcs();
-      if (srcs.length && !img.getAttribute("src")) {
-        img.dataset.srcIndex = "0";
-        img.src = srcs[0];
+      if (!img.getAttribute("src")) {
+        img.style.display = "none";
       }
 
       img.addEventListener("load", () => {
@@ -666,11 +639,7 @@
       });
 
       img.addEventListener("error", () => {
-        const list = getSrcs();
-        const next = Number(img.dataset.srcIndex || "0") + 1;
-        img.dataset.srcIndex = String(next);
-        if (next < list.length) img.src = list[next];
-        else img.style.display = "none";
+        img.style.display = "none";
       });
     });
   }

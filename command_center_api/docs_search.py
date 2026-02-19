@@ -21,6 +21,14 @@ def _snippet(text: str, query: str, *, width: int = 90) -> str:
     return text[start:end].strip().replace("\n", " ")
 
 
+def _docs_index() -> dict[str, Path]:
+    index: dict[str, Path] = {}
+    for markdown_file in DOCS_ROOT.rglob("*.md"):
+        relative = markdown_file.relative_to(DOCS_ROOT).as_posix()
+        index[relative] = markdown_file
+    return index
+
+
 def search_docs(query: str, *, limit: int = 25) -> list[dict[str, Any]]:
     safe_query = query.strip()
     if not safe_query:
@@ -47,25 +55,15 @@ def search_docs(query: str, *, limit: int = 25) -> list[dict[str, Any]]:
 
 
 def read_doc_page(relative_path: str) -> dict[str, str]:
-    requested = str(relative_path or "").strip()
+    requested = Path(str(relative_path or "").strip()).as_posix().lstrip("/")
     if not requested:
         raise ValueError("doc page not found")
-    relative = Path(requested)
-    if relative.is_absolute():
-        raise ValueError("absolute paths are not allowed")
-    if any(part in {"", ".", ".."} for part in relative.parts):
-        raise ValueError("path escapes docs root")
-    full_path = (DOCS_ROOT / relative).resolve()
-    if not full_path.is_relative_to(DOCS_ROOT):
-        raise ValueError("path escapes docs root")
-    if (
-        not full_path.exists()
-        or not full_path.is_file()
-        or full_path.suffix.lower() != ".md"
-    ):
+    docs_map = _docs_index()
+    full_path = docs_map.get(requested)
+    if full_path is None:
         raise ValueError("doc page not found")
     content = full_path.read_text(encoding="utf-8", errors="replace")
     return {
-        "path": _safe_relative_path(full_path.relative_to(DOCS_ROOT)),
+        "path": requested,
         "content": content,
     }

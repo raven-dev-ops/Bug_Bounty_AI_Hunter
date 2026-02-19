@@ -8,25 +8,16 @@ from command_center_api import db
 
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
+PROGRAM_REGISTRY_PATH = (REPO_ROOT / "data/program_registry.json").resolve()
+FINDINGS_DB_PATH = (REPO_ROOT / "data/findings_db.json").resolve()
+BOUNTY_BOARD_ROOT = (REPO_ROOT / "bounty_board").resolve()
 
 
-def _resolve_repo_path(path: Path | str) -> Path:
-    candidate = Path(path)
-    if candidate.is_absolute():
-        resolved = candidate.resolve()
-    else:
-        resolved = (REPO_ROOT / candidate).resolve()
-    if not resolved.is_relative_to(REPO_ROOT):
-        raise ValueError("path escapes repository root")
-    return resolved
-
-
-def _load_json(path: Path | str) -> dict[str, Any]:
-    safe_path = _resolve_repo_path(path)
-    raw = safe_path.read_text(encoding="utf-8")
+def _load_json(path: Path) -> dict[str, Any]:
+    raw = path.read_text(encoding="utf-8")
     data = json.loads(raw)
     if not isinstance(data, dict):
-        raise ValueError(f"expected object JSON at {safe_path}")
+        raise ValueError(f"expected object JSON at {path}")
     return data
 
 
@@ -61,9 +52,10 @@ def ingest_existing_artifacts(
     findings_db_path: Path | str = Path("data/findings_db.json"),
     bounty_board_root: Path | str = Path("bounty_board"),
 ) -> dict[str, int]:
-    registry_path = _resolve_repo_path(program_registry_path)
-    findings_path = _resolve_repo_path(findings_db_path)
-    board_root = _resolve_repo_path(bounty_board_root)
+    _ = (program_registry_path, findings_db_path, bounty_board_root)
+    registry_path = PROGRAM_REGISTRY_PATH
+    findings_path = FINDINGS_DB_PATH
+    board_root = BOUNTY_BOARD_ROOT
 
     counts = {
         "programs_registry": 0,

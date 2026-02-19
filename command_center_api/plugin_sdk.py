@@ -20,19 +20,9 @@ def _load_python_module(path: Path) -> Any:
     return module
 
 
-def _resolve_plugin_dir(plugin_dir: Path | str) -> Path:
-    candidate = Path(plugin_dir)
-    if candidate.is_absolute():
-        resolved = candidate.resolve()
-    else:
-        resolved = (REPO_ROOT / candidate).resolve()
-    if not resolved.is_relative_to(PLUGIN_ROOT):
-        raise ValueError("plugin_dir must be within plugins/")
-    return resolved
-
-
 def discover_plugins(*, plugin_dir: Path | str = PLUGIN_DIR) -> list[dict[str, Any]]:
-    root = _resolve_plugin_dir(plugin_dir)
+    _ = plugin_dir
+    root = PLUGIN_ROOT
     if not root.exists():
         return []
     results: list[dict[str, Any]] = []
