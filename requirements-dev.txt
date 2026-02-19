@@ -1,7 +1,7 @@
 -r requirements.txt
 jsonschema==4.26.0
 ruff==0.14.13
-hypothesis==6.150.2
+hypothesis==6.151.9
 coverage==7.13.1
 mkdocs==1.6.1
 pip-audit==2.10.0
