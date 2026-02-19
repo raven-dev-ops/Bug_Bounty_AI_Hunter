@@ -3,6 +3,8 @@
 All notable changes to this project will be documented here.
 
 ## Unreleased
+- Added root README UI snapshot previews for Command Center Playwright visual
+  baselines so repo visitors can view current desktop/mobile screens directly.
 - Fixed CI breakages by adding `httpx` to dev dependencies for FastAPI
   TestClient-based tests and upgrading FastAPI to `0.121.0` to resolve
   Starlette audit findings in the quality pipeline.

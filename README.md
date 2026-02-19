@@ -132,6 +132,16 @@ npm run test:e2e
   explicit Sign In/Sign Out controls and `/auth/callback` handling.
 - Playwright smoke and visual suites live under `command-center/e2e/`.
 
+## Command Center UI Snapshots
+Baseline images are captured by Playwright visual tests and committed for quick
+preview on the repo home page.
+
+### Overview (Desktop)
+![Command Center overview desktop screenshot](command-center/e2e/visual.spec.ts-snapshots/overview-desktop-chromium-win32.png)
+
+### Settings (Mobile)
+![Command Center settings mobile screenshot](command-center/e2e/visual.spec.ts-snapshots/settings-mobile-chromium-win32.png)
+
 ## Command Center Backend API (MVP Baseline)
 ```bash
 python -m pip install -r requirements.txt
